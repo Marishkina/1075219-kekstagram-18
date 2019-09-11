@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Марина](https://up.htmlacademy.ru/javascript/18/user/1075219).
-* Наставник: `Неизвестно`.
+* Наставник: [Даниил Бублик](https://htmlacademy.ru/profile/id118890).
 
 ---
 
