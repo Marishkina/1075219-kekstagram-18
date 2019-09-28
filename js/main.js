@@ -57,8 +57,3 @@ for (var i = 0; i < kekstagramArray.length; i++) {
 
   picturesList.appendChild(pictureElement);
 }
-
-
-
-
-
