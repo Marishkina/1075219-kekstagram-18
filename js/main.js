@@ -1,8 +1,10 @@
 'use strict';
 
-var PHOTOS = ['photos/1.jpg', 'photos/2.jpg', 'photos/3.jpg', 'photos/4.jpg', 'photos/5.jpg', 'photos/6.jpg', 'photos/7.jpg', 'photos/8.jpg', 'photos/9.jpg', 'photos/10.jpg', 'photos/11.jpg', 'photos/12.jpg', 'photos/13.jpg', 'photos/14.jpg', 'photos/15.jpg', 'photos/16.jpg', 'photos/17.jpg', 'photos/18.jpg', 'photos/19.jpg', 'photos/20.jpg', 'photos/21.jpg', 'photos22.jpg', 'photos/23.jpg', 'photos/24.jpg', 'photos/25.jpg'];
+var PHOTOS = ['photos/1.jpg', 'photos/2.jpg', 'photos/3.jpg', 'photos/4.jpg', 'photos/5.jpg', 'photos/6.jpg', 'photos/7.jpg', 'photos/8.jpg', 'photos/9.jpg', 'photos/10.jpg', 'photos/11.jpg', 'photos/12.jpg', 'photos/13.jpg', 'photos/14.jpg', 'photos/15.jpg', 'photos/16.jpg', 'photos/17.jpg', 'photos/18.jpg', 'photos/19.jpg', 'photos/20.jpg', 'photos/21.jpg', 'photos/22.jpg', 'photos/23.jpg', 'photos/24.jpg', 'photos/25.jpg'];
 var DESCRIPTIONS = ['фото огонь', 'так себе настроение', 'позитивчик', 'отдыхаю'];
 var COMMENTS = ['Всё отлично!', 'В целом всё неплохо. Но не всё.', 'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.', 'Моя бабушка случайно чихнула с фотоаппаратом в руках и у нее получилась фотография лучше.', 'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.', 'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
+var MIN_COMMENTS = 1;
+var MAX_COMMENTS = 2;
 var MIN_LIKES = 15;
 var MAX_LIKES = 200;
 var NAMES = ['Артем', 'Вася', 'Матрена', 'Катюша', 'Слава', 'Поля'];
@@ -11,15 +13,15 @@ var COUNT = 25;
 var picturesList = document.querySelector('.pictures');
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
-var getRandomNumber = function (array) {
+var getRandomItem = function (array) {
   return array[Math.floor(Math.random() * array.length)];
 };
 
-var getRandomLikes = function (min, max) {
+var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-var shuffledArray = function shuffle(a) {
+var shuffleArray = function (a) {
   for (var i = a.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
     var x = a[i];
@@ -29,31 +31,49 @@ var shuffledArray = function shuffle(a) {
   return a;
 };
 
+var renderComments = function (array) {
+  var commentsCount = getRandomNumber(1, 2);
+  for (var i = 0; i < commentsCount; i++) {
+    var newArray = [];
+    newArray[i] = getRandomItem(COMMENTS);
+  }
+  return newArray;
+};
+
 var getKekstagramArray = function (count) {
-  var shuffledArrayPhotos = shuffledArray(PHOTOS);
+  var shuffledArrayPhotos = shuffleArray(PHOTOS);
   var array = [];
 
   for (var i = 0; i < count; i++) {
     array[i] = {
-      name: getRandomNumber(NAMES),
-      avatar: getRandomNumber(AVATARS),
-      message: getRandomNumber(DESCRIPTIONS),
-      url: (shuffledArrayPhotos[i]),
-      likes: getRandomLikes(MIN_LIKES, MAX_LIKES),
-      comments: getRandomNumber(COMMENTS)
+      name: getRandomItem(NAMES),
+      avatar: getRandomItem(AVATARS),
+      message: getRandomItem(DESCRIPTIONS),
+      url: shuffledArrayPhotos[i],
+      likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
+      comments: getRandomNumber(MIN_COMMENTS, MAX_COMMENTS)
     };
   }
   return array;
 };
 
-var kekstagramArray = getKekstagramArray(COUNT);
-
-for (var i = 0; i < kekstagramArray.length; i++) {
+var renderKeksktagramArray = function (kekstagramArray) {
   var pictureElement = pictureTemplate.cloneNode(true);
 
-  // pictureElement.querySelector('.picture__image').textContent = kekstagramArray[i].url;
-  pictureElement.querySelector('.picture__likes').textContent = getKekstagramArray.likes;
-  pictureElement.querySelector('.picture__comments').textContent = getKekstagramArray.comments;
+  pictureElement.querySelector('.picture__img').src = kekstagramArray.url;
+  pictureElement.querySelector('.picture__likes').textContent = kekstagramArray.likes;
+  pictureElement.querySelector('.picture__comments').textContent = kekstagramArray.comments;
 
-  picturesList.appendChild(pictureElement);
+  return pictureElement;
+};
+
+function init() {
+  var kekstagramArray = getKekstagramArray(COUNT);
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < kekstagramArray.length; i++) {
+    fragment.appendChild(renderKeksktagramArray(kekstagramArray[i]));
+  }
+  picturesList.appendChild(fragment);
 }
+init();
