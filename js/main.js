@@ -31,11 +31,11 @@ var shuffleArray = function (a) {
   return a;
 };
 
-var renderComments = function (array) {
-  var commentsCount = array[getRandomNumber(MIN_COMMENTS, MAX_COMMENTS)];
-  for (var i = 0; i < commentsCount; i++) {
-    var newCommentsArray = commentsCount;
-    newCommentsArray[i] = getRandomItem(array);
+var сommentsArray = function (array) {
+  var shuffledArray = shuffleArray(array);
+  var commentsCount = getRandomNumber(MIN_COMMENTS, MAX_COMMENTS);
+  if (commentsCount) {
+    var newCommentsArray = shuffledArray.slice(0, commentsCount);
   }
   return newCommentsArray;
 };
@@ -52,7 +52,7 @@ var getKekstagramArray = function (count) {
       url: shuffledArrayPhotos[i],
       likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
       commentsCount: getRandomNumber(MIN_COMMENTS, MAX_COMMENTS),
-      comments: renderComments(COMMENTS)
+      comments: сommentsArray(COMMENTS)
     };
   }
   return array;
