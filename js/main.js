@@ -32,12 +32,12 @@ var shuffleArray = function (a) {
 };
 
 var renderComments = function (array) {
-  var commentsCount = getRandomNumber(1, 2);
+  var commentsCount = array[getRandomNumber(MIN_COMMENTS, MAX_COMMENTS)];
   for (var i = 0; i < commentsCount; i++) {
-    var newArray = [];
-    newArray[i] = getRandomItem(COMMENTS);
+    var newCommentsArray = commentsCount;
+    newCommentsArray[i] = getRandomItem(array);
   }
-  return newArray;
+  return newCommentsArray;
 };
 
 var getKekstagramArray = function (count) {
@@ -51,7 +51,8 @@ var getKekstagramArray = function (count) {
       message: getRandomItem(DESCRIPTIONS),
       url: shuffledArrayPhotos[i],
       likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
-      comments: getRandomNumber(MIN_COMMENTS, MAX_COMMENTS)
+      commentsCount: getRandomNumber(MIN_COMMENTS, MAX_COMMENTS),
+      comments: renderComments(COMMENTS)
     };
   }
   return array;
@@ -62,7 +63,7 @@ var renderKeksktagramArray = function (kekstagramArray) {
 
   pictureElement.querySelector('.picture__img').src = kekstagramArray.url;
   pictureElement.querySelector('.picture__likes').textContent = kekstagramArray.likes;
-  pictureElement.querySelector('.picture__comments').textContent = kekstagramArray.comments;
+  pictureElement.querySelector('.picture__comments').textContent = kekstagramArray.commentsCount;
 
   return pictureElement;
 };
