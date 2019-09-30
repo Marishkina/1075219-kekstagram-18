@@ -34,9 +34,8 @@ var shuffleArray = function (a) {
 var сommentsArray = function (array) {
   var shuffledArray = shuffleArray(array);
   var commentsCount = getRandomNumber(MIN_COMMENTS, MAX_COMMENTS);
-  if (commentsCount) {
-    var newCommentsArray = shuffledArray.slice(0, commentsCount);
-  }
+  var newCommentsArray = shuffledArray.slice(0, commentsCount);
+
   return newCommentsArray;
 };
 
