@@ -10,6 +10,7 @@ var MAX_LIKES = 200;
 var NAMES = ['Артем', 'Вася', 'Матрена', 'Катюша', 'Слава', 'Поля'];
 var AVATARS = ['avatar-1.svg', 'avatar-2.svg', 'avatar-3.svg', 'avatar-4.svg', 'avatar-5.svg', 'avatar-6.svg'];
 var COUNT = 25;
+
 var picturesList = document.querySelector('.pictures');
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
@@ -31,48 +32,43 @@ var shuffleArray = function (a) {
   return a;
 };
 
-var сommentsArray = function (array) {
-  var shuffledArray = shuffleArray(array);
-  var commentsCount = getRandomNumber(MIN_COMMENTS, MAX_COMMENTS);
-  var newCommentsArray = shuffledArray.slice(0, commentsCount);
-
-  return newCommentsArray;
-};
-
-var getKekstagramArray = function (count) {
+var generateKekstagramObject = function (count) {
   var shuffledArrayPhotos = shuffleArray(PHOTOS);
-  var array = [];
+  var kekstagramObject = [];
 
   for (var i = 0; i < count; i++) {
-    array[i] = {
+    var shuffledArrayComments = shuffleArray(COMMENTS);
+    var newCommentsArray = shuffledArrayComments.slice(0, getRandomNumber(MIN_COMMENTS, MAX_COMMENTS));
+
+    kekstagramObject[i] = {
       name: getRandomItem(NAMES),
       avatar: getRandomItem(AVATARS),
       message: getRandomItem(DESCRIPTIONS),
       url: shuffledArrayPhotos[i],
       likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
-      commentsCount: getRandomNumber(MIN_COMMENTS, MAX_COMMENTS),
-      comments: сommentsArray(COMMENTS)
+      commentsCount: newCommentsArray.length,
+      comments: newCommentsArray
     };
   }
-  return array;
+  return kekstagramObject;
 };
 
-var renderKeksktagramArray = function (kekstagramArray) {
+var generateKeksktagramObject = function (kekstagramObject) {
   var pictureElement = pictureTemplate.cloneNode(true);
 
-  pictureElement.querySelector('.picture__img').src = kekstagramArray.url;
-  pictureElement.querySelector('.picture__likes').textContent = kekstagramArray.likes;
-  pictureElement.querySelector('.picture__comments').textContent = kekstagramArray.commentsCount;
+  pictureElement.querySelector('.picture__img').src = kekstagramObject.url;
+  pictureElement.querySelector('.picture__likes').textContent = kekstagramObject.likes;
+  pictureElement.querySelector('.picture__comments').textContent = kekstagramObject.commentsCount;
 
   return pictureElement;
 };
 
 function init() {
-  var kekstagramArray = getKekstagramArray(COUNT);
+  var kekstagramObject = generateKekstagramObject(COUNT);
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < kekstagramArray.length; i++) {
-    fragment.appendChild(renderKeksktagramArray(kekstagramArray[i]));
+  for (var i = 0; i < kekstagramObject.length; i++) {
+    fragment.appendChild(generateKeksktagramObject(kekstagramObject[i]));
   }
   picturesList.appendChild(fragment);
 }
