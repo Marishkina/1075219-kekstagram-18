@@ -9,7 +9,7 @@ var MIN_LIKES = 15;
 var MAX_LIKES = 200;
 var NAMES = ['Артем', 'Вася', 'Матрена', 'Катюша', 'Слава', 'Поля'];
 var AVATARS = ['avatar-1.svg', 'avatar-2.svg', 'avatar-3.svg', 'avatar-4.svg', 'avatar-5.svg', 'avatar-6.svg'];
-var PHOTO_ITEM_COUNT = 25;
+var PHOTO_ITEMS_COUNT = 25;
 
 var picturesList = document.querySelector('.pictures');
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
@@ -53,22 +53,22 @@ var generateListPhoto = function (count) {
   return itemListPhoto;
 };
 
-var generatePhoto = function (itemListPhoto) {
+var generatePhoto = function (itemsListPhoto) {
   var pictureElement = pictureTemplate.cloneNode(true);
 
-  pictureElement.querySelector('.picture__img').src = itemListPhoto.url;
-  pictureElement.querySelector('.picture__likes').textContent = itemListPhoto.likes;
-  pictureElement.querySelector('.picture__comments').textContent = itemListPhoto.commentsCount;
+  pictureElement.querySelector('.picture__img').src = itemsListPhoto.url;
+  pictureElement.querySelector('.picture__likes').textContent = itemsListPhoto.likes;
+  pictureElement.querySelector('.picture__comments').textContent = itemsListPhoto.commentsCount;
 
   return pictureElement;
 };
 
 function init() {
-  var generateListItem = generateListPhoto(PHOTO_ITEM_COUNT);
+  var generateListItems = generateListPhoto(PHOTO_ITEMS_COUNT);
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < PHOTO_ITEM_COUNT; i++) {
-    fragment.appendChild(generatePhoto(generateListItem[i]));
+  for (var i = 0; i < PHOTO_ITEMS_COUNT; i++) {
+    fragment.appendChild(generatePhoto(generateListItems[i]));
   }
   picturesList.appendChild(fragment);
 }
