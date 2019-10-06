@@ -9,7 +9,7 @@ var MIN_LIKES = 15;
 var MAX_LIKES = 200;
 var NAMES = ['Артем', 'Вася', 'Матрена', 'Катюша', 'Слава', 'Поля'];
 var AVATARS = ['avatar-1.svg', 'avatar-2.svg', 'avatar-3.svg', 'avatar-4.svg', 'avatar-5.svg', 'avatar-6.svg'];
-var COUNT = 25;
+var OBJECT_COUNT = 25;
 
 var picturesList = document.querySelector('.pictures');
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
@@ -22,7 +22,7 @@ var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-var shuffleArray = function (a) {
+var shuffleList = function (a) {
   for (var i = a.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
     var x = a[i];
@@ -32,43 +32,43 @@ var shuffleArray = function (a) {
   return a;
 };
 
-var generateKekstagramObject = function (count) {
-  var shuffledArrayPhotos = shuffleArray(PHOTOS);
-  var kekstagramObject = [];
+var generateListPhoto = function (count) {
+  var shuffledListPhotos = shuffleList(PHOTOS);
+  var itemListPhoto = [];
 
   for (var i = 0; i < count; i++) {
-    var shuffledArrayComments = shuffleArray(COMMENTS);
-    var newCommentsArray = shuffledArrayComments.slice(0, getRandomNumber(MIN_COMMENTS, MAX_COMMENTS));
+    var shuffledListComments = shuffleList(COMMENTS);
+    var newCommentsList = shuffledListComments.slice(0, getRandomNumber(MIN_COMMENTS, MAX_COMMENTS));
 
-    kekstagramObject[i] = {
+    itemListPhoto[i] = {
       name: getRandomItem(NAMES),
       avatar: getRandomItem(AVATARS),
       message: getRandomItem(DESCRIPTIONS),
-      url: shuffledArrayPhotos[i],
+      url: shuffledListPhotos[i],
       likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
-      commentsCount: newCommentsArray.length,
-      comments: newCommentsArray
+      commentsCount: newCommentsList.length,
+      comments: newCommentsList
     };
   }
-  return kekstagramObject;
+  return itemListPhoto;
 };
 
-var generateKeksktagramObject = function (kekstagramObject) {
+var generatePhoto = function (itemListPhoto) {
   var pictureElement = pictureTemplate.cloneNode(true);
 
-  pictureElement.querySelector('.picture__img').src = kekstagramObject.url;
-  pictureElement.querySelector('.picture__likes').textContent = kekstagramObject.likes;
-  pictureElement.querySelector('.picture__comments').textContent = kekstagramObject.commentsCount;
+  pictureElement.querySelector('.picture__img').src = itemListPhoto.url;
+  pictureElement.querySelector('.picture__likes').textContent = itemListPhoto.likes;
+  pictureElement.querySelector('.picture__comments').textContent = itemListPhoto.commentsCount;
 
   return pictureElement;
 };
 
 function init() {
-  var kekstagramObject = generateKekstagramObject(COUNT);
+  var generateListItem = generateListPhoto(OBJECT_COUNT);
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < kekstagramObject.length; i++) {
-    fragment.appendChild(generateKeksktagramObject(kekstagramObject[i]));
+  for (var i = 0; i < OBJECT_COUNT; i++) {
+    fragment.appendChild(generatePhoto(generateListItem[i]));
   }
   picturesList.appendChild(fragment);
 }
