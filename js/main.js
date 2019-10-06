@@ -9,7 +9,7 @@ var MIN_LIKES = 15;
 var MAX_LIKES = 200;
 var NAMES = ['Артем', 'Вася', 'Матрена', 'Катюша', 'Слава', 'Поля'];
 var AVATARS = ['avatar-1.svg', 'avatar-2.svg', 'avatar-3.svg', 'avatar-4.svg', 'avatar-5.svg', 'avatar-6.svg'];
-var OBJECT_COUNT = 25;
+var PHOTO_ITEM_COUNT = 25;
 
 var picturesList = document.querySelector('.pictures');
 var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
@@ -64,10 +64,10 @@ var generatePhoto = function (itemListPhoto) {
 };
 
 function init() {
-  var generateListItem = generateListPhoto(OBJECT_COUNT);
+  var generateListItem = generateListPhoto(PHOTO_ITEM_COUNT);
   var fragment = document.createDocumentFragment();
 
-  for (var i = 0; i < OBJECT_COUNT; i++) {
+  for (var i = 0; i < PHOTO_ITEM_COUNT; i++) {
     fragment.appendChild(generatePhoto(generateListItem[i]));
   }
   picturesList.appendChild(fragment);
