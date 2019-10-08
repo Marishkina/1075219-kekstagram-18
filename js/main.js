@@ -120,25 +120,25 @@ var shuffleList = function (a) {
   return a;
 };
 
-var generateListPhoto = function (count) {
+var generateListOfPhotos = function (count) {
   var shuffledListPhotos = shuffleList(PHOTOS);
-  var itemListPhoto = [];
+  var itemsOfListOfPhotos = [];
 
   for (var i = 0; i < count; i++) {
     var shuffledListComments = shuffleList(COMMENTS);
-    var newCommentsList = shuffledListComments.slice(0, getRandomNumber(MIN_COMMENTS, MAX_COMMENTS));
+    var listOfComments = shuffledListComments.slice(0, getRandomNumber(MIN_COMMENTS, MAX_COMMENTS));
 
-    itemListPhoto[i] = {
+    itemsOfListOfPhotos[i] = {
       name: getRandomItem(NAMES),
       avatar: getRandomItem(AVATARS),
       message: getRandomItem(DESCRIPTIONS),
       url: shuffledListPhotos[i],
       likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
-      commentsCount: newCommentsList.length,
-      comments: newCommentsList
+      commentsCount: listOfComments.length,
+      comments: listOfComments
     };
   }
-  return itemListPhoto;
+  return itemsOfListOfPhotos;
 };
 
 var generatePhoto = function (itemsListPhoto) {
@@ -151,14 +151,19 @@ var generatePhoto = function (itemsListPhoto) {
   return pictureElement;
 };
 
-function init() {
-  var generateListItems = generateListPhoto(PHOTO_ITEMS_COUNT);
+var init = function (generateListItems) {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < PHOTO_ITEMS_COUNT; i++) {
     fragment.appendChild(generatePhoto(generateListItems[i]));
   }
   picturesList.appendChild(fragment);
+<<<<<<< HEAD
 }
 init();
 >>>>>>> Правит функцию renderComments
+=======
+};
+
+init(generateListOfPhotos(PHOTO_ITEMS_COUNT));
+>>>>>>> Делает функцию init - функциональным выражением, правит название переменных и меняет функцию init
