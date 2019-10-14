@@ -158,7 +158,7 @@
   var onUploadOverlayFormEscDown = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
       if (evt.target === hashtagInput) {
-        evt.stopPropogation()
+        evt.stopPropogation();
       } else {
         closeUploadOverlayForm();
       }
