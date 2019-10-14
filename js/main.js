@@ -89,6 +89,57 @@
   };
 
   init(generateListOfPhotos(PHOTO_ITEMS_COUNT));
+
+  var uploadForm = document.querySelector('.img-upload__form');
+  var uploadFieldset = uploadForm.querySelector('.img-upload__start');
+  var uploadButton = uploadFieldset.querySelector('#upload-file');
+  var ENTER_KEYCODE = 13;
+  var ESC_KEYCODE = 27;
+  var uploadOverlayForm = uploadForm.querySelector('.img-upload__overlay');
+  var fileName = uploadFieldset.querySelector('input[name = filename]');
+
+  var openUploadFieldset = function () {
+    uploadButton.classList.remove('visually-hidden');
+  };
+
+  var closeUploadFieldset = function () {
+    uploadButton.classList.add('visually-hidden');
+  };
+
+  var openUploadOverlayForm = function () {
+    uploadOverlayForm.classList.remove('hidden');
+  };
+
+  var onUploadFieldsetEnterDown = function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      openUploadFieldset();
+    }
+  };
+
+  var onUploadFieldsetEscDown = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      if (evt.target === fileName) {
+        evt.stopPropagation();
+      } else {
+        closeUploadFieldset();
+      }
+    }
+  };
+
+  var openOverlayForm = function (evt) {
+    if (evt.target === fileName) {
+      openUploadOverlayForm();
+    } else {
+      closeUploadFieldset();
+    }
+  };
+
+  uploadFieldset.addEventListener('click', openUploadFieldset);
+  uploadFieldset.addEventListener('keydown', onUploadFieldsetEnterDown);
+  document.addEventListener('keydown', onUploadFieldsetEscDown);
+  document.addEventListener('click', onUploadFieldsetEscDown);
+  uploadFieldset.addEventListener('click', openOverlayForm);
+  uploadFieldset.addEventListener('keydown', openOverlayForm);
 })();
 <<<<<<< HEAD
 =======
