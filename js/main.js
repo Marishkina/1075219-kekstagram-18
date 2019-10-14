@@ -95,8 +95,20 @@
   var uploadButton = uploadFieldset.querySelector('#upload-file');
   var ENTER_KEYCODE = 13;
   var ESC_KEYCODE = 27;
-  var uploadOverlayForm = uploadForm.querySelector('.img-upload__overlay');
+  var TAB_KEYCODE = 9;
   var fileName = uploadFieldset.querySelector('input[name = filename]');
+  var uploadOverlayForm = uploadForm.querySelector('.img-upload__overlay');
+  var closeButtonUploadOverlayForm = uploadOverlayForm.querySelector('#upload-cancel');
+  var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
+  // var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
+  var pinEffectLevel = effectLevel.querySelector('.effect-level__pin');
+  // var effectLevelValue = effectLevel.querySelector('.effect-level__value');
+  var effects = uploadForm.querySelector('.img-upload__effects');
+  var effectsItems = effects.querySelector('.effects__item');
+  var hashtagFieldset = uploadForm.querySelector('.img-upload__text');
+  var hashtagInput = hashtagFieldset.querySelector('input[name=hashtags]');
+  var MAX_HASHTAGS = 5;
+  var MAX_HASHTAG_LENGTH = 20;
 
   var openUploadFieldset = function () {
     uploadButton.classList.remove('visually-hidden');
@@ -118,28 +130,87 @@
 
   var onUploadFieldsetEscDown = function (evt) {
     if (evt.keyCode === ESC_KEYCODE) {
-      if (evt.target === fileName) {
-        evt.stopPropagation();
+      closeUploadFieldset();
+    }
+  };
+
+  var closeUploadFieldsetHandler = function (evt) {
+    if (evt.target !== fileName) {
+      closeUploadFieldset();
+    }
+  };
+
+  var onUploadFieldsetTabDown = function (evt) {
+    if (evt.keyCode === TAB_KEYCODE) {
+      closeUploadFieldset();
+    }
+  };
+
+  var photoSelection = function () {
+    uploadForm.reset();
+    openUploadOverlayForm();
+  };
+
+  var closeUploadOverlayForm = function () {
+    uploadOverlayForm.classList.add('hidden');
+  };
+
+  var onUploadOverlayFormEscDown = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      if (evt.target === hashtagInput) {
+        evt.stopPropogation()
       } else {
-        closeUploadFieldset();
+        closeUploadOverlayForm();
       }
     }
   };
 
-  var openOverlayForm = function (evt) {
-    if (evt.target === fileName) {
-      openUploadOverlayForm();
-    } else {
-      closeUploadFieldset();
+  // определение уровня насыщенности и нахождение положения пина относительно блока effectLevel
+  var pinEffectLevelPosition = function (evt) {
+    return evt.pageX - pinEffectLevel.offsetLeft;
+  };
+
+  var depthChange = function (maxFilter) {
+    return (pinEffectLevelPosition() * maxFilter) / 100;
+  };
+
+  // сброс уровня эффекта до начального состояния
+  var effectLevelReset = function () {
+    effectLevel.reset();
+  };
+
+  // валидация хэш-тегов
+
+  var validateHashtags = function () {
+    var a = hashtagInput.toLowerCase();
+    var hashtagList = a.split(' ');
+
+    for (var i = 0; i < hashtagList.length; i++) {
+      if (hashtagList[i].indexOf('#') !== 0) {
+        hashtagInput.setCustomValidity('хэш-тег начинается с символа #');
+      } else if (hashtagList[i] === 1 && hashtagList[i].indexOf('#') === 0) {
+        hashtagInput.setCustomValidity('хеш-тег не может состоять только из одной решётки');
+      } else if (hashtagList.include(hashtagList[i])) {
+        hashtagInput.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
+      } else if (hashtagList.length > MAX_HASHTAGS) {
+        hashtagInput.setCustomValidity('максимум пять хэш-тегов');
+      } else if (hashtagList[i].length > MAX_HASHTAG_LENGTH) {
+        hashtagInput.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
+      }
     }
   };
 
   uploadFieldset.addEventListener('click', openUploadFieldset);
   uploadFieldset.addEventListener('keydown', onUploadFieldsetEnterDown);
   document.addEventListener('keydown', onUploadFieldsetEscDown);
-  document.addEventListener('click', onUploadFieldsetEscDown);
-  uploadFieldset.addEventListener('click', openOverlayForm);
-  uploadFieldset.addEventListener('keydown', openOverlayForm);
+  document.addEventListener('click', closeUploadFieldsetHandler);
+  document.addEventListener('keydown', onUploadFieldsetTabDown);
+  fileName.addEventListener('change', photoSelection);
+  closeButtonUploadOverlayForm.addEventListener('click', closeUploadOverlayForm);
+  document.addEventListener('keydown', onUploadOverlayFormEscDown);
+  effectLevel.addEventListener('mouseup', depthChange);
+  effectsItems.addEventListener('change', effectLevelReset); // сброс уровня эффекта до начального состояния при переключении фильтра
+  hashtagInput.addEventListener('input', validateHashtags);
 })();
 <<<<<<< HEAD
 =======
