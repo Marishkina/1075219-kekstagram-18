@@ -14,7 +14,7 @@
   var MIN_LIKES = 15;
   var MAX_LIKES = 200;
   var NAMES = ['Артем', 'Вася', 'Матрена', 'Катюша', 'Слава', 'Поля'];
-  var AVATARS = ['avatar-1.svg', 'avatar-2.svg', 'avatar-3.svg', 'avatar-4.svg', 'avatar-5.svg', 'avatar-6.svg'];
+  var AVATARS = ['1', '2', '3', '4', '5', '6'];
   var PHOTO_ITEMS_COUNT = 25;
 
   var picturesList = document.querySelector('.pictures');
@@ -45,8 +45,10 @@
       var shuffledListComments = shuffleList(COMMENTS);
       var listOfMessage = shuffledListComments.slice(0, getRandomNumber(MIN_COMMENTS, MAX_COMMENTS));
 
+      var name = getRandomItem(AVATARS);
+
       listOfComments = {
-        avatar: getRandomItem(AVATARS),
+        avatar: 'img/avatar-' + name + '.svg',
         message: listOfMessage,
         name: getRandomItem(NAMES)
       };
@@ -79,6 +81,54 @@
     return pictureElement;
   };
 
+  // задание - личный проект: больше деталей в module3-task3
+  var bigPicture = document.querySelector('.big-picture');
+  var socialComment = bigPicture.querySelector('.social__comment');
+  var commentsCount = bigPicture.querySelector('.social__comment-count');
+  var commentsLoader = bigPicture.querySelector('.comments-loader');
+  var bigPictureCancel = bigPicture.querySelector('#picture-cancel');
+
+  var openBigPicture = function () {
+    bigPicture.classList.remove('hidden');
+  };
+
+  var closeBigPicture = function () {
+    bigPicture.classList.add('hidden');
+  };
+
+  var onBigPictureEscDown = function (evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      bigPicture.classList.add('hidden');
+    }
+  };
+
+  var closeBigPicturEnterDown = function () {
+    if (bigPictureCancel.target === ENTER_KEYCODE) {
+      bigPicture.classList.add('hidden');
+    }
+  };
+
+  picturesList.addEventListener('click', openBigPicture);
+  commentsCount.classList.add('visually-hidden');
+  commentsLoader.classList.add('visually-hidden');
+  bigPictureCancel.addEventListener('click', closeBigPicture);
+  document.addEventListener('keydown', onBigPictureEscDown);
+  bigPictureCancel.addEventListener('keydown', closeBigPicturEnterDown);
+
+  var generateBigPictureElements = function (generateListItems) {
+
+    bigPicture.querySelector('.big-picture__img').src = generateListItems[0].url;
+    bigPicture.querySelector('.likes-count').textContent = generateListItems[0].likes;
+    bigPicture.querySelector('.comments-count').textContent = String(generateListItems[0].comments.message.length);
+    bigPicture.querySelector('.social__comments .social__picture').src = generateListItems[0].comments.avatar;
+    bigPicture.querySelector('.social__comments .social__picture').alt = generateListItems[0].comments.name;
+    bigPicture.querySelector('.social__comments .social__text').textContent = generateListItems[0].comments.message;
+    bigPicture.querySelector('.social__caption').textContent = generateListItems[0].description;
+
+    return bigPicture;
+  };
+  // задание 3-3 финиш
+
   var init = function (generateListItems) {
     var fragment = document.createDocumentFragment();
 
@@ -86,6 +136,7 @@
       fragment.appendChild(generatePhoto(generateListItems[i]));
     }
     picturesList.appendChild(fragment);
+    socialComment.appendChild(generateBigPictureElements(generateListItems));
   };
 
   init(generateListOfPhotos(PHOTO_ITEMS_COUNT));
