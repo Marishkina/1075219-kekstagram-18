@@ -19,6 +19,8 @@
   var NAMES = ['Артем', 'Вася', 'Матрена', 'Катюша', 'Слава', 'Поля'];
   var AVATARS = ['1', '2', '3', '4', '5', '6'];
   var PHOTO_ITEMS_COUNT = 25;
+  var ENTER_KEYCODE = 13;
+  var ESC_KEYCODE = 27;
 
   var picturesList = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
@@ -129,8 +131,9 @@
   var generatePhotoPage = function (generateListItems) {
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < PHOTO_ITEMS_COUNT; i++) {
-      fragment.appendChild(generatePhoto(generateListItems[i]));
+  var openBigPicture = function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      bigPicture.classList.remove('hidden');
     }
 
     picturesList.appendChild(fragment);
@@ -143,8 +146,6 @@
   var uploadForm = document.querySelector('.img-upload__form');
   var uploadFieldset = uploadForm.querySelector('.img-upload__start');
   var uploadButton = uploadFieldset.querySelector('#upload-file');
-  var ENTER_KEYCODE = 13;
-  var ESC_KEYCODE = 27;
   var TAB_KEYCODE = 9;
   var fileName = uploadFieldset.querySelector('input[name = filename]');
   var uploadOverlayForm = uploadForm.querySelector('.img-upload__overlay');
@@ -215,7 +216,6 @@
     }
   };
 
-  // определение уровня насыщенности и нахождение положения пина относительно блока effectLevel
   var pinEffectLevelPosition = function (evt) {
     return evt.pageX - pinEffectLevel.offsetLeft;
   };
@@ -224,12 +224,9 @@
     return (pinEffectLevelPosition() * maxFilter) / 100;
   };
 
-  // сброс уровня эффекта до начального состояния
   var effectLevelReset = function () {
     effectLevel.reset();
   };
-
-  // валидация хэш-тегов
 
   var validateHashtags = function () {
     var a = hashtagInput.toLowerCase();
@@ -259,6 +256,19 @@
   closeButtonUploadOverlayForm.addEventListener('click', closeUploadOverlayForm);
   document.addEventListener('keydown', onUploadOverlayFormEscDown);
   effectLevel.addEventListener('mouseup', depthChange);
-  effectsItems.addEventListener('change', effectLevelReset); // сброс уровня эффекта до начального состояния при переключении фильтра
+  effectsItems.addEventListener('change', effectLevelReset);
   hashtagInput.addEventListener('input', validateHashtags);
+
+  var init = function (generateListItems) {
+    var fragment = document.createDocumentFragment();
+
+    for (var i = 0; i < PHOTO_ITEMS_COUNT; i++) {
+      fragment.appendChild(generatePhoto(generateListItems[i]));
+    }
+    picturesList.appendChild(fragment);
+    main.appendChild(generateBigPictureElements(generateListItems));
+  };
+
+  init(generateListOfPhotos(PHOTO_ITEMS_COUNT));
+
 })();
