@@ -134,8 +134,9 @@
   var generatePhotoPage = function (generateListItems) {
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < PHOTO_ITEMS_COUNT; i++) {
-      fragment.appendChild(generatePhoto(generateListItems[i]));
+  var openBigPicture = function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      bigPicture.classList.remove('hidden');
     }
 
     picturesList.appendChild(fragment);
