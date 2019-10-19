@@ -110,14 +110,20 @@
   document.addEventListener('keydown', onBigPictureEscDown);
   bigPictureCancel.addEventListener('keydown', closeBigPictureEnterDown);
 
+  var renderBigPictureComments = function (generateListItems) {
+
+    bigPicture.querySelector('.social__picture').src = generateListItems[0].comments.avatar;
+    bigPicture.querySelector('.social__picture').alt = generateListItems[0].comments.name;
+    bigPicture.querySelector('.social__text').textContent = generateListItems[0].comments.message;
+
+    return bigPicture;
+  };
+
   var generateBigPictureElements = function (generateListItems) {
 
     bigPicture.querySelector('.big-picture__img').src = generateListItems[0].url;
     bigPicture.querySelector('.likes-count').textContent = generateListItems[0].likes;
     bigPicture.querySelector('.comments-count').textContent = String(generateListItems[0].comments.message.length);
-    bigPicture.querySelector('.social__comments .social__picture').src = generateListItems[0].comments.avatar;
-    bigPicture.querySelector('.social__comments .social__picture').alt = generateListItems[0].comments.name;
-    bigPicture.querySelector('.social__comments .social__text').textContent = generateListItems[0].comments.message;
     bigPicture.querySelector('.social__caption').textContent = generateListItems[0].description;
 
     return bigPicture;
@@ -132,6 +138,7 @@
 
     picturesList.appendChild(fragment);
     main.appendChild(generateBigPictureElements(generateListItems));
+    main.appendChild(renderBigPictureComments(generateListItems));
   };
 
   init(generateListOfPhotos(PHOTO_ITEMS_COUNT));
