@@ -145,21 +145,21 @@
   //   return commentsFragment.appendChild(newListElement);
   // };
 
+  // функция собирает li
   var renderBigPictureComment = function (comment) {
-    var commentTemplate = socialComment.cloneNode(true);
+    var socialCommentElement = socialComment.cloneNode(true);
 
-    commentTemplate.querySelector('.social__picture').src = comment.avatar;
-    commentTemplate.querySelector('.social__picture').alt = comment.name;
-    commentTemplate.querySelector('.social__text').textContent = comment.message;
+    socialCommentElement.querySelector('.social__picture').src = comment.avatar;
+    socialCommentElement.querySelector('.social__picture').alt = comment.name;
+    socialCommentElement.querySelector('.social__text').textContent = comment.message;
 
-    return socialComments.appendChild(commentTemplate);
+    return socialCommentElement;
   };
 
+  // функция собирает li в ul
   var renderListOfComments = function (listOfComments) {
-    var myNode = socialComments;
-    while (myNode.firstChild) {
-      myNode.removeChild(myNode.firstChild);
-    }
+    socialComments.innerHTML = '';
+
     var commentsFragment = document.createDocumentFragment();
 
     for (var i = 0; i < listOfComments.length; i++) {
