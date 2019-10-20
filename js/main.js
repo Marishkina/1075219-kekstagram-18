@@ -13,7 +13,7 @@
     'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
   ];
   var MIN_COMMENTS = 1;
-  var MAX_COMMENTS = 2;
+  var MAX_COMMENTS = 12;
   var MIN_LIKES = 15;
   var MAX_LIKES = 200;
   var NAMES = ['Артем', 'Вася', 'Матрена', 'Катюша', 'Слава', 'Поля'];
@@ -122,23 +122,59 @@
   document.addEventListener('keydown', onBigPictureEscDown);
   bigPictureCancel.addEventListener('keydown', closeBigPictureEnterDown);
 
-  var renderBigPictureComments = function (comment) {
-    for (var i = 0; i < comment.lenght; i++) {
+  // Второй способ вывода li с комментом
 
-      socialComment.querySelector('.social__picture').src = comment[i].comments.avatar;
-      socialComment.querySelector('.social__picture').alt = comment[i].comments.name;
-      socialComment.querySelector('.social__text').textContent = comment[i].comments.message;
+  // var renderBigPictureComment = function (comment) {
+  //   var commentsFragment = document.createDocumentFragment();
+
+  //   var newListElement = document.createElement('li');
+  //   newListElement.className = 'social__comment';
+
+  //   var newImageElement = document.createElement('img');
+  //   newImageElement.className = 'social__picture';
+  //   newImageElement.src = comment.avatar;
+  //   newImageElement.alt = comment.name;
+
+  //   var newCommentElement = document.createElement('p');
+  //   newCommentElement.className = 'social__text';
+  //   newCommentElement.textContent = comment.message;
+
+  //   newListElement.appendChild(newImageElement);
+  //   newListElement.appendChild(newCommentElement);
+
+  //   return commentsFragment.appendChild(newListElement);
+  // };
+
+  var renderBigPictureComment = function (comment) {
+    var commentTemplate = socialComment.cloneNode(true);
+
+    commentTemplate.querySelector('.social__picture').src = comment.avatar;
+    commentTemplate.querySelector('.social__picture').alt = comment.name;
+    commentTemplate.querySelector('.social__text').textContent = comment.message;
+
+    return socialComments.appendChild(commentTemplate);
+  };
+
+  var renderListOfComments = function (listOfComments) {
+    var myNode = socialComments;
+    while (myNode.firstChild) {
+      myNode.removeChild(myNode.firstChild);
     }
-    return socialComment;
+    var commentsFragment = document.createDocumentFragment();
+
+    for (var i = 0; i < listOfComments.length; i++) {
+      commentsFragment.appendChild(renderBigPictureComment(listOfComments[i]));
+    }
+
+    return commentsFragment;
   };
 
   var generateBigPictureElements = function (generateListItems) {
-
     bigPicture.querySelector('.big-picture__img').src = generateListItems[0].url;
     bigPicture.querySelector('.likes-count').textContent = generateListItems[0].likes;
     bigPicture.querySelector('.comments-count').textContent = String(generateListItems[0].comments.length);
     bigPicture.querySelector('.social__caption').textContent = generateListItems[0].description;
-    bigPicture.querySelector('.social__comments').textContent = renderBigPictureComments(generateListItems[0].comments);
+    bigPicture.querySelector('.social__comments').appendChild(renderListOfComments(generateListItems[0].comments));
 
     return bigPicture;
   };
