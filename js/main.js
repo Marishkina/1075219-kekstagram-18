@@ -270,5 +270,4 @@
   };
 
   init(generateListOfPhotos(PHOTO_ITEMS_COUNT));
-
 })();
