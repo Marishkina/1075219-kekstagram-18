@@ -143,6 +143,7 @@
 
   generatePhotoPage(generateListOfPhotos(PHOTO_ITEMS_COUNT));
 
+  // загрузка изображения и показ формы редактирования
   var uploadForm = document.querySelector('.img-upload__form');
   var uploadFieldset = uploadForm.querySelector('.img-upload__start');
   var uploadButton = uploadFieldset.querySelector('#upload-file');
@@ -150,16 +151,8 @@
   var fileName = uploadFieldset.querySelector('input[name = filename]');
   var uploadOverlayForm = uploadForm.querySelector('.img-upload__overlay');
   var closeButtonUploadOverlayForm = uploadOverlayForm.querySelector('#upload-cancel');
-  var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
-  // var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
-  var pinEffectLevel = effectLevel.querySelector('.effect-level__pin');
-  // var effectLevelValue = effectLevel.querySelector('.effect-level__value');
-  var effects = uploadForm.querySelector('.img-upload__effects');
-  var effectsItems = effects.querySelector('.effects__item');
   var hashtagFieldset = uploadForm.querySelector('.img-upload__text');
   var hashtagInput = hashtagFieldset.querySelector('input[name=hashtags]');
-  var MAX_HASHTAGS = 5;
-  var MAX_HASHTAG_LENGTH = 20;
 
   var openUploadFieldset = function () {
     uploadButton.classList.remove('visually-hidden');
@@ -216,17 +209,52 @@
     }
   };
 
-  var pinEffectLevelPosition = function (evt) {
-    return evt.pageX - pinEffectLevel.offsetLeft;
+  uploadFieldset.addEventListener('click', openUploadFieldset);
+  uploadFieldset.addEventListener('keydown', onUploadFieldsetEnterDown);
+  document.addEventListener('keydown', onUploadFieldsetEscDown);
+  document.addEventListener('click', closeUploadFieldsetHandler);
+  document.addEventListener('keydown', onUploadFieldsetTabDown);
+  fileName.addEventListener('change', photoSelection);
+  closeButtonUploadOverlayForm.addEventListener('click', closeUploadOverlayForm);
+  document.addEventListener('keydown', onUploadOverlayFormEscDown);
+
+  // расчет уровня насыщенности при передвижении пина
+
+  // добавить на пин слайдера .effect-level__pin обработчик события по mouseup
+  // обработчик события mouseup - меняет уровень насыщенности фильтра для изображения
+  // насыщенность рассчитываем исходя из положения пина слайдера относительно блока
+  // воспользоваться пропорцией, чтобы понять какой уровень эффекта нужно применить
+  // при переключении фильтра уровень эффекта должен сбрасываться до начального состояния
+
+  var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
+  var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
+  var line = effectLevel.querySelector('.effect-level__line');
+  // var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
+  // var effectLevelValue = effectLevel.querySelector('.effect-level__value');
+  var effects = uploadForm.querySelector('.img-upload__effects');
+  var effectsItems = effects.querySelector('.effects__item');
+
+  var effectLevelPinPosition = function (evt) {
+    var page = evt.pageX - effectLevelPin.offsetLeft;
+    console.log(page);
+    // return page - effectLevelPin.offsetLeft;
   };
 
   var depthChange = function (maxFilter) {
-    return (pinEffectLevelPosition() * maxFilter) / 100;
+    return (effectLevelPinPosition() * maxFilter) / 100;
   };
 
   var effectLevelReset = function () {
     effectLevel.reset();
   };
+
+  effectLevelPin.addEventListener('mouseup', depthChange);
+  effectsItems.addEventListener('change', effectLevelReset);
+
+  // валидация хеш-тегов
+
+  var MAX_HASHTAGS = 5;
+  var MAX_HASHTAG_LENGTH = 20;
 
   var validateHashtags = function () {
     var a = hashtagInput.toLowerCase();
@@ -247,16 +275,6 @@
     }
   };
 
-  uploadFieldset.addEventListener('click', openUploadFieldset);
-  uploadFieldset.addEventListener('keydown', onUploadFieldsetEnterDown);
-  document.addEventListener('keydown', onUploadFieldsetEscDown);
-  document.addEventListener('click', closeUploadFieldsetHandler);
-  document.addEventListener('keydown', onUploadFieldsetTabDown);
-  fileName.addEventListener('change', photoSelection);
-  closeButtonUploadOverlayForm.addEventListener('click', closeUploadOverlayForm);
-  document.addEventListener('keydown', onUploadOverlayFormEscDown);
-  effectLevel.addEventListener('mouseup', depthChange);
-  effectsItems.addEventListener('change', effectLevelReset);
   hashtagInput.addEventListener('input', validateHashtags);
 
   var init = function (generateListItems) {
