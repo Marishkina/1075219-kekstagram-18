@@ -89,7 +89,7 @@
   var commentsCount = bigPicture.querySelector('.social__comment-count');
   var commentsLoader = bigPicture.querySelector('.comments-loader');
 
-  bigPicture.classList.remove('hidden');
+  // bigPicture.classList.remove('hidden');
 
   commentsCount.classList.add('visually-hidden');
   commentsLoader.classList.add('visually-hidden');
@@ -131,9 +131,8 @@
   var generatePhotoPage = function (generateListItems) {
     var fragment = document.createDocumentFragment();
 
-  var openBigPicture = function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      bigPicture.classList.remove('hidden');
+    for (var i = 0; i < PHOTO_ITEMS_COUNT; i++) {
+      fragment.appendChild(generatePhoto(generateListItems[i]));
     }
 
     picturesList.appendChild(fragment);
@@ -142,6 +141,8 @@
   };
 
   generatePhotoPage(generateListOfPhotos(PHOTO_ITEMS_COUNT));
+
+  // задание 4-2
 
   // загрузка изображения и показ формы редактирования
   var uploadForm = document.querySelector('.img-upload__form');
@@ -153,6 +154,14 @@
   var closeButtonUploadOverlayForm = uploadOverlayForm.querySelector('#upload-cancel');
   var hashtagFieldset = uploadForm.querySelector('.img-upload__text');
   var hashtagInput = hashtagFieldset.querySelector('input[name=hashtags]');
+  var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
+  var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
+  // var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
+  // var effectLevelValue = effectLevel.querySelector('.effect-level__value');
+  var effects = uploadForm.querySelector('.img-upload__effects');
+  var effectsItems = effects.querySelector('.effects__item');
+  var MAX_HASHTAGS = 5;
+  var MAX_HASHTAG_LENGTH = 20;
 
   var openUploadFieldset = function () {
     uploadButton.classList.remove('visually-hidden');
@@ -226,18 +235,8 @@
   // воспользоваться пропорцией, чтобы понять какой уровень эффекта нужно применить
   // при переключении фильтра уровень эффекта должен сбрасываться до начального состояния
 
-  var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
-  var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
-  var line = effectLevel.querySelector('.effect-level__line');
-  // var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
-  // var effectLevelValue = effectLevel.querySelector('.effect-level__value');
-  var effects = uploadForm.querySelector('.img-upload__effects');
-  var effectsItems = effects.querySelector('.effects__item');
-
   var effectLevelPinPosition = function (evt) {
-    var page = evt.pageX - effectLevelPin.offsetLeft;
-    console.log(page);
-    return page - effectLevelPin.offsetLeft;
+    return evt.pageX - effectLevelPin.offsetLeft;
   };
 
   var depthChange = function (maxFilter) {
@@ -252,9 +251,6 @@
   effectsItems.addEventListener('change', effectLevelReset);
 
   // валидация хеш-тегов
-
-  var MAX_HASHTAGS = 5;
-  var MAX_HASHTAG_LENGTH = 20;
 
   var validateHashtags = function () {
     var a = hashtagInput.toLowerCase();
@@ -276,16 +272,4 @@
   };
 
   hashtagInput.addEventListener('input', validateHashtags);
-
-  var init = function (generateListItems) {
-    var fragment = document.createDocumentFragment();
-
-    for (var i = 0; i < PHOTO_ITEMS_COUNT; i++) {
-      fragment.appendChild(generatePhoto(generateListItems[i]));
-    }
-    picturesList.appendChild(fragment);
-    generateBigPictureElements(generateListItems);
-  };
-
-  init(generateListOfPhotos(PHOTO_ITEMS_COUNT));
 })();
