@@ -237,7 +237,7 @@
   var effectLevelPinPosition = function (evt) {
     var page = evt.pageX - effectLevelPin.offsetLeft;
     console.log(page);
-    // return page - effectLevelPin.offsetLeft;
+    return page - effectLevelPin.offsetLeft;
   };
 
   var depthChange = function (maxFilter) {
@@ -284,7 +284,7 @@
       fragment.appendChild(generatePhoto(generateListItems[i]));
     }
     picturesList.appendChild(fragment);
-    main.appendChild(generateBigPictureElements(generateListItems));
+    generateBigPictureElements(generateListItems);
   };
 
   init(generateListOfPhotos(PHOTO_ITEMS_COUNT));
