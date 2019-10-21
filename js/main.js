@@ -13,7 +13,7 @@
     'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
   ];
   var MIN_COMMENTS = 1;
-  var MAX_COMMENTS = 12;
+  var MAX_COMMENTS = 120;
   var MIN_LIKES = 15;
   var MAX_LIKES = 200;
   var NAMES = ['Артем', 'Вася', 'Матрена', 'Катюша', 'Слава', 'Поля'];
@@ -42,20 +42,16 @@
   };
 
   var comments = function (count) {
+    var shuffledListComments = shuffleList(COMMENTS);
+    var listOfComments = [];
     for (var i = 0; i < count; i++) {
-      var shuffledListComments = shuffleList(COMMENTS);
-      var listOfMessage = shuffledListComments.slice(0, getRandomNumber(MIN_COMMENTS, MAX_COMMENTS));
 
-      var listOfComments = [];
-
-      for (var j = 0; j < listOfMessage.length; j++) {
-
-        listOfComments [j] = {
-          avatar: 'img/avatar-' + getRandomItem(AVATARS) + '.svg',
-          message: listOfMessage[j],
-          name: getRandomItem(NAMES)
-        };
-      }
+      var comment = {
+        avatar: 'img/avatar-' + getRandomItem(AVATARS) + '.svg',
+        message: getRandomItem(shuffledListComments),
+        name: getRandomItem(NAMES)
+      };
+      listOfComments.push(comment);
     }
     return listOfComments;
   };
@@ -69,7 +65,7 @@
         url: 'photos/' + shuffledListPhotos[i] + '.jpg',
         description: getRandomItem(DESCRIPTIONS),
         likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
-        comments: comments(PHOTO_ITEMS_COUNT)
+        comments: comments(getRandomNumber(MIN_COMMENTS, MAX_COMMENTS))
       };
     }
     return itemsOfListOfPhotos;
