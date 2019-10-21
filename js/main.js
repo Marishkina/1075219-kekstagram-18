@@ -19,8 +19,6 @@
   var NAMES = ['Артем', 'Вася', 'Матрена', 'Катюша', 'Слава', 'Поля'];
   var AVATARS = ['1', '2', '3', '4', '5', '6'];
   var PHOTO_ITEMS_COUNT = 25;
-  var ENTER_KEYCODE = 13;
-  var ESC_KEYCODE = 27;
 
   var picturesList = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
@@ -88,62 +86,15 @@
   };
 
   var bigPicture = document.querySelector('.big-picture');
-  var main = document.querySelector('main');
   var socialComments = bigPicture.querySelector('.social__comments');
   var socialComment = socialComments.querySelector('.social__comment');
   var commentsCount = bigPicture.querySelector('.social__comment-count');
   var commentsLoader = bigPicture.querySelector('.comments-loader');
-  var bigPictureCancel = bigPicture.querySelector('#picture-cancel');
 
-  var openBigPicture = function () {
-    bigPicture.classList.remove('hidden');
-  };
+  bigPicture.classList.remove('hidden');
 
-  var closeBigPicture = function () {
-    bigPicture.classList.add('hidden');
-  };
-
-  var onBigPictureEscDown = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
-      bigPicture.classList.add('hidden');
-    }
-  };
-
-  var closeBigPictureEnterDown = function () {
-    if (bigPictureCancel.target === ENTER_KEYCODE) {
-      bigPicture.classList.add('hidden');
-    }
-  };
-
-  picturesList.addEventListener('click', openBigPicture);
   commentsCount.classList.add('visually-hidden');
   commentsLoader.classList.add('visually-hidden');
-  bigPictureCancel.addEventListener('click', closeBigPicture);
-  document.addEventListener('keydown', onBigPictureEscDown);
-  bigPictureCancel.addEventListener('keydown', closeBigPictureEnterDown);
-
-  // Второй способ вывода li с комментом
-
-  // var renderBigPictureComment = function (comment) {
-  //   var commentsFragment = document.createDocumentFragment();
-
-  //   var newListElement = document.createElement('li');
-  //   newListElement.className = 'social__comment';
-
-  //   var newImageElement = document.createElement('img');
-  //   newImageElement.className = 'social__picture';
-  //   newImageElement.src = comment.avatar;
-  //   newImageElement.alt = comment.name;
-
-  //   var newCommentElement = document.createElement('p');
-  //   newCommentElement.className = 'social__text';
-  //   newCommentElement.textContent = comment.message;
-
-  //   newListElement.appendChild(newImageElement);
-  //   newListElement.appendChild(newCommentElement);
-
-  //   return commentsFragment.appendChild(newListElement);
-  // };
 
   // функция собирает li
   var renderBigPictureComment = function (comment) {
@@ -179,7 +130,7 @@
     return bigPicture;
   };
 
-  var init = function (generateListItems) {
+  var generatePhotoPage = function (generateListItems) {
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < PHOTO_ITEMS_COUNT; i++) {
@@ -187,8 +138,9 @@
     }
 
     picturesList.appendChild(fragment);
-    main.appendChild(generateBigPictureElements(generateListItems));
+
+    generateBigPictureElements(generateListItems);
   };
 
-  init(generateListOfPhotos(PHOTO_ITEMS_COUNT));
+  generatePhotoPage(generateListOfPhotos(PHOTO_ITEMS_COUNT));
 })();
