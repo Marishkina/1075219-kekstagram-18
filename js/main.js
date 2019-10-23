@@ -211,20 +211,20 @@
   fileName.addEventListener('change', onFileNameChange);
   closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
 
-  var effectLevelPinPosition = function (evt) {
+  var getEffectLevelPinPosition = function (evt) {
     return evt.pageX - effectLevelPin.offsetLeft;
   };
 
-  var depthChange = function (maxFilter) {
-    return (effectLevelPinPosition() * maxFilter) / 100;
+  var onEffectLevelPinMouseup = function (maxFilter) {
+    return (getEffectLevelPinPosition() * maxFilter) / 100;
   };
 
-  var effectLevelReset = function () {
+  var onEffectsItemsChange = function () {
     effectLevel.reset();
   };
 
-  effectLevelPin.addEventListener('mouseup', depthChange);
-  effectsItems.addEventListener('change', effectLevelReset);
+  effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
+  effectsItems.addEventListener('change', onEffectsItemsChange);
 
   // валидация хеш-тегов
 
@@ -233,26 +233,20 @@
   };
 
   var validateHashtag = function () {
-    var lowerCaseHashtagList = hashtagTextField.toLowerCase();
-    var hashtagList = lowerCaseHashtagList.split(' ');
+    var lowerCaseHashtagsList = hashtagTextField.toLowerCase();
+    var hashtagList = lowerCaseHashtagsList.split(' ');
 
     for (var i = 0; i < hashtagList.length; i++) {
-      switch (hashtagList) {
-        case (hashtagList[i].indexOf('#') !== 0):
-          hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
-          break;
-        case (hashtagList[i] === 1 && hashtagList[i].indexOf('#') === 0):
-          hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
-          break;
-        case (hashtagList.include(hashtagList[i])):
-          hashtagTextField.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
-          break;
-        case (hashtagList.length > MAX_HASHTAGS_COUNT):
-          hashtagTextField.setCustomValidity('максимум пять хэш-тегов');
-          break;
-        case (hashtagList[i].length > MAX_HASHTAG_LENGTH):
-          hashtagTextField.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
-          break;
+      if (hashtagList[i].indexOf('#') !== 0) {
+        hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
+      } else if (hashtagList[i] === 1 && hashtagList[i].indexOf('#') === 0) {
+        hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
+      } else if (hashtagList.include(hashtagList[i])) {
+        hashtagTextField.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
+      } else if (hashtagList.length > MAX_HASHTAGS_COUNT) {
+        hashtagTextField.setCustomValidity('максимум пять хэш-тегов');
+      } else if (hashtagList[i].length > MAX_HASHTAG_LENGTH) {
+        hashtagTextField.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
       }
     }
   };
