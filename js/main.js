@@ -19,8 +19,8 @@
   var NAMES = ['Артем', 'Вася', 'Матрена', 'Катюша', 'Слава', 'Поля'];
   var AVATARS = ['1', '2', '3', '4', '5', '6'];
   var PHOTO_ITEMS_COUNT = 25;
-  var ENTER_KEYCODE = 13;
-  var ESC_KEYCODE = 27;
+  var MAX_HASHTAGS = 5;
+  var MAX_HASHTAG_LENGTH = 20;
 
   var picturesList = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
@@ -43,7 +43,7 @@
     return a;
   };
 
-  var comments = function (count) {
+  var getComments = function (count) {
     var shuffledListComments = shuffleList(COMMENTS);
     var listOfComments = [];
     for (var i = 0; i < count; i++) {
@@ -67,7 +67,7 @@
         url: 'photos/' + shuffledListPhotos[i] + '.jpg',
         description: getRandomItem(DESCRIPTIONS),
         likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
-        comments: comments(getRandomNumber(MIN_COMMENTS, MAX_COMMENTS))
+        comments: getComments(getRandomNumber(MIN_COMMENTS, MAX_COMMENTS))
       };
     }
     return itemsOfListOfPhotos;
@@ -148,22 +148,17 @@
   var uploadForm = document.querySelector('.img-upload__form');
   var uploadFieldset = uploadForm.querySelector('.img-upload__start');
   var uploadButton = uploadFieldset.querySelector('#upload-file');
-  var TAB_KEYCODE = 9;
   var fileName = uploadFieldset.querySelector('input[name = filename]');
   var uploadOverlayForm = uploadForm.querySelector('.img-upload__overlay');
   var closeButtonUploadOverlayForm = uploadOverlayForm.querySelector('#upload-cancel');
   var hashtagFieldset = uploadForm.querySelector('.img-upload__text');
-  var hashtagInput = hashtagFieldset.querySelector('input[name=hashtags]');
+  var hashtagFieldset = hashtagFieldset.querySelector('input[name=hashtags]');
   var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
-  // var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
-  // var effectLevelValue = effectLevel.querySelector('.effect-level__value');
   var effects = uploadForm.querySelector('.img-upload__effects');
   var effectsItems = effects.querySelector('.effects__item');
-  var MAX_HASHTAGS = 5;
-  var MAX_HASHTAG_LENGTH = 20;
 
-  var openUploadFieldset = function () {
+  var onUploadFieldsetClick = function () {
     uploadButton.classList.remove('visually-hidden');
   };
 
@@ -176,30 +171,30 @@
   };
 
   var onUploadFieldsetEnterDown = function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      openUploadFieldset();
+    if (evt.code === 'Enter') {
+      onUploadFieldsetClick();
     }
   };
 
   var onUploadFieldsetEscDown = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
+    if (evt.code === 'Escape') {
       closeUploadFieldset();
     }
   };
 
-  var closeUploadFieldsetHandler = function (evt) {
+  var onDocumentClick = function (evt) {
     if (evt.target !== fileName) {
       closeUploadFieldset();
     }
   };
 
   var onUploadFieldsetTabDown = function (evt) {
-    if (evt.keyCode === TAB_KEYCODE) {
+    if (evt.code === 'Tab') {
       closeUploadFieldset();
     }
   };
 
-  var photoSelection = function () {
+  var onPhotoPickerClick = function () {
     uploadForm.reset();
     openUploadOverlayForm();
   };
@@ -209,7 +204,7 @@
   };
 
   var onUploadOverlayFormEscDown = function (evt) {
-    if (evt.keyCode === ESC_KEYCODE) {
+    if (evt.code === 'Escape') {
       if (evt.target === hashtagInput) {
         evt.stopPropogation();
       } else {
@@ -218,22 +213,14 @@
     }
   };
 
-  uploadFieldset.addEventListener('click', openUploadFieldset);
+  uploadFieldset.addEventListener('click', onUploadFieldsetClick);
   uploadFieldset.addEventListener('keydown', onUploadFieldsetEnterDown);
   document.addEventListener('keydown', onUploadFieldsetEscDown);
-  document.addEventListener('click', closeUploadFieldsetHandler);
+  document.addEventListener('click', onDocumentClick);
   document.addEventListener('keydown', onUploadFieldsetTabDown);
-  fileName.addEventListener('change', photoSelection);
+  fileName.addEventListener('change', onPhotoPickerClick);
   closeButtonUploadOverlayForm.addEventListener('click', closeUploadOverlayForm);
   document.addEventListener('keydown', onUploadOverlayFormEscDown);
-
-  // расчет уровня насыщенности при передвижении пина
-
-  // добавить на пин слайдера .effect-level__pin обработчик события по mouseup
-  // обработчик события mouseup - меняет уровень насыщенности фильтра для изображения
-  // насыщенность рассчитываем исходя из положения пина слайдера относительно блока
-  // воспользоваться пропорцией, чтобы понять какой уровень эффекта нужно применить
-  // при переключении фильтра уровень эффекта должен сбрасываться до начального состояния
 
   var effectLevelPinPosition = function (evt) {
     return evt.pageX - effectLevelPin.offsetLeft;
@@ -253,23 +240,29 @@
   // валидация хеш-тегов
 
   var validateHashtags = function () {
-    var a = hashtagInput.toLowerCase();
+    var a = hashtagFieldset.toLowerCase();
     var hashtagList = a.split(' ');
 
     for (var i = 0; i < hashtagList.length; i++) {
-      if (hashtagList[i].indexOf('#') !== 0) {
-        hashtagInput.setCustomValidity('хэш-тег начинается с символа #');
-      } else if (hashtagList[i] === 1 && hashtagList[i].indexOf('#') === 0) {
-        hashtagInput.setCustomValidity('хеш-тег не может состоять только из одной решётки');
-      } else if (hashtagList.include(hashtagList[i])) {
-        hashtagInput.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
-      } else if (hashtagList.length > MAX_HASHTAGS) {
-        hashtagInput.setCustomValidity('максимум пять хэш-тегов');
-      } else if (hashtagList[i].length > MAX_HASHTAG_LENGTH) {
-        hashtagInput.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
+      switch (hashtagList) {
+        case (hashtagList[i].indexOf('#') !== 0):
+          console.log('хэш-тег начинается с символа #');
+          break;
+        case (hashtagList[i] === 1 && hashtagList[i].indexOf('#') === 0):
+            console.log('хеш-тег не может состоять только из одной решётки');
+          break;
+        case (hashtagList.include(hashtagList[i])):
+            console.log('один и тот же хэш-тег не может быть использован дважды');
+          break;
+        case (hashtagList.length > MAX_HASHTAGS):
+            console.log('максимум пять хэш-тегов');
+          break;
+        case (hashtagList[i].length > MAX_HASHTAG_LENGTH):
+            console.log('максимальная длина одного хэш-тега 20 символов, включая решётку');
+          break;
       }
     }
   };
 
-  hashtagInput.addEventListener('input', validateHashtags);
+  hashtagFieldset.addEventListener('input', validateHashtags);
 })();
