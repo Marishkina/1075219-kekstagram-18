@@ -229,8 +229,12 @@
   // валидация хеш-тегов
 
   var onHashtagTextFieldInput = function () {
-    var a = hashtagTextField.toLowerCase();
-    var hashtagList = a.split(' ');
+    validateHashtag();
+  };
+
+  var validateHashtag = function () {
+    var lowerCaseHashtagList = hashtagTextField.toLowerCase();
+    var hashtagList = lowerCaseHashtagList.split(' ');
 
     for (var i = 0; i < hashtagList.length; i++) {
       switch (hashtagList) {
