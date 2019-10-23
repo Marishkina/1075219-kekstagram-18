@@ -152,7 +152,7 @@
   var uploadOverlayForm = uploadForm.querySelector('.img-upload__overlay');
   var closeButtonUploadOverlayForm = uploadOverlayForm.querySelector('#upload-cancel');
   var hashtagFieldset = uploadForm.querySelector('.img-upload__text');
-  var hashtagFieldset = hashtagFieldset.querySelector('input[name=hashtags]');
+  var hashtagTextField = hashtagFieldset.querySelector('input[name=hashtags]');
   var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
   var effects = uploadForm.querySelector('.img-upload__effects');
@@ -205,7 +205,7 @@
 
   var onUploadOverlayFormEscDown = function (evt) {
     if (evt.code === 'Escape') {
-      if (evt.target === hashtagInput) {
+      if (evt.target === hashtagTextField) {
         evt.stopPropogation();
       } else {
         closeUploadOverlayForm();
@@ -240,7 +240,7 @@
   // валидация хеш-тегов
 
   var validateHashtags = function () {
-    var a = hashtagFieldset.toLowerCase();
+    var a = hashtagTextField.toLowerCase();
     var hashtagList = a.split(' ');
 
     for (var i = 0; i < hashtagList.length; i++) {
@@ -264,5 +264,5 @@
     }
   };
 
-  hashtagFieldset.addEventListener('input', validateHashtags);
+  hashtagTextField.addEventListener('input', validateHashtags);
 })();
