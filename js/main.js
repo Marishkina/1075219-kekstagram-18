@@ -158,7 +158,7 @@
   var effects = uploadForm.querySelector('.img-upload__effects');
   var effectsItems = effects.querySelector('.effects__item');
 
-  var onUploadFieldsetClick = function () {
+  var onUploadFieldsetChange = function () {
     uploadButton.classList.remove('visually-hidden');
   };
 
@@ -172,7 +172,7 @@
 
   var onUploadFieldsetKeydown = function (evt) {
     if (evt.code === 'Enter') {
-      onUploadFieldsetClick();
+      onUploadFieldsetChange();
     }
   };
 
@@ -204,7 +204,7 @@
     uploadOverlayForm.classList.add('hidden');
   };
 
-  uploadFieldset.addEventListener('click', onUploadFieldsetClick);
+  uploadFieldset.addEventListener('change', onUploadFieldsetChange);
   uploadFieldset.addEventListener('keydown', onUploadFieldsetKeydown);
   document.addEventListener('keydown', onDocumentKeydown);
   document.addEventListener('click', onDocumentClick);
@@ -234,18 +234,20 @@
 
   var validateHashtag = function () {
     var lowerCaseHashtagsList = hashtagTextField.toLowerCase();
-    var hashtagList = lowerCaseHashtagsList.split(' ');
+    var hashtagsList = lowerCaseHashtagsList.split(' ');
 
-    for (var i = 0; i < hashtagList.length; i++) {
-      if (hashtagList[i].indexOf('#') !== 0) {
+    if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
+      hashtagTextField.setCustomValidity('максимум пять хэш-тегов');
+    }
+
+    for (var i = 0; i < hashtagsList.length; i++) {
+      if (hashtagsList[i].indexOf('#') !== 0) {
         hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
-      } else if (hashtagList[i] === 1 && hashtagList[i].indexOf('#') === 0) {
+      } else if (hashtagsList.length === 1 && hashtagsList[i].indexOf('#') === 0) {
         hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
-      } else if (hashtagList.include(hashtagList[i])) {
+      } else if (hashtagsList.includes(hashtagsList[i])) {
         hashtagTextField.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
-      } else if (hashtagList.length > MAX_HASHTAGS_COUNT) {
-        hashtagTextField.setCustomValidity('максимум пять хэш-тегов');
-      } else if (hashtagList[i].length > MAX_HASHTAG_LENGTH) {
+      } else if (hashtagsList[i].length > MAX_HASHTAG_LENGTH) {
         hashtagTextField.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
       }
     }
