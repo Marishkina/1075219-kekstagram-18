@@ -203,6 +203,7 @@
     uploadOverlayForm.classList.add('hidden');
   };
 
+  uploadFile.addEventListener('click', onUploadFieldsetKeydown);
   uploadFile.addEventListener('keydown', onUploadFieldsetKeydown);
   document.addEventListener('keydown', onDocumentKeydown);
   document.addEventListener('click', onDocumentClick);
