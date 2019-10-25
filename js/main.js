@@ -157,22 +157,18 @@
   var effects = uploadForm.querySelector('.img-upload__effects');
   var effectsItems = effects.querySelector('.effects__item');
 
-  var openUploadFieldset = function () {
-    uploadFile.classList.remove('visually-hidden');
-  };
-
-  var closeUploadFieldset = function () {
-    uploadFile.classList.add('visually-hidden');
-  };
-
   var openUploadOverlayForm = function () {
     uploadOverlayForm.classList.remove('hidden');
+    document.addEventListener('keydown', onDocumentKeydown);
+    closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
+    hashtagTextField.addEventListener('input', onHashtagTextFieldInput);
   };
 
-  var onUploadFieldsetKeydown = function (evt) {
-    if (evt.code === 'Enter') {
-      openUploadFieldset();
-    }
+  var closeUploadOverlayForm = function () {
+    uploadOverlayForm.classList.add('hidden');
+    document.removeEventListener('keydown', onDocumentKeydown);
+    closeButtonUploadOverlayForm.removeEventListener('click', onCloseButtonUploadOverlayFormClick);
+    hashtagTextField.removeEventListener('input', onHashtagTextFieldInput);
   };
 
   var onDocumentKeydown = function (evt) {
@@ -180,17 +176,8 @@
       if (evt.target === hashtagTextField) {
         evt.stopPropogation();
       } else {
-        closeUploadFieldset();
+        closeUploadOverlayForm();
       }
-      onCloseButtonUploadOverlayFormClick();
-    } else if (evt.code === 'Tab') {
-      closeUploadFieldset();
-    }
-  };
-
-  var onDocumentClick = function (evt) {
-    if (evt.target !== uploadFile) {
-      closeUploadFieldset();
     }
   };
 
@@ -203,12 +190,7 @@
     uploadOverlayForm.classList.add('hidden');
   };
 
-  uploadFile.addEventListener('click', onUploadFieldsetKeydown);
-  uploadFile.addEventListener('keydown', onUploadFieldsetKeydown);
-  document.addEventListener('keydown', onDocumentKeydown);
-  document.addEventListener('click', onDocumentClick);
   uploadFile.addEventListener('change', onFileNameChange);
-  closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
 
   var getEffectLevelPinPosition = function (evt) {
     return evt.pageX - effectLevelPin.offsetLeft;
@@ -251,6 +233,4 @@
       }
     }
   };
-
-  hashtagTextField.addEventListener('input', onHashtagTextFieldInput);
 })();
