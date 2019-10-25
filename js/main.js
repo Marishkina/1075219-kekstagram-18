@@ -147,8 +147,7 @@
   // загрузка изображения и показ формы редактирования
   var uploadForm = document.querySelector('.img-upload__form');
   var uploadFieldset = uploadForm.querySelector('.img-upload__start');
-  var uploadButton = uploadFieldset.querySelector('#upload-file');
-  var fileName = uploadFieldset.querySelector('input[name = filename]');
+  var uploadFile = uploadFieldset.querySelector('#upload-file');
   var uploadOverlayForm = uploadForm.querySelector('.img-upload__overlay');
   var closeButtonUploadOverlayForm = uploadOverlayForm.querySelector('#upload-cancel');
   var hashtagFieldset = uploadForm.querySelector('.img-upload__text');
@@ -158,12 +157,12 @@
   var effects = uploadForm.querySelector('.img-upload__effects');
   var effectsItems = effects.querySelector('.effects__item');
 
-  var onUploadFieldsetChange = function () {
-    uploadButton.classList.remove('visually-hidden');
+  var openUploadFieldset = function () {
+    uploadFile.classList.remove('visually-hidden');
   };
 
   var closeUploadFieldset = function () {
-    uploadButton.classList.add('visually-hidden');
+    uploadFile.classList.add('visually-hidden');
   };
 
   var openUploadOverlayForm = function () {
@@ -172,7 +171,7 @@
 
   var onUploadFieldsetKeydown = function (evt) {
     if (evt.code === 'Enter') {
-      onUploadFieldsetChange();
+      openUploadFieldset();
     }
   };
 
@@ -190,7 +189,7 @@
   };
 
   var onDocumentClick = function (evt) {
-    if (evt.target !== fileName) {
+    if (evt.target !== uploadFile) {
       closeUploadFieldset();
     }
   };
@@ -204,11 +203,10 @@
     uploadOverlayForm.classList.add('hidden');
   };
 
-  uploadFieldset.addEventListener('change', onUploadFieldsetChange);
-  uploadFieldset.addEventListener('keydown', onUploadFieldsetKeydown);
+  uploadFile.addEventListener('keydown', onUploadFieldsetKeydown);
   document.addEventListener('keydown', onDocumentKeydown);
   document.addEventListener('click', onDocumentClick);
-  fileName.addEventListener('change', onFileNameChange);
+  uploadFile.addEventListener('change', onFileNameChange);
   closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
 
   var getEffectLevelPinPosition = function (evt) {
