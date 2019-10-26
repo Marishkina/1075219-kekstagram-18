@@ -146,8 +146,7 @@
 
   // загрузка изображения и показ формы редактирования
   var uploadForm = document.querySelector('.img-upload__form');
-  var uploadFieldset = uploadForm.querySelector('.img-upload__start');
-  var uploadFile = uploadFieldset.querySelector('#upload-file');
+  var uploadFile = uploadForm.querySelector('#upload-file');
   var uploadOverlayForm = uploadForm.querySelector('.img-upload__overlay');
   var closeButtonUploadOverlayForm = uploadOverlayForm.querySelector('#upload-cancel');
   var hashtagFieldset = uploadForm.querySelector('.img-upload__text');
@@ -165,6 +164,7 @@
   };
 
   var closeUploadOverlayForm = function () {
+    uploadFile.value = '';
     uploadOverlayForm.classList.add('hidden');
     document.removeEventListener('keydown', onDocumentKeydown);
     closeButtonUploadOverlayForm.removeEventListener('click', onCloseButtonUploadOverlayFormClick);
@@ -174,23 +174,22 @@
   var onDocumentKeydown = function (evt) {
     if (evt.code === 'Escape') {
       if (evt.target === hashtagTextField) {
-        evt.stopPropogation();
+        evt.stopPropagation();
       } else {
         closeUploadOverlayForm();
       }
     }
   };
 
-  var onFileNameChange = function () {
-    uploadForm.reset();
+  var onuploadFileChange = function () {
     openUploadOverlayForm();
   };
 
   var onCloseButtonUploadOverlayFormClick = function () {
-    uploadOverlayForm.classList.add('hidden');
+    closeUploadOverlayForm();
   };
 
-  uploadFile.addEventListener('change', onFileNameChange);
+  uploadFile.addEventListener('change', onuploadFileChange);
 
   var getEffectLevelPinPosition = function (evt) {
     return evt.pageX - effectLevelPin.offsetLeft;
