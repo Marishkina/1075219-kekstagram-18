@@ -161,6 +161,7 @@
     document.addEventListener('keydown', onDocumentKeydown);
     closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
     hashtagTextField.addEventListener('input', onHashtagTextFieldInput);
+    uploadForm.addEventListener('submit', onUploadSubmitClick);
   };
 
   var closeUploadOverlayForm = function () {
@@ -169,6 +170,7 @@
     document.removeEventListener('keydown', onDocumentKeydown);
     closeButtonUploadOverlayForm.removeEventListener('click', onCloseButtonUploadOverlayFormClick);
     hashtagTextField.removeEventListener('input', onHashtagTextFieldInput);
+    uploadForm.removeEventListener('submit', onUploadSubmitClick);
   };
 
   var onDocumentKeydown = function (evt) {
@@ -181,7 +183,7 @@
     }
   };
 
-  var onuploadFileChange = function () {
+  var onUploadFileChange = function () {
     openUploadOverlayForm();
   };
 
@@ -189,7 +191,9 @@
     closeUploadOverlayForm();
   };
 
-  uploadFile.addEventListener('change', onuploadFileChange);
+  uploadFile.addEventListener('change', onUploadFileChange);
+
+  // определение уровня насыщенности фильтра для изображения
 
   var getEffectLevelPinPosition = function (evt) {
     return evt.pageX - effectLevelPin.offsetLeft;
@@ -208,27 +212,34 @@
 
   // валидация хеш-тегов
 
+  var onUploadSubmitClick = function (evt) {
+    evt.preventDefault();
+    onHashtagTextFieldInput();
+    uploadForm.submit();
+  };
+
   var onHashtagTextFieldInput = function () {
     validateHashtag();
   };
 
   var validateHashtag = function () {
-    var lowerCaseHashtagsList = hashtagTextField.toLowerCase();
+    var hashtagTextFieldContent = hashtagTextField.value;
+    var lowerCaseHashtagsList = hashtagTextFieldContent.toLowerCase();
     var hashtagsList = lowerCaseHashtagsList.split(' ');
-
-    if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
-      hashtagTextField.setCustomValidity('максимум пять хэш-тегов');
-    }
 
     for (var i = 0; i < hashtagsList.length; i++) {
       if (hashtagsList[i].indexOf('#') !== 0) {
         hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
-      } else if (hashtagsList.length === 1 && hashtagsList[i].indexOf('#') === 0) {
+      } else if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
+        hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
+      } else if (hashtagsList[i] === '#') {
         hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
-      } else if (hashtagsList.includes(hashtagsList[i])) {
-        hashtagTextField.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
+      } else if (hashtagsList.indexOf(hashtagsList[i]) !== i) {
+        hashtagTextField.setCustomValidity('один и тот же хеш-тег не может быть использован дважды');
       } else if (hashtagsList[i].length > MAX_HASHTAG_LENGTH) {
         hashtagTextField.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
+      } else {
+        hashtagTextField.setCustomValidity('');
       }
     }
   };
