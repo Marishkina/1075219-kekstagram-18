@@ -357,6 +357,12 @@
     uploadForm.submit();
   };
 
+  var onUploadSubmitClick = function (evt) {
+    evt.preventDefault();
+    onHashtagTextFieldInput();
+    uploadForm.submit();
+  };
+
   var onHashtagTextFieldInput = function () {
     var hashtagTextFieldContent = hashtagTextField.value;
     var hashtagsList = hashtagTextFieldContent.toLowerCase().split(' ');
