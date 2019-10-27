@@ -188,7 +188,16 @@
     }
   };
 
+<<<<<<< HEAD:js/picture-upload-form.js
   // валидация хеш-тегов
+=======
+  var onUploadSubmitClick = function (evt) {
+    evt.preventDefault();
+    onHashtagTextFieldInput();
+    uploadForm.submit();
+  };
+
+>>>>>>> Правит валидацию хеш-тегов:js/main.js
   var onHashtagTextFieldInput = function () {
     var hashtagTextFieldContent = hashtagTextField.value;
     var hashtagsList = hashtagTextFieldContent.toLowerCase().split(' ');
