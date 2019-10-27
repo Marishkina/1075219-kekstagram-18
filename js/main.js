@@ -230,6 +230,8 @@
     for (var i = 0; i < hashtagsList.length; i++) {
       if (hashtagsList[i].indexOf('#') !== 0) {
         hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
+      } else if (hashtagsList[0].indexOf('#') !== 0) {
+        hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
       } else if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
         hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
       } else if (hashtagsList[i] === '#') {
