@@ -153,8 +153,9 @@
   var hashtagTextField = hashtagFieldset.querySelector('input[name=hashtags]');
   var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
-  var effects = uploadForm.querySelector('.img-upload__effects');
-  var effectsItems = effects.querySelector('.effects__item');
+  var effectLevelLine = effectLevel.querySelector('.effect-level__line');
+  var effectRadioButtons = uploadForm.querySelector('input[name=effect]');
+  var effectLevelValue = uploadForm.querySelector('.effect-level__value');
 
   var openUploadOverlayForm = function () {
     uploadOverlayForm.classList.remove('hidden');
@@ -162,6 +163,8 @@
     closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
     hashtagTextField.addEventListener('input', onHashtagTextFieldInput);
     uploadForm.addEventListener('submit', onUploadSubmitClick);
+    effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
+    effectRadioButtons.addEventListener('change', onEffectRadioButtonsChange);
   };
 
   var closeUploadOverlayForm = function () {
@@ -171,6 +174,8 @@
     closeButtonUploadOverlayForm.removeEventListener('click', onCloseButtonUploadOverlayFormClick);
     hashtagTextField.removeEventListener('input', onHashtagTextFieldInput);
     uploadForm.removeEventListener('submit', onUploadSubmitClick);
+    effectLevelPin.removeEventListener('mouseup', onEffectLevelPinMouseup);
+    effectRadioButtons.removeEventListener('change', onEffectRadioButtonsChange);
   };
 
   var onDocumentKeydown = function (evt) {
@@ -195,20 +200,35 @@
 
   // определение уровня насыщенности фильтра для изображения
 
-  var getEffectLevelPinPosition = function (evt) {
-    return evt.pageX - effectLevelPin.offsetLeft;
+  // обработчик события mouseup на .effect-level__pin - изменяет уровень насыщенности фильтра
+  // для определения уровня насыщенности, нужно рассчитать положение пина слайдера относительно всего блока и воспользоваться пропорцией, чтобы понять, какой уровень эффекта нужно применить
+  // при переключении фильтра, уровень эффекта должен сразу cбрасываться до начального состояния, т.е. логика по определению уровня насыщенности должна срабатывать не только при «перемещении» слайдера, но и при переключении фильтров.
+  // по умолчанию должен быть выбран эффект Оригинал
+  // на изображении может быть выбран только 1 эффект
+  // при смене эффекта, выбором одного из значений среди радиокнопок .effects__radio, добавить картинке внутри .img-upload__preview CSS-класс (н-р, effects__preview--chrome, если выбран chrome)
+  // Уровень эффекта записывается в поле .effect-level__value
+  // при выборе эффекта «Оригинал» слайдер скрывается
+  // при переключении эффектов, уровень насыщенности сбрасывается до начального значения (100%): слайдер, CSS-стиль изображения и значение поля должны обновляться.
+
+  //  определение ширины линии (родителя пина)
+  var getWidthOfEffectLevelLine = function () {
+    return effectLevelLine.getBoundingClientRect().width;
   };
 
-  var onEffectLevelPinMouseup = function (maxFilter) {
-    return (getEffectLevelPinPosition() * maxFilter) / 100;
+  // определение позиции пина относительно левого края родителя
+  var getEffectLevelPinPosition = function () {
+    return effectLevelPin.offsetLeft;
   };
 
-  var onEffectsItemsChange = function () {
-    effectLevel.reset();
+  // пропорция для определения уровня эффекта
+  var onEffectLevelPinMouseup = function () {
+    return (getEffectLevelPinPosition() * 100) / getWidthOfEffectLevelLine() + '%';
   };
 
-  effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
-  effectsItems.addEventListener('change', onEffectsItemsChange);
+  // сброс уровня эффекта до начального состояния (100%)
+  var onEffectRadioButtonsChange = function () {
+    effectLevelValue.value = 100;
+  };
 
   // валидация хеш-тегов
 
