@@ -240,67 +240,42 @@
 
   // добавление класса на картинку
   var changeEffect = function () {
-    for (var i = 0; i < imageUploadPreview.classList.length; i++) {
-      imageUploadPreview.classList.remove(imageUploadPreview.classList[i]);
-      if (originalEffect.checked) {
-        imageUploadPreview.classList.toggle('effects__preview--none');
-        effectLevel.classList.add('visually-hidden');
-      } else if (chromeEffect.checked) {
-        imageUploadPreview.classList.add('effects__preview--chrome');
-        effectLevel.classList.remove('visually-hidden');
-      } else if (sepiaEffect.checked) {
-        imageUploadPreview.classList.add('effects__preview--sepia');
-        effectLevel.classList.remove('visually-hidden');
-      } else if (marvinEffect.checked) {
-        imageUploadPreview.classList.add('effects__preview--marvin');
-        effectLevel.classList.remove('visually-hidden');
-      } else if (phobosEffect.checked) {
-        imageUploadPreview.classList.add('effects__preview--phobos');
-        effectLevel.classList.remove('visually-hidden');
-      } else if (heatEffect.checked) {
-        imageUploadPreview.classList.add('effects__preview--heat');
-        effectLevel.classList.remove('visually-hidden');
+    var effects = photoEffects.elements;
+    for (var j = 0; j < imageUploadPreview.classList.length; j++) {
+      imageUploadPreview.classList.remove(imageUploadPreview.classList[j]);
+
+      for (var i = 0; i < effects.length; i++) {
+        if (effects[i].checked) {
+          switch (effects[i].value) {
+            case ('none'):
+              imageUploadPreview.classList.add('effects__preview--none');
+              effectLevel.classList.add('visually-hidden');
+              break;
+            case ('chrome'):
+              imageUploadPreview.classList.add('effects__preview--chrome');
+              effectLevel.classList.remove('visually-hidden');
+              break;
+            case ('sepia'):
+              imageUploadPreview.classList.add('effects__preview--sepia');
+              effectLevel.classList.remove('visually-hidden');
+              break;
+            case ('marvin'):
+              imageUploadPreview.classList.add('effects__preview--marvin');
+              effectLevel.classList.remove('visually-hidden');
+              break;
+            case ('phobos'):
+              imageUploadPreview.classList.add('effects__preview--phobos');
+              effectLevel.classList.remove('visually-hidden');
+              break;
+            case ('heat'):
+              imageUploadPreview.classList.add('effects__preview--heat');
+              effectLevel.classList.remove('visually-hidden');
+              break;
+          }
+        }
       }
     }
   };
-
-  // var changeEffect = function () {
-  //   var effects = photoEffects.elements;
-  //   for (var j = 0; j < imageUploadPreview.classList.length; j++) {
-  //     imageUploadPreview.classList.remove(imageUploadPreview.classList[j]);
-
-  //     for (var i = 0; i < effects.length; i++) {
-  //       if (effects[i].checked) {
-  //         switch (effects[i].value) {
-  //           case ('none'):
-  //             imageUploadPreview.classList.add('effects__preview--none');
-  //             effectLevel.classList.add('visually-hidden');
-  //             break;
-  //           case ('chrome'):
-  //             imageUploadPreview.classList.add('effects__preview--chrome');
-  //             effectLevel.classList.remove('visually-hidden');
-  //             break;
-  //           case ('sepia'):
-  //             imageUploadPreview.classList.add('effects__preview--sepia');
-  //             effectLevel.classList.remove('visually-hidden');
-  //             break;
-  //           case ('marvin'):
-  //             imageUploadPreview.classList.add('effects__preview--marvin');
-  //             effectLevel.classList.remove('visually-hidden');
-  //             break;
-  //           case ('phobos'):
-  //             imageUploadPreview.classList.add('effects__preview--phobos');
-  //             effectLevel.classList.remove('visually-hidden');
-  //             break;
-  //           case ('heat'):
-  //             imageUploadPreview.classList.add('effects__preview--heat');
-  //             effectLevel.classList.remove('visually-hidden');
-  //             break;
-  //         }
-  //       }
-  //     }
-  //   }
-  // };
 
   // валидация хеш-тегов
   var onUploadFormSubmit = function (evt) {
