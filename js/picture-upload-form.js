@@ -17,9 +17,8 @@
   var hashtagTextField = hashtagFieldset.querySelector('input[name=hashtags]');
   var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
-  var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
   var effectLevelLine = effectLevel.querySelector('.effect-level__line');
-  var effectRadioButton = uploadForm.querySelector('.effects__radio');
+  var effectRadioButtons = uploadForm.querySelector('input[name=effect]');
   var effectLevelValue = uploadForm.querySelector('.effect-level__value');
   var imageUploadPreview = uploadForm.querySelector('.img-upload__preview');
   var photoEffects = uploadForm.querySelector('.img-upload__effects');
@@ -36,7 +35,7 @@
     hashtagTextField.addEventListener('input', onHashtagTextFieldInput);
     uploadForm.addEventListener('submit', onUploadFormSubmit);
     effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
-    effectRadioButton.addEventListener('change', onEffectRadioButtonsChange);
+    effectRadioButtons.addEventListener('change', onEffectRadioButtonsChange);
     photoEffects.addEventListener('change', onPhotoEffectsChange);
     effectLevelDepth.style.width = '100%';
     effectLevelPin.style.left = '100%';
@@ -54,7 +53,7 @@
     hashtagTextField.removeEventListener('input', onHashtagTextFieldInput);
     uploadForm.removeEventListener('submit', onUploadFormSubmit);
     effectLevelPin.removeEventListener('mouseup', onEffectLevelPinMouseup);
-    effectRadioButton.removeEventListener('change', onEffectRadioButtonsChange);
+    effectRadioButtons.removeEventListener('change', onEffectRadioButtonsChange);
     photoEffects.removeEventListener('change', onPhotoEffectsChange);
     scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
