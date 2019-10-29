@@ -28,6 +28,13 @@
   var picturesList = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
+  var bigPicture = document.querySelector('.big-picture');
+  var socialComments = bigPicture.querySelector('.social__comments');
+  var socialComment = socialComments.querySelector('.social__comment');
+  var commentsCount = bigPicture.querySelector('.social__comment-count');
+  var commentsLoader = bigPicture.querySelector('.comments-loader');
+  var closeBigPictureButton = bigPicture.querySelector('#picture-cancel');
+
   var getRandomItem = function (array) {
     return array[Math.floor(Math.random() * array.length)];
   };
@@ -140,10 +147,39 @@
 
     picturesList.appendChild(fragment);
 
-    generateBigPictureElements(generateListItems);
+    // generateBigPictureElements(generateListItems);
   };
 
-  generatePhotoPage(generateListOfPhotos(PHOTO_ITEMS_COUNT));
+  var photoArray = generatePhotoPage(generateListOfPhotos(PHOTO_ITEMS_COUNT));
+
+  // задание 4-3: Доверяй, но проверяй
+
+  var openBigPicture = function (evt) {
+    var photoTarget = evt.target;
+    var currentPhoto = photoTarget.src;
+    for (var i = 0; i < currentPhoto; i++) {
+
+      generateBigPictureElements(photoArray[i]);
+    }
+    console.log('photoTarget.src=', photoTarget);
+    picturesList.classList.remove('hidden');
+    commentsCount.classList.add('visually-hidden');
+    commentsLoader.classList.add('visually-hidden');
+    closeBigPictureButton.addEventListener('click', onCloseBigPictureButtonClick);
+    document.addEventListener('keydown', onDocumentKeydown);
+  };
+
+  var closeBigPicture = function () {
+    bigPicture.classList.add('hidden');
+    closeBigPictureButton.removeEventListener('click', onCloseBigPictureButtonClick);
+    document.removeEventListener('keydown', onDocumentKeydown);
+  };
+
+  var onCloseBigPictureButtonClick = function () {
+    closeBigPicture();
+  };
+
+  document.addEventListener('click', openBigPicture);
 
   // задание 4-2
 
@@ -156,15 +192,9 @@
   var hashtagTextField = hashtagFieldset.querySelector('input[name=hashtags]');
   var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
-  var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
   var effectLevelLine = effectLevel.querySelector('.effect-level__line');
-  var effectRadioButton = uploadForm.querySelector('.effects__radio');
+  var effectRadioButtons = uploadForm.querySelector('input[name=effect]');
   var effectLevelValue = uploadForm.querySelector('.effect-level__value');
-  var imageUploadPreview = uploadForm.querySelector('.img-upload__preview');
-  var photoEffects = uploadForm.querySelector('.img-upload__effects');
-  var scaleControlSmaller = uploadForm.querySelector('.scale__control--smaller');
-  var scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');
-  var scaleControlValue = uploadForm.querySelector('.scale__control--value');
 
   var openUploadOverlayForm = function () {
     uploadOverlayForm.classList.remove('hidden');
@@ -181,6 +211,12 @@
     scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
     scaleControlValue.setAttribute('value', '100%');
+    document.addEventListener('keydown', onDocumentKeydown);
+    closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
+    hashtagTextField.addEventListener('input', onHashtagTextFieldInput);
+    uploadForm.addEventListener('submit', onUploadSubmitClick);
+    effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
+    effectRadioButtons.addEventListener('change', onEffectRadioButtonsChange);
   };
 
   var closeUploadOverlayForm = function () {
@@ -195,6 +231,10 @@
     photoEffects.removeEventListener('change', onPhotoEffectsChange);
     scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
+    hashtagTextField.removeEventListener('input', onHashtagTextFieldInput);
+    uploadForm.removeEventListener('submit', onUploadSubmitClick);
+    effectLevelPin.removeEventListener('mouseup', onEffectLevelPinMouseup);
+    effectRadioButtons.removeEventListener('change', onEffectRadioButtonsChange);
   };
 
   var onDocumentKeydown = function (evt) {
@@ -203,6 +243,7 @@
         evt.stopPropagation();
       } else {
         closeUploadOverlayForm();
+        closeBigPicture();
       }
     }
   };
