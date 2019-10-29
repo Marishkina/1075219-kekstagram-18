@@ -154,17 +154,31 @@
   var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
   var effectLevelLine = effectLevel.querySelector('.effect-level__line');
-  var effectRadioButtons = uploadForm.querySelector('input[name=effect]');
+  var effectRadioButton = uploadForm.querySelector('.effects__radio');
   var effectLevelValue = uploadForm.querySelector('.effect-level__value');
+  var imageUploadPreview = uploadForm.querySelector('.img-upload__preview');
+  var photoEffects = uploadForm.querySelector('.img-upload__effects');
+  var originalEffect = uploadForm.querySelector('#effect-none');
+  var chromeEffect = uploadForm.querySelector('#effect-chrome');
+  var sepiaEffect = uploadForm.querySelector('#effect-sepia');
+  var marvinEffect = uploadForm.querySelector('#effect-marvin');
+  var phobosEffect = uploadForm.querySelector('#effect-phobos');
+  var heatEffect = uploadForm.querySelector('#effect-heat');
 
   var openUploadOverlayForm = function () {
     uploadOverlayForm.classList.remove('hidden');
     document.addEventListener('keydown', onDocumentKeydown);
     closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
-    hashtagTextField.addEventListener('input', onHashtagTextFieldInput);
-    uploadForm.addEventListener('submit', onUploadSubmitClick);
+    hashtagTextField.addEventListener('input', validateHashtag);
+    uploadForm.addEventListener('submit', onUploadFormSubmit);
     effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
-    effectRadioButtons.addEventListener('change', onEffectRadioButtonsChange);
+    effectRadioButton.addEventListener('change', onEffectRadioButtonsChange);
+    originalEffect.addEventListener('change', changeEffect);
+    chromeEffect.addEventListener('change', changeEffect);
+    sepiaEffect.addEventListener('change', changeEffect);
+    marvinEffect.addEventListener('change', changeEffect);
+    phobosEffect.addEventListener('change', changeEffect);
+    heatEffect.addEventListener('change', changeEffect);
   };
 
   var closeUploadOverlayForm = function () {
@@ -172,10 +186,16 @@
     uploadOverlayForm.classList.add('hidden');
     document.removeEventListener('keydown', onDocumentKeydown);
     closeButtonUploadOverlayForm.removeEventListener('click', onCloseButtonUploadOverlayFormClick);
-    hashtagTextField.removeEventListener('input', onHashtagTextFieldInput);
-    uploadForm.removeEventListener('submit', onUploadSubmitClick);
+    hashtagTextField.removeEventListener('input', validateHashtag);
+    uploadForm.removeEventListener('submit', onUploadFormSubmit);
     effectLevelPin.removeEventListener('mouseup', onEffectLevelPinMouseup);
-    effectRadioButtons.removeEventListener('change', onEffectRadioButtonsChange);
+    effectRadioButton.removeEventListener('change', onEffectRadioButtonsChange);
+    originalEffect.removeEventListener('change', changeEffect);
+    chromeEffect.removeEventListener('change', changeEffect);
+    sepiaEffect.removeEventListener('change', changeEffect);
+    marvinEffect.removeEventListener('change', changeEffect);
+    phobosEffect.removeEventListener('change', changeEffect);
+    heatEffect.removeEventListener('change', changeEffect);
   };
 
   var onDocumentKeydown = function (evt) {
@@ -198,48 +218,95 @@
 
   uploadFile.addEventListener('change', onUploadFileChange);
 
-  // определение уровня насыщенности фильтра для изображения
-
-  // обработчик события mouseup на .effect-level__pin - изменяет уровень насыщенности фильтра
-  // для определения уровня насыщенности, нужно рассчитать положение пина слайдера относительно всего блока и воспользоваться пропорцией, чтобы понять, какой уровень эффекта нужно применить
-  // при переключении фильтра, уровень эффекта должен сразу cбрасываться до начального состояния, т.е. логика по определению уровня насыщенности должна срабатывать не только при «перемещении» слайдера, но и при переключении фильтров.
-  // по умолчанию должен быть выбран эффект Оригинал
-  // на изображении может быть выбран только 1 эффект
-  // при смене эффекта, выбором одного из значений среди радиокнопок .effects__radio, добавить картинке внутри .img-upload__preview CSS-класс (н-р, effects__preview--chrome, если выбран chrome)
-  // Уровень эффекта записывается в поле .effect-level__value
-  // при выборе эффекта «Оригинал» слайдер скрывается
-  // при переключении эффектов, уровень насыщенности сбрасывается до начального значения (100%): слайдер, CSS-стиль изображения и значение поля должны обновляться.
-
-  //  определение ширины линии (родителя пина)
-  var getWidthOfEffectLevelLine = function () {
-    return effectLevelLine.getBoundingClientRect().width;
-  };
-
-  // определение позиции пина относительно левого края родителя
-  var getEffectLevelPinPosition = function () {
-    return effectLevelPin.offsetLeft;
-  };
-
   // пропорция для определения уровня эффекта
   var onEffectLevelPinMouseup = function () {
-    return (getEffectLevelPinPosition() * 100) / getWidthOfEffectLevelLine() + '%';
+    var widthOfEffectLevelLine = effectLevelLine.getBoundingClientRect().width;
+    var pinPosition = effectLevelPin.offsetLeft;
+    var effectLevelMouseup = (pinPosition * 100) / widthOfEffectLevelLine + '%';
+    effectLevelValue.value = effectLevelMouseup;
+    console.log('effectLevelMouseup=', effectLevelMouseup); // оставлю, чтобы было видно сколько показывает ползунок
+    return effectLevelMouseup;
   };
 
   // сброс уровня эффекта до начального состояния (100%)
   var onEffectRadioButtonsChange = function () {
-    effectLevelValue.value = 100;
+    var maxPositionOfEffectLine = effectLevelLine.getBoundingClientRect().right;
+    var pinPosition = maxPositionOfEffectLine;
+    var defaultPinPosition = (pinPosition * 100) / maxPositionOfEffectLine + '%';
+    effectLevelValue.value = defaultPinPosition;
+    console.log('defaultPinPosition=', defaultPinPosition); // оставлю, чтобы было видно сколько показывает ползунок
+    return defaultPinPosition;
   };
+
+  // добавление класса на картинку
+  var changeEffect = function () {
+    for (var i = 0; i < imageUploadPreview.classList.length; i++) {
+      imageUploadPreview.classList.remove(imageUploadPreview.classList[i]);
+      if (originalEffect.checked) {
+        imageUploadPreview.classList.toggle('effects__preview--none');
+        effectLevel.classList.add('visually-hidden');
+      } else if (chromeEffect.checked) {
+        imageUploadPreview.classList.add('effects__preview--chrome');
+        effectLevel.classList.remove('visually-hidden');
+      } else if (sepiaEffect.checked) {
+        imageUploadPreview.classList.add('effects__preview--sepia');
+        effectLevel.classList.remove('visually-hidden');
+      } else if (marvinEffect.checked) {
+        imageUploadPreview.classList.add('effects__preview--marvin');
+        effectLevel.classList.remove('visually-hidden');
+      } else if (phobosEffect.checked) {
+        imageUploadPreview.classList.add('effects__preview--phobos');
+        effectLevel.classList.remove('visually-hidden');
+      } else if (heatEffect.checked) {
+        imageUploadPreview.classList.add('effects__preview--heat');
+        effectLevel.classList.remove('visually-hidden');
+      }
+    }
+  };
+
+  // var changeEffect = function () {
+  //   var effects = photoEffects.elements;
+  //   for (var j = 0; j < imageUploadPreview.classList.length; j++) {
+  //     imageUploadPreview.classList.remove(imageUploadPreview.classList[j]);
+
+  //     for (var i = 0; i < effects.length; i++) {
+  //       if (effects[i].checked) {
+  //         switch (effects[i].value) {
+  //           case ('none'):
+  //             imageUploadPreview.classList.add('effects__preview--none');
+  //             effectLevel.classList.add('visually-hidden');
+  //             break;
+  //           case ('chrome'):
+  //             imageUploadPreview.classList.add('effects__preview--chrome');
+  //             effectLevel.classList.remove('visually-hidden');
+  //             break;
+  //           case ('sepia'):
+  //             imageUploadPreview.classList.add('effects__preview--sepia');
+  //             effectLevel.classList.remove('visually-hidden');
+  //             break;
+  //           case ('marvin'):
+  //             imageUploadPreview.classList.add('effects__preview--marvin');
+  //             effectLevel.classList.remove('visually-hidden');
+  //             break;
+  //           case ('phobos'):
+  //             imageUploadPreview.classList.add('effects__preview--phobos');
+  //             effectLevel.classList.remove('visually-hidden');
+  //             break;
+  //           case ('heat'):
+  //             imageUploadPreview.classList.add('effects__preview--heat');
+  //             effectLevel.classList.remove('visually-hidden');
+  //             break;
+  //         }
+  //       }
+  //     }
+  //   }
+  // };
 
   // валидация хеш-тегов
-
-  var onUploadSubmitClick = function (evt) {
+  var onUploadFormSubmit = function (evt) {
     evt.preventDefault();
-    onHashtagTextFieldInput();
-    uploadForm.submit();
-  };
-
-  var onHashtagTextFieldInput = function () {
     validateHashtag();
+    uploadForm.submit();
   };
 
   var validateHashtag = function () {
@@ -247,21 +314,21 @@
     var lowerCaseHashtagsList = hashtagTextFieldContent.toLowerCase();
     var hashtagsList = lowerCaseHashtagsList.split(' ');
 
-    for (var i = 0; i < hashtagsList.length; i++) {
-      if (hashtagsList[i].indexOf('#') !== 0) {
-        hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
-      } else if (hashtagsList[0].indexOf('#') !== 0) {
-        hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
-      } else if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
-        hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
-      } else if (hashtagsList[i] === '#') {
-        hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
-      } else if (hashtagsList.indexOf(hashtagsList[i]) !== i) {
-        hashtagTextField.setCustomValidity('один и тот же хеш-тег не может быть использован дважды');
-      } else if (hashtagsList[i].length > MAX_HASHTAG_LENGTH) {
-        hashtagTextField.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
-      } else {
-        hashtagTextField.setCustomValidity('');
+    if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
+      hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
+    } else {
+      for (var i = 0; i < hashtagsList.length; i++) {
+        if (hashtagsList[i].indexOf('#') !== 0 || hashtagsList[0].indexOf('#') !== 0) {
+          hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
+        } else if (hashtagsList[i] === '#') {
+          hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
+        } else if (hashtagsList.indexOf(hashtagsList[i]) !== i) {
+          hashtagTextField.setCustomValidity('один и тот же хеш-тег не может быть использован дважды');
+        } else if (hashtagsList[i].length > MAX_HASHTAG_LENGTH) {
+          hashtagTextField.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
+        } else {
+          hashtagTextField.setCustomValidity('');
+        }
       }
     }
   };
