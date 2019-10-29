@@ -242,7 +242,7 @@
   var changeEffect = function () {
     var effects = photoEffects.elements;
     for (var j = 0; j < imageUploadPreview.classList.length; j++) {
-      imageUploadPreview.classList.remove(imageUploadPreview.classList[j]);
+      imageUploadPreview.classList.remove(imageUploadPreview.classList[1]);
 
       for (var i = 0; i < effects.length; i++) {
         if (effects[i].checked) {
