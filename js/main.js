@@ -21,6 +21,9 @@
   var PHOTO_ITEMS_COUNT = 25;
   var MAX_HASHTAGS_COUNT = 5;
   var MAX_HASHTAG_LENGTH = 20;
+  var MIN_SCALE = 25;
+  var MAX_SCALE = 100;
+  var SCALE_STEP = 25;
 
   var picturesList = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
@@ -153,11 +156,17 @@
   var hashtagTextField = hashtagFieldset.querySelector('input[name=hashtags]');
   var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
+  var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
   var effectLevelLine = effectLevel.querySelector('.effect-level__line');
   var effectRadioButton = uploadForm.querySelector('.effects__radio');
   var effectLevelValue = uploadForm.querySelector('.effect-level__value');
   var imageUploadPreview = uploadForm.querySelector('.img-upload__preview');
   var photoEffects = uploadForm.querySelector('.img-upload__effects');
+  var scaleControlSmaller = uploadForm.querySelector('.scale__control--smaller');
+  var scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');
+  var scaleControlValue = uploadForm.querySelector('.scale__control--value');
+  scaleControlValue.setAttribute('value', '100%');
+  var currentImageSize = parseInt(scaleControlValue. value, 10);
 
   var openUploadOverlayForm = function () {
     uploadOverlayForm.classList.remove('hidden');
@@ -169,6 +178,10 @@
     effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
     effectRadioButton.addEventListener('change', onEffectRadioButtonsChange);
     photoEffects.addEventListener('change', onPhotoEffectsChange);
+    effectLevelDepth.setAttribute('style', 'width: 100%');
+    effectLevelPin.setAttribute('style', 'left: 100%');
+    scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
+    scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
   };
 
   var closeUploadOverlayForm = function () {
@@ -181,6 +194,8 @@
     effectLevelPin.removeEventListener('mouseup', onEffectLevelPinMouseup);
     effectRadioButton.removeEventListener('change', onEffectRadioButtonsChange);
     photoEffects.removeEventListener('change', onPhotoEffectsChange);
+    scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
+    scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
   };
 
   var onDocumentKeydown = function (evt) {
@@ -282,5 +297,30 @@
         }
       }
     }
+  };
+
+  // масштабирование картинки
+  var onScaleControlSmallerClick = function () {
+    var setImageSize = currentImageSize - SCALE_STEP;
+    if (setImageSize <= SCALE_STEP) {
+      setImageSize = MIN_SCALE;
+    }
+    currentImageSize = setImageSize;
+    changeImageSize(currentImageSize);
+  };
+
+  var onScaleControlBiggerClick = function () {
+    var setImageSize = currentImageSize + SCALE_STEP;
+    if (setImageSize >= MAX_SCALE) {
+      setImageSize = MAX_SCALE;
+    }
+    currentImageSize = setImageSize;
+    changeImageSize(setImageSize);
+  };
+
+  var changeImageSize = function (imageSize) {
+    imageUploadPreview.classList.remove(imageUploadPreview.classList[1]);
+    imageUploadPreview.classList.add('transform' + ':' + 'scale' + '(' + imageSize / 100 + ')');
+    scaleControlValue.setAttribute('value', imageSize + '%');
   };
 })();
