@@ -7,7 +7,10 @@
   var MIN_SCALE = 25;
   var MAX_SCALE = 100;
   var SCALE_STEP = 25;
+<<<<<<< HEAD
   var MAX_COMMENT_LENGTH = 140;
+=======
+>>>>>>> Добавляет масштабирование фотографии
 
   var uploadForm = document.querySelector('.img-upload__form');
   var uploadFile = uploadForm.querySelector('#upload-file');
