@@ -158,12 +158,6 @@
   var effectLevelValue = uploadForm.querySelector('.effect-level__value');
   var imageUploadPreview = uploadForm.querySelector('.img-upload__preview');
   var photoEffects = uploadForm.querySelector('.img-upload__effects');
-  var originalEffect = uploadForm.querySelector('#effect-none');
-  var chromeEffect = uploadForm.querySelector('#effect-chrome');
-  var sepiaEffect = uploadForm.querySelector('#effect-sepia');
-  var marvinEffect = uploadForm.querySelector('#effect-marvin');
-  var phobosEffect = uploadForm.querySelector('#effect-phobos');
-  var heatEffect = uploadForm.querySelector('#effect-heat');
 
   var openUploadOverlayForm = function () {
     uploadOverlayForm.classList.remove('hidden');
@@ -173,12 +167,7 @@
     uploadForm.addEventListener('submit', onUploadFormSubmit);
     effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
     effectRadioButton.addEventListener('change', onEffectRadioButtonsChange);
-    originalEffect.addEventListener('change', changeEffect);
-    chromeEffect.addEventListener('change', changeEffect);
-    sepiaEffect.addEventListener('change', changeEffect);
-    marvinEffect.addEventListener('change', changeEffect);
-    phobosEffect.addEventListener('change', changeEffect);
-    heatEffect.addEventListener('change', changeEffect);
+    photoEffects.addEventListener('change', onPhotoEffectsChange);
   };
 
   var closeUploadOverlayForm = function () {
@@ -190,12 +179,7 @@
     uploadForm.removeEventListener('submit', onUploadFormSubmit);
     effectLevelPin.removeEventListener('mouseup', onEffectLevelPinMouseup);
     effectRadioButton.removeEventListener('change', onEffectRadioButtonsChange);
-    originalEffect.removeEventListener('change', changeEffect);
-    chromeEffect.removeEventListener('change', changeEffect);
-    sepiaEffect.removeEventListener('change', changeEffect);
-    marvinEffect.removeEventListener('change', changeEffect);
-    phobosEffect.removeEventListener('change', changeEffect);
-    heatEffect.removeEventListener('change', changeEffect);
+    photoEffects.removeEventListener('change', onPhotoEffectsChange);
   };
 
   var onDocumentKeydown = function (evt) {
@@ -224,22 +208,17 @@
     var pinPosition = effectLevelPin.offsetLeft;
     var effectLevelMouseup = (pinPosition * 100) / widthOfEffectLevelLine + '%';
     effectLevelValue.value = effectLevelMouseup;
-    console.log('effectLevelMouseup=', effectLevelMouseup); // оставлю, чтобы было видно сколько показывает ползунок
-    return effectLevelMouseup;
   };
 
   // сброс уровня эффекта до начального состояния (100%)
   var onEffectRadioButtonsChange = function () {
-    var maxPositionOfEffectLine = effectLevelLine.getBoundingClientRect().right;
-    var pinPosition = maxPositionOfEffectLine;
-    var defaultPinPosition = (pinPosition * 100) / maxPositionOfEffectLine + '%';
+    var maxPinPosition = effectLevelLine.getBoundingClientRect().right;
+    var defaultPinPosition = (maxPinPosition * 100) / maxPinPosition + '%';
     effectLevelValue.value = defaultPinPosition;
-    console.log('defaultPinPosition=', defaultPinPosition); // оставлю, чтобы было видно сколько показывает ползунок
-    return defaultPinPosition;
   };
 
   // добавление класса на картинку
-  var changeEffect = function () {
+  var onPhotoEffectsChange = function () {
     var effects = photoEffects.elements;
     for (var j = 0; j < imageUploadPreview.classList.length; j++) {
       imageUploadPreview.classList.remove(imageUploadPreview.classList[1]);
@@ -293,7 +272,7 @@
       hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
     } else {
       for (var i = 0; i < hashtagsList.length; i++) {
-        if (hashtagsList[i].indexOf('#') !== 0 || hashtagsList[0].indexOf('#') !== 0) {
+        if (hashtagsList[i].indexOf(0) !== '#') {
           hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
         } else if (hashtagsList[i] === '#') {
           hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
