@@ -161,6 +161,7 @@
 
   var openUploadOverlayForm = function () {
     uploadOverlayForm.classList.remove('hidden');
+    effectLevel.classList.add('visually-hidden');
     document.addEventListener('keydown', onDocumentKeydown);
     closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
     hashtagTextField.addEventListener('input', validateHashtag);
@@ -206,51 +207,47 @@
   var onEffectLevelPinMouseup = function () {
     var widthOfEffectLevelLine = effectLevelLine.getBoundingClientRect().width;
     var pinPosition = effectLevelPin.offsetLeft;
-    var effectLevelMouseup = (pinPosition * 100) / widthOfEffectLevelLine + '%';
-    effectLevelValue.value = effectLevelMouseup;
+    effectLevelValue.value = (pinPosition * 100) / widthOfEffectLevelLine + '%';
   };
 
   // сброс уровня эффекта до начального состояния (100%)
   var onEffectRadioButtonsChange = function () {
     var maxPinPosition = effectLevelLine.getBoundingClientRect().right;
-    var defaultPinPosition = (maxPinPosition * 100) / maxPinPosition + '%';
-    effectLevelValue.value = defaultPinPosition;
+    effectLevelValue.value = (maxPinPosition * 100) / maxPinPosition + '%';
   };
 
   // добавление класса на картинку
   var onPhotoEffectsChange = function () {
     var effects = photoEffects.elements;
-    for (var j = 0; j < imageUploadPreview.classList.length; j++) {
-      imageUploadPreview.classList.remove(imageUploadPreview.classList[1]);
+    imageUploadPreview.classList.remove(imageUploadPreview.classList[1]);
 
-      for (var i = 0; i < effects.length; i++) {
-        if (effects[i].checked) {
-          switch (effects[i].value) {
-            case ('none'):
-              imageUploadPreview.classList.add('effects__preview--none');
-              effectLevel.classList.add('visually-hidden');
-              break;
-            case ('chrome'):
-              imageUploadPreview.classList.add('effects__preview--chrome');
-              effectLevel.classList.remove('visually-hidden');
-              break;
-            case ('sepia'):
-              imageUploadPreview.classList.add('effects__preview--sepia');
-              effectLevel.classList.remove('visually-hidden');
-              break;
-            case ('marvin'):
-              imageUploadPreview.classList.add('effects__preview--marvin');
-              effectLevel.classList.remove('visually-hidden');
-              break;
-            case ('phobos'):
-              imageUploadPreview.classList.add('effects__preview--phobos');
-              effectLevel.classList.remove('visually-hidden');
-              break;
-            case ('heat'):
-              imageUploadPreview.classList.add('effects__preview--heat');
-              effectLevel.classList.remove('visually-hidden');
-              break;
-          }
+    for (var i = 0; i < effects.length; i++) {
+      if (effects[i].checked) {
+        switch (effects[i].value) {
+          case ('none'):
+            imageUploadPreview.classList.add('effects__preview--none');
+            effectLevel.classList.add('visually-hidden');
+            break;
+          case ('chrome'):
+            imageUploadPreview.classList.add('effects__preview--chrome');
+            effectLevel.classList.remove('visually-hidden');
+            break;
+          case ('sepia'):
+            imageUploadPreview.classList.add('effects__preview--sepia');
+            effectLevel.classList.remove('visually-hidden');
+            break;
+          case ('marvin'):
+            imageUploadPreview.classList.add('effects__preview--marvin');
+            effectLevel.classList.remove('visually-hidden');
+            break;
+          case ('phobos'):
+            imageUploadPreview.classList.add('effects__preview--phobos');
+            effectLevel.classList.remove('visually-hidden');
+            break;
+          case ('heat'):
+            imageUploadPreview.classList.add('effects__preview--heat');
+            effectLevel.classList.remove('visually-hidden');
+            break;
         }
       }
     }
