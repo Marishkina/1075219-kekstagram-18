@@ -7,10 +7,7 @@
   var MIN_SCALE = 25;
   var MAX_SCALE = 100;
   var SCALE_STEP = 25;
-<<<<<<< HEAD
   var MAX_COMMENT_LENGTH = 140;
-=======
->>>>>>> Добавляет масштабирование фотографии
 
   var uploadForm = document.querySelector('.img-upload__form');
   var uploadFile = uploadForm.querySelector('#upload-file');
@@ -121,7 +118,6 @@
   // добавление класса на картинку
   var onPhotoEffectsChange = function () {
     var effects = photoEffects.elements;
-
     imageUploadPreview.classList.remove('effects__preview--none', 'effects__preview--chrome', 'effects__preview--sepia', 'effects__preview--marvin', 'effects__preview--phobos', 'effects__preview--heat');
 
     for (var i = 0; i < effects.length; i++) {
