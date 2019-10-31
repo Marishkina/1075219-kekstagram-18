@@ -233,7 +233,6 @@
   // добавление класса на картинку
   var onPhotoEffectsChange = function () {
     var effects = photoEffects.elements;
-
     imageUploadPreview.classList.remove('effects__preview--none', 'effects__preview--chrome', 'effects__preview--sepia', 'effects__preview--marvin', 'effects__preview--phobos', 'effects__preview--heat');
 
     for (var i = 0; i < effects.length; i++) {
