@@ -150,23 +150,30 @@
     // generateBigPictureElements(generateListItems);
   };
 
-  var photoArray = generatePhotoPage(generateListOfPhotos(PHOTO_ITEMS_COUNT));
+  // generatePhotoPage(generateListOfPhotos(PHOTO_ITEMS_COUNT));
+  var photosList = generateListOfPhotos(PHOTO_ITEMS_COUNT);
+  generatePhotoPage(photosList);
 
   // задание 4-3: Доверяй, но проверяй
 
-  var openBigPicture = function (evt) {
-    var photoTarget = evt.target;
-    var currentPhoto = photoTarget.src;
-    for (var i = 0; i < currentPhoto; i++) {
-
-      generateBigPictureElements(photoArray[i]);
-    }
-    console.log('photoTarget.src=', photoTarget);
-    picturesList.classList.remove('hidden');
+  var openBigPicture = function (target) {
+    var targetDetails = getBigPictureDetails(photosList, target);
+    generateBigPictureElements(targetDetails);
+    bigPicture.classList.remove('hidden');
     commentsCount.classList.add('visually-hidden');
     commentsLoader.classList.add('visually-hidden');
     closeBigPictureButton.addEventListener('click', onCloseBigPictureButtonClick);
     document.addEventListener('keydown', onDocumentKeydown);
+  };
+
+  var getBigPictureDetails = function (photosLists, evt) {
+    var bigPictureUrl = evt.target.src;
+    for (var i = 0; i < photosLists.length; i++) {
+      if (bigPictureUrl === photosLists[i].url) {
+        return photosLists[i];
+      }
+    }
+    return '';
   };
 
   var closeBigPicture = function () {
@@ -257,6 +264,16 @@
   };
 
   uploadFile.addEventListener('change', onUploadFileChange);
+
+  //  определение ширины линии (родителя пина)
+  var getWidthOfEffectLevelLine = function () {
+    return effectLevelLine.getBoundingClientRect().width;
+  };
+
+  // определение позиции пина относительно левого края родителя
+  var getEffectLevelPinPosition = function () {
+    return effectLevelPin.offsetLeft;
+  };
 
   // пропорция для определения уровня эффекта
   var onEffectLevelPinMouseup = function () {
