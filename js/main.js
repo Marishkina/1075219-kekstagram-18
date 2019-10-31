@@ -153,6 +153,16 @@
     bigPicture.focus();
   };
 
+  var getBigPictureDetails = function (photosLists, evt) {
+    var bigPictureUrl = evt.target.src;
+    for (var i = 0; i < photosLists.length; i++) {
+      if (bigPictureUrl === photosLists[i].url) {
+        return photosLists[i];
+      }
+    }
+    return '';
+  };
+
   var closeBigPicture = function () {
     bigPicture.classList.add('hidden');
     closeBigPictureButton.removeEventListener('click', onCloseBigPictureButtonClick);
@@ -286,6 +296,16 @@
   };
 
   uploadFile.addEventListener('change', onUploadFileChange);
+
+  //  определение ширины линии (родителя пина)
+  var getWidthOfEffectLevelLine = function () {
+    return effectLevelLine.getBoundingClientRect().width;
+  };
+
+  // определение позиции пина относительно левого края родителя
+  var getEffectLevelPinPosition = function () {
+    return effectLevelPin.offsetLeft;
+  };
 
   // пропорция для определения уровня эффекта
   var onEffectLevelPinMouseup = function () {
