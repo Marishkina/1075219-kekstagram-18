@@ -165,10 +165,6 @@
   var scaleControlSmaller = uploadForm.querySelector('.scale__control--smaller');
   var scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');
   var scaleControlValue = uploadForm.querySelector('.scale__control--value');
-  scaleControlValue.setAttribute('value', '100%');
-
-
-  var currentImageSize = parseInt(scaleControlValue. value, 10);
 
   var openUploadOverlayForm = function () {
     uploadOverlayForm.classList.remove('hidden');
@@ -184,6 +180,7 @@
     effectLevelPin.style.left = '100%';
     scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
+    scaleControlValue.setAttribute('value', '100%');
   };
 
   var closeUploadOverlayForm = function () {
@@ -303,6 +300,7 @@
 
   // масштабирование картинки
   var onScaleControlSmallerClick = function () {
+    var currentImageSize = parseInt(scaleControlValue. value, 10);
     var setImageSize = currentImageSize - SCALE_STEP;
     if (setImageSize <= SCALE_STEP) {
       setImageSize = MIN_SCALE;
@@ -312,6 +310,7 @@
   };
 
   var onScaleControlBiggerClick = function () {
+    var currentImageSize = parseInt(scaleControlValue. value, 10);
     var setImageSize = currentImageSize + SCALE_STEP;
     if (setImageSize >= MAX_SCALE) {
       setImageSize = MAX_SCALE;
