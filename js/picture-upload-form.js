@@ -81,6 +81,21 @@
     closeUploadOverlayForm();
   };
 
+<<<<<<< HEAD:js/picture-upload-form.js
+=======
+  uploadFile.addEventListener('change', onUploadFileChange);
+
+  //  определение ширины линии (родителя пина)
+  var getWidthOfEffectLevelLine = function () {
+    return effectLevelLine.getBoundingClientRect().width;
+  };
+
+  // определение позиции пина относительно левого края родителя
+  var getEffectLevelPinPosition = function () {
+    return effectLevelPin.offsetLeft;
+  };
+
+>>>>>>> Добавляет функцию отрисовки выбранной фото:js/main.js
   // пропорция для определения уровня эффекта
   var onEffectLevelPinMouseup = function () {
     var widthOfEffectLevelLine = effectLevelLine.getBoundingClientRect().width;
