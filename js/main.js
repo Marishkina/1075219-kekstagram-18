@@ -166,6 +166,8 @@
   var scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');
   var scaleControlValue = uploadForm.querySelector('.scale__control--value');
   scaleControlValue.setAttribute('value', '100%');
+
+
   var currentImageSize = parseInt(scaleControlValue. value, 10);
 
   var openUploadOverlayForm = function () {
@@ -178,8 +180,8 @@
     effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
     effectRadioButton.addEventListener('change', onEffectRadioButtonsChange);
     photoEffects.addEventListener('change', onPhotoEffectsChange);
-    effectLevelDepth.setAttribute('style', 'width: 100%');
-    effectLevelPin.setAttribute('style', 'left: 100%');
+    effectLevelDepth.style.width = '100%';
+    effectLevelPin.style.left = '100%';
     scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
   };
@@ -234,7 +236,7 @@
   // добавление класса на картинку
   var onPhotoEffectsChange = function () {
     var effects = photoEffects.elements;
-    imageUploadPreview.classList.remove(imageUploadPreview.classList[1]);
+    imageUploadPreview.classList.remove('effects__preview--none', 'effects__preview--chrome', 'effects__preview--sepia', 'effects__preview--marvin', 'effects__preview--phobos', 'effects__preview--heat');
 
     for (var i = 0; i < effects.length; i++) {
       if (effects[i].checked) {
@@ -319,8 +321,8 @@
   };
 
   var changeImageSize = function (imageSize) {
-    imageUploadPreview.classList.remove(imageUploadPreview.classList[1]);
+    imageUploadPreview.classList.remove('transform:scale(0.25)', 'transform:scale(0.5)', 'transform:scale(0.75)', 'transform:scale(1)');
     imageUploadPreview.classList.add('transform' + ':' + 'scale' + '(' + imageSize / 100 + ')');
-    scaleControlValue.setAttribute('value', imageSize + '%');
+    scaleControlValue.value = imageSize + '%';
   };
 })();
