@@ -24,6 +24,7 @@
   var MIN_SCALE = 25;
   var MAX_SCALE = 100;
   var SCALE_STEP = 25;
+  var MAX_COMMENT_LENGTH = 140;
 
   var picturesList = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
@@ -83,9 +84,10 @@
     return itemsOfListOfPhotos;
   };
 
-  var generatePhoto = function (itemsListPhoto) {
+  var generatePhoto = function (itemsListPhoto, i) {
     var pictureElement = pictureTemplate.cloneNode(true);
 
+    pictureElement.querySelector('.picture__img').id = 'm' + i;
     pictureElement.querySelector('.picture__img').src = itemsListPhoto.url;
     pictureElement.querySelector('.picture__likes').textContent = itemsListPhoto.likes;
     pictureElement.querySelector('.picture__comments').textContent = String(itemsListPhoto.comments.length);
@@ -129,11 +131,11 @@
   };
 
   var generateBigPictureElements = function (generateListItems) {
-    bigPicture.querySelector('.big-picture__img').src = generateListItems[0].url;
-    bigPicture.querySelector('.likes-count').textContent = generateListItems[0].likes;
-    bigPicture.querySelector('.comments-count').textContent = String(generateListItems[0].comments.length);
-    bigPicture.querySelector('.social__caption').textContent = generateListItems[0].description;
-    bigPicture.querySelector('.social__comments').appendChild(renderListOfComments(generateListItems[0].comments));
+    bigPicture.querySelector('.big-picture__img img').src = generateListItems.url;
+    bigPicture.querySelector('.likes-count').textContent = generateListItems.likes;
+    bigPicture.querySelector('.comments-count').textContent = String(generateListItems.comments.length);
+    bigPicture.querySelector('.social__caption').textContent = generateListItems.description;
+    bigPicture.querySelector('.social__comments').appendChild(renderListOfComments(generateListItems.comments));
 
     return bigPicture;
   };
@@ -142,38 +144,22 @@
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < PHOTO_ITEMS_COUNT; i++) {
-      fragment.appendChild(generatePhoto(generateListItems[i]));
+      fragment.appendChild(generatePhoto(generateListItems[i], i));
     }
-
     picturesList.appendChild(fragment);
-
-    // generateBigPictureElements(generateListItems);
   };
 
-  // generatePhotoPage(generateListOfPhotos(PHOTO_ITEMS_COUNT));
   var photosList = generateListOfPhotos(PHOTO_ITEMS_COUNT);
   generatePhotoPage(photosList);
 
   // задание 4-3: Доверяй, но проверяй
 
-  var openBigPicture = function (target) {
-    var targetDetails = getBigPictureDetails(photosList, target);
-    generateBigPictureElements(targetDetails);
+  var openBigPicture = function () {
     bigPicture.classList.remove('hidden');
     commentsCount.classList.add('visually-hidden');
     commentsLoader.classList.add('visually-hidden');
     closeBigPictureButton.addEventListener('click', onCloseBigPictureButtonClick);
-    document.addEventListener('keydown', onDocumentKeydown);
-  };
-
-  var getBigPictureDetails = function (photosLists, evt) {
-    var bigPictureUrl = evt.target.src;
-    for (var i = 0; i < photosLists.length; i++) {
-      if (bigPictureUrl === photosLists[i].url) {
-        return photosLists[i];
-      }
-    }
-    return '';
+    picturesList.addEventListener('keydown', onDocumentKeydown);
   };
 
   var closeBigPicture = function () {
@@ -186,7 +172,52 @@
     closeBigPicture();
   };
 
-  document.addEventListener('click', openBigPicture);
+  var getBigPictureDetails = function (evt) {
+    if (evt.code === 'Enter') {
+      var m = evt.target.children[0].id.slice(1);
+    } else {
+      m = evt.target.id.slice(1);
+    }
+    // console.log('evt=', evt.target.id); вытащили лайки
+    // console.log('evt=', evt.target.nextElementSibling.children[1].innerText);
+    // console.log('photosList_' + m + '=', photosList[m]);
+    // console.log('photosList_' + m + '=', photosList[m].url);
+    // console.log('photosList_' + m + '=', photosList[m].likes);
+    // console.log('photosList_' + m + '=', photosList[m].comments);
+    // console.log('photosList_' + m + '=', photosList[m].comments.length);
+    // console.log('photosList_' + m + '=', photosList[m].description);
+    var bigPictureDetails = {
+      url: photosList[m].url,
+      description: photosList[m].description,
+      likes: photosList[m].likes,
+      comments: photosList[m].comments
+    };
+    return bigPictureDetails;
+  };
+
+  var onPicturesListClick = function (evt) {
+    generateBigPictureElements(getBigPictureDetails(evt));
+    openBigPicture();
+  };
+
+  var onPicturesListKeydown = function (evt) {
+    if (evt.code === 'Enter') {
+      generateBigPictureElements(getBigPictureDetails(evt));
+      openBigPicture();
+    }
+  };
+
+  picturesList.addEventListener('click', onPicturesListClick);
+  picturesList.addEventListener('keydown', onPicturesListKeydown);
+
+  // валидация поля комментария
+  var validateComment = function () {
+    if (commentsField.value.length > MAX_COMMENT_LENGTH) {
+      commentsField.setCustomValidity('максимальная длина комментария 140 символов');
+    } else {
+      commentsField.setCustomValidity('');
+    }
+  };
 
   // задание 4-2
 
@@ -202,6 +233,7 @@
   var effectLevelLine = effectLevel.querySelector('.effect-level__line');
   var effectRadioButtons = uploadForm.querySelector('input[name=effect]');
   var effectLevelValue = uploadForm.querySelector('.effect-level__value');
+  var commentsField = uploadForm.querySelector('.text__description');
 
   var openUploadOverlayForm = function () {
     uploadOverlayForm.classList.remove('hidden');
@@ -224,6 +256,7 @@
     uploadForm.addEventListener('submit', onUploadSubmitClick);
     effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
     effectRadioButtons.addEventListener('change', onEffectRadioButtonsChange);
+    commentsField.addEventListener('change', validateComment);
   };
 
   var closeUploadOverlayForm = function () {
@@ -242,11 +275,14 @@
     uploadForm.removeEventListener('submit', onUploadSubmitClick);
     effectLevelPin.removeEventListener('mouseup', onEffectLevelPinMouseup);
     effectRadioButtons.removeEventListener('change', onEffectRadioButtonsChange);
+    commentsField.removeEventListener('change', validateComment);
   };
 
   var onDocumentKeydown = function (evt) {
     if (evt.code === 'Escape') {
       if (evt.target === hashtagTextField) {
+        evt.stopPropagation();
+      } else if (evt.target === commentsField) {
         evt.stopPropagation();
       } else {
         closeUploadOverlayForm();
