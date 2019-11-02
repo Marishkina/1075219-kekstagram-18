@@ -95,17 +95,6 @@
     return pictureElement;
   };
 
-  var bigPicture = document.querySelector('.big-picture');
-  var socialComments = bigPicture.querySelector('.social__comments');
-  var socialComment = socialComments.querySelector('.social__comment');
-  var commentsCount = bigPicture.querySelector('.social__comment-count');
-  var commentsLoader = bigPicture.querySelector('.comments-loader');
-
-  // bigPicture.classList.remove('hidden');
-
-  commentsCount.classList.add('visually-hidden');
-  commentsLoader.classList.add('visually-hidden');
-
   // функция собирает li
   var renderBigPictureComment = function (comment) {
     var socialCommentElement = socialComment.cloneNode(true);
@@ -195,7 +184,7 @@
     return bigPictureDetails;
   };
 
-  var onPicturesListClick = function (evt) {
+  var onPicturesListMouseup = function (evt) {
     generateBigPictureElements(getBigPictureDetails(evt));
     openBigPicture();
   };
@@ -207,7 +196,7 @@
     }
   };
 
-  picturesList.addEventListener('click', onPicturesListClick);
+  picturesList.addEventListener('mouseup', onPicturesListMouseup);
   picturesList.addEventListener('keydown', onPicturesListKeydown);
 
   // валидация поля комментария
@@ -230,9 +219,15 @@
   var hashtagTextField = hashtagFieldset.querySelector('input[name=hashtags]');
   var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
+  var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
   var effectLevelLine = effectLevel.querySelector('.effect-level__line');
-  var effectRadioButtons = uploadForm.querySelector('input[name=effect]');
+  var effectRadioButton = uploadForm.querySelector('.effects__radio');
   var effectLevelValue = uploadForm.querySelector('.effect-level__value');
+  var imageUploadPreview = uploadForm.querySelector('.img-upload__preview');
+  var photoEffects = uploadForm.querySelector('.img-upload__effects');
+  var scaleControlSmaller = uploadForm.querySelector('.scale__control--smaller');
+  var scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');
+  var scaleControlValue = uploadForm.querySelector('.scale__control--value');
   var commentsField = uploadForm.querySelector('.text__description');
 
   var openUploadOverlayForm = function () {
@@ -250,12 +245,6 @@
     scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
     scaleControlValue.setAttribute('value', '100%');
-    document.addEventListener('keydown', onDocumentKeydown);
-    closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
-    hashtagTextField.addEventListener('input', onHashtagTextFieldInput);
-    uploadForm.addEventListener('submit', onUploadSubmitClick);
-    effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
-    effectRadioButtons.addEventListener('change', onEffectRadioButtonsChange);
     commentsField.addEventListener('change', validateComment);
   };
 
@@ -271,10 +260,6 @@
     photoEffects.removeEventListener('change', onPhotoEffectsChange);
     scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
-    hashtagTextField.removeEventListener('input', onHashtagTextFieldInput);
-    uploadForm.removeEventListener('submit', onUploadSubmitClick);
-    effectLevelPin.removeEventListener('mouseup', onEffectLevelPinMouseup);
-    effectRadioButtons.removeEventListener('change', onEffectRadioButtonsChange);
     commentsField.removeEventListener('change', validateComment);
   };
 
@@ -300,16 +285,6 @@
   };
 
   uploadFile.addEventListener('change', onUploadFileChange);
-
-  //  определение ширины линии (родителя пина)
-  var getWidthOfEffectLevelLine = function () {
-    return effectLevelLine.getBoundingClientRect().width;
-  };
-
-  // определение позиции пина относительно левого края родителя
-  var getEffectLevelPinPosition = function () {
-    return effectLevelPin.offsetLeft;
-  };
 
   // пропорция для определения уровня эффекта
   var onEffectLevelPinMouseup = function () {
@@ -371,14 +346,13 @@
 
   var validateHashtag = function () {
     var hashtagTextFieldContent = hashtagTextField.value;
-    var lowerCaseHashtagsList = hashtagTextFieldContent.toLowerCase();
-    var hashtagsList = lowerCaseHashtagsList.split(' ');
+    var hashtagsList = hashtagTextFieldContent.toLowerCase().split(' ');
 
     if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
       hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
     } else {
       for (var i = 0; i < hashtagsList.length; i++) {
-        if (hashtagsList[i][0] !== '#' || hashtagsList[0][0] !== '#') {
+        if ((hashtagsList[i][0] !== '#' || hashtagsList[0][0] !== '#')) {
           hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
         } else if (hashtagsList[i] === '#') {
           hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
