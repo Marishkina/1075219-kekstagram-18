@@ -280,6 +280,8 @@
     if (evt.code === 'Escape') {
       if (evt.target === hashtagTextField || evt.target === commentsField) {
         evt.stopPropagation();
+      } else if (evt.target === commentsField) {
+        evt.stopPropagation();
       } else {
         closeUploadOverlayForm();
         closeBigPicture();
