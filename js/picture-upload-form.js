@@ -67,6 +67,8 @@
     if (evt.code === 'Escape') {
       if (document.activeElement === hashtagTextField || document.activeElement === commentsField) {
         evt.stopPropagation();
+      } else if (evt.target === commentsField) {
+        evt.stopPropagation();
       } else {
         closeUploadOverlayForm();
       }
