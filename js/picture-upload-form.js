@@ -65,6 +65,7 @@
   };
 
   var onDocumentKeydown = function (evt) {
+<<<<<<< HEAD:js/picture-upload-form.js
     if (evt.code === 'Escape') {
       if (document.activeElement === hashtagTextField || document.activeElement === commentsField) {
         evt.stopPropagation();
@@ -73,6 +74,14 @@
       } else {
         closeUploadOverlayForm();
       }
+=======
+    if (evt.target === hashtagTextField) {
+      evt.stopPropagation();
+    } else if (evt.target === commentsField) {
+      evt.stopPropagation();
+    } else {
+      window.util.isEscEvent(evt, closeUploadOverlayForm);
+>>>>>>> Задание 5-2: модуляция:js/form.js
     }
   };
 
@@ -171,6 +180,7 @@
     }
     currentImageSize = setImageSize;
     changeImageSize(setImageSize);
+<<<<<<< HEAD:js/picture-upload-form.js
   };
 
   var changeImageSize = function (imageSize) {
@@ -226,4 +236,51 @@
   };
 
   uploadFile.addEventListener('change', onUploadFileChange);
+=======
+  };
+
+  var changeImageSize = function (imageSize) {
+    imageUploadPreview.classList.remove('transform:scale(0.25)', 'transform:scale(0.5)', 'transform:scale(0.75)', 'transform:scale(1)');
+    imageUploadPreview.classList.add('transform' + ':' + 'scale' + '(' + imageSize / 100 + ')');
+    scaleControlValue.value = imageSize + '%';
+  };
+
+  var validateComment = function () {
+    if (commentsField.value.length > MAX_COMMENT_LENGTH) {
+      commentsField.setCustomValidity('максимальная длина комментария 140 символов');
+    } else {
+      commentsField.setCustomValidity('');
+    }
+  };
+
+  // валидация хеш-тегов
+  var validateHashtag = function () {
+    var hashtagTextFieldContent = hashtagTextField.value;
+    var hashtagsList = hashtagTextFieldContent.toLowerCase().split(' ');
+
+    if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
+      hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
+    } else {
+      for (var i = 0; i < hashtagsList.length; i++) {
+        if ((hashtagsList[i][0] !== '#' || hashtagsList[0][0] !== '#')) {
+          hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
+        } else if (hashtagsList[i] === '#') {
+          hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
+        } else if (hashtagsList.indexOf(hashtagsList[i]) !== i) {
+          hashtagTextField.setCustomValidity('один и тот же хеш-тег не может быть использован дважды');
+        } else if (hashtagsList[i].length > MAX_HASHTAG_LENGTH) {
+          hashtagTextField.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
+        } else {
+          hashtagTextField.setCustomValidity('');
+        }
+      }
+    }
+  };
+
+  var onUploadFormSubmit = function (evt) {
+    evt.preventDefault();
+    validateHashtag();
+    uploadForm.submit();
+  };
+>>>>>>> Задание 5-2: модуляция:js/form.js
 })();
