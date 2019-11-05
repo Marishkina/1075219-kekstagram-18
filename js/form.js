@@ -35,7 +35,8 @@
     closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
     hashtagTextField.addEventListener('input', validateHashtag);
     uploadForm.addEventListener('submit', onUploadFormSubmit);
-    effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
+    effectLevelPin.addEventListener('mousedown', shiftEffectLevelPin);
+    effectLevelPin.addEventListener('mouseup', getValueOfEffectLevelPinMouseup);
     effectRadioButton.addEventListener('change', onEffectRadioButtonsChange);
     photoEffects.addEventListener('change', onPhotoEffectsChange);
     effectLevelDepth.style.width = '100%';
@@ -53,7 +54,8 @@
     closeButtonUploadOverlayForm.removeEventListener('click', onCloseButtonUploadOverlayFormClick);
     hashtagTextField.removeEventListener('input', validateHashtag);
     uploadForm.removeEventListener('submit', onUploadFormSubmit);
-    effectLevelPin.removeEventListener('mouseup', onEffectLevelPinMouseup);
+    effectLevelPin.removeEventListener('mousedown', shiftEffectLevelPin);
+    effectLevelPin.removeEventListener('mouseup', getValueOfEffectLevelPinMouseup);
     effectRadioButton.removeEventListener('change', onEffectRadioButtonsChange);
     photoEffects.removeEventListener('change', onPhotoEffectsChange);
     scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
@@ -82,7 +84,7 @@
   uploadFile.addEventListener('change', onUploadFileChange);
 
   // пропорция для определения уровня эффекта
-  var onEffectLevelPinMouseup = function () {
+  var getValueOfEffectLevelPinMouseup = function () {
     var widthOfEffectLevelLine = effectLevelLine.getBoundingClientRect().width;
     var pinPosition = effectLevelPin.offsetLeft;
     effectLevelValue.value = (pinPosition * 100) / widthOfEffectLevelLine + '%';
@@ -93,6 +95,83 @@
     var maxPinPosition = effectLevelLine.getBoundingClientRect().right;
     effectLevelValue.value = (maxPinPosition * 100) / maxPinPosition + '%';
   };
+
+  // задание 5-3 Максимум подвижности
+  var shiftEffectLevelPin = function (evt) {
+    evt.preventDefault();
+
+    var startCoords = {
+      x: evt.clientX
+    };
+    console.log('startCoords.x=', startCoords.x);
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX
+      };
+      console.log('moveEvt.ClientX=', moveEvt.ClientX);
+      console.log('startCoords.x1=', startCoords.x);
+      console.log('shift.x=', shift.x);
+
+      startCoords = {
+        x: moveEvt.clientX
+      };
+
+      effectLevelLine.style.left = (effectLevelLine.offsetLeft - shift.x) + 'px';
+
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      effectLevelLine.removeEventListener('mousemove', onMouseMove);
+      effectLevelLine.removeEventListener('mouseup', onMouseUp);
+    };
+
+    effectLevelLine.addEventListener('mousemove', onMouseMove);
+    effectLevelLine.addEventListener('mouseup', onMouseUp);
+  };
+
+
+
+
+
+  // var shiftEffectLevelPin = function (evt) {
+  //   evt.preventDefault();
+
+  //   var startCoords = {
+  //     x: evt.clientX
+  //   }; console.log('startCoords.x=', startCoords.x);
+
+  //   var onEffectLevelPinMousemove = function (moveEvt) {
+  //     moveEvt.preventDefault();
+
+  //     var shift = {
+  //       x: startCoords.x - moveEvt.ClientX
+  //     };
+  //     console.log('moveEvt.ClientX=', moveEvt.ClientX);
+  //     console.log('startCoords.x1=', startCoords.x);
+  //     console.log('shift.x=', shift.x);
+
+  //     startCoords = {
+  //       x: moveEvt.ClientX
+  //     };
+  //     console.log('startCoords.x2=', startCoords.x);
+  //     effectLevel.style.left = (effectLevel.offsetLeft - shift.x) + '%';
+  //   };
+
+  //   var onEffectLevelPinMouseup = function (upEvt) {
+  //     upEvt.preventDefault();
+
+  //     effectLevelLine.removeEventListener('mousemove', onEffectLevelPinMousemove);
+  //     effectLevelLine.removeEventListener('mouseup', onEffectLevelPinMouseup);
+  //   };
+
+  //   effectLevelLine.addEventListener('mousemove', onEffectLevelPinMousemove);
+  //   effectLevelLine.addEventListener('mouseup', onEffectLevelPinMouseup);
+  // };
 
   // добавление класса на картинку
   var onPhotoEffectsChange = function () {
