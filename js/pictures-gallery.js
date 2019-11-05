@@ -4,19 +4,19 @@
 
   var commentsCount = window.preview.querySelector('.social__comment-count');
   var commentsLoader = window.preview.querySelector('.comments-loader');
-  var closePrewievButton = window.preview.querySelector('#picture-cancel');
+  var closePreviewButton = window.preview.querySelector('#picture-cancel');
 
   var openPreview = function () {
     window.preview.classList.remove('hidden');
     commentsCount.classList.add('visually-hidden');
     commentsLoader.classList.add('visually-hidden');
-    closePrewievButton.addEventListener('click', onClosePrewievButtonClick);
+    closePreviewButton.addEventListener('click', onClosePrewievButtonClick);
     document.addEventListener('keydown', onDocumentKeydown);
   };
 
   var closePreview = function () {
     window.preview.classList.add('hidden');
-    closePrewievButton.removeEventListener('click', onClosePrewievButtonClick);
+    closePreviewButton.removeEventListener('click', onClosePrewievButtonClick);
     document.removeEventListener('keydown', onDocumentKeydown);
   };
 
@@ -44,10 +44,10 @@
     return previewDetails;
   };
 
-  var onPicturesListMouseup = function (evt) {
-    window.generatePreview(getPreviewDetails(evt));
-    openPreview();
-  };
+  // var onPicturesListMouseup = function (evt) {
+  //   window.generatePreview(getPreviewDetails(evt));
+  //   openPreview();
+  // };
 
   var onPicturesListKeydown = function (evt) {
     if (evt.code === 'Enter') {
@@ -56,6 +56,6 @@
     }
   };
 
-  window.picturesList.addEventListener('mouseup', onPicturesListMouseup);
+  // window.picturesList.addEventListener('mouseup', onPicturesListMouseup);
   window.picturesList.addEventListener('keydown', onPicturesListKeydown);
 })();
