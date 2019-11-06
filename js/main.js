@@ -87,7 +87,7 @@
   var generatePhoto = function (itemsListPhoto, i) {
     var pictureElement = pictureTemplate.cloneNode(true);
 
-    pictureElement.querySelector('.picture__img').id = 'm' + i;
+    pictureElement.querySelector('.picture__img').id = 'templateImgId' + i;
     pictureElement.querySelector('.picture__img').src = itemsListPhoto.url;
     pictureElement.querySelector('.picture__likes').textContent = itemsListPhoto.likes;
     pictureElement.querySelector('.picture__comments').textContent = String(itemsListPhoto.comments.length);
@@ -163,23 +163,15 @@
 
   var getBigPictureDetails = function (evt) {
     if (evt.code === 'Enter') {
-      var m = evt.target.children[0].id.slice(1);
+      var templateImgId = evt.target.children[0].id.slice(13);
     } else {
-      m = evt.target.id.slice(1);
+      templateImgId = evt.target.id.slice(13);
     }
-    // console.log('evt=', evt.target.id); вытащили лайки
-    // console.log('evt=', evt.target.nextElementSibling.children[1].innerText);
-    // console.log('photosList_' + m + '=', photosList[m]);
-    // console.log('photosList_' + m + '=', photosList[m].url);
-    // console.log('photosList_' + m + '=', photosList[m].likes);
-    // console.log('photosList_' + m + '=', photosList[m].comments);
-    // console.log('photosList_' + m + '=', photosList[m].comments.length);
-    // console.log('photosList_' + m + '=', photosList[m].description);
     var bigPictureDetails = {
-      url: photosList[m].url,
-      description: photosList[m].description,
-      likes: photosList[m].likes,
-      comments: photosList[m].comments
+      url: photosList[templateImgId].url,
+      description: photosList[templateImgId].description,
+      likes: photosList[templateImgId].likes,
+      comments: photosList[templateImgId].comments
     };
     return bigPictureDetails;
   };
@@ -200,7 +192,7 @@
   picturesList.addEventListener('keydown', onPicturesListKeydown);
 
   // валидация поля комментария
-  var validateComment = function () {
+  var onCommentsFieldChange = function () {
     if (commentsField.value.length > MAX_COMMENT_LENGTH) {
       commentsField.setCustomValidity('максимальная длина комментария 140 символов');
     } else {
@@ -245,7 +237,7 @@
     scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
     scaleControlValue.setAttribute('value', '100%');
-    commentsField.addEventListener('change', validateComment);
+    commentsField.addEventListener('change', onCommentsFieldChange);
   };
 
   var closeUploadOverlayForm = function () {
@@ -260,14 +252,12 @@
     photoEffects.removeEventListener('change', onPhotoEffectsChange);
     scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
-    commentsField.removeEventListener('change', validateComment);
+    commentsField.removeEventListener('change', onCommentsFieldChange);
   };
 
   var onDocumentKeydown = function (evt) {
     if (evt.code === 'Escape') {
-      if (evt.target === hashtagTextField) {
-        evt.stopPropagation();
-      } else if (evt.target === commentsField) {
+      if (evt.target === hashtagTextField || evt.target === commentsField) {
         evt.stopPropagation();
       } else {
         closeUploadOverlayForm();
