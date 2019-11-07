@@ -4,9 +4,6 @@
 
   var MAX_HASHTAGS_COUNT = 5;
   var MAX_HASHTAG_LENGTH = 20;
-  var MIN_SCALE = 25;
-  var MAX_SCALE = 100;
-  var SCALE_STEP = 25;
   var MAX_COMMENT_LENGTH = 140;
 
   var uploadForm = document.querySelector('.img-upload__form');
@@ -19,10 +16,6 @@
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
   var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
   var effectLevelValue = uploadForm.querySelector('.effect-level__value');
-  var imageUploadPreview = uploadForm.querySelector('.img-upload__preview');
-  var scaleControlSmaller = uploadForm.querySelector('.scale__control--smaller');
-  var scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');
-  var scaleControlValue = uploadForm.querySelector('.scale__control--value');
   var commentsField = uploadForm.querySelector('.text__description');
 
   var openUploadOverlayForm = function () {
@@ -34,10 +27,7 @@
     uploadForm.addEventListener('submit', onUploadFormSubmit);
     effectLevelDepth.style.width = '100%';
     effectLevelPin.style.left = '100%';
-    scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
-    scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
     effectLevelValue.setAttribute('value', 100);
-    scaleControlValue.setAttribute('value', '100%');
     commentsField.addEventListener('change', validateComment);
   };
 
@@ -48,8 +38,6 @@
     closeButtonUploadOverlayForm.removeEventListener('click', onCloseButtonUploadOverlayFormClick);
     hashtagTextField.removeEventListener('input', validateHashtag);
     uploadForm.removeEventListener('submit', onUploadFormSubmit);
-    scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
-    scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
     commentsField.removeEventListener('change', validateComment);
   };
 
@@ -72,33 +60,6 @@
   };
 
   uploadFile.addEventListener('change', onUploadFileChange);
-
-  // масштабирование картинки
-  var onScaleControlSmallerClick = function () {
-    var currentImageSize = parseInt(scaleControlValue. value, 10);
-    var setImageSize = currentImageSize - SCALE_STEP;
-    if (setImageSize <= SCALE_STEP) {
-      setImageSize = MIN_SCALE;
-    }
-    currentImageSize = setImageSize;
-    changeImageSize(currentImageSize);
-  };
-
-  var onScaleControlBiggerClick = function () {
-    var currentImageSize = parseInt(scaleControlValue. value, 10);
-    var setImageSize = currentImageSize + SCALE_STEP;
-    if (setImageSize >= MAX_SCALE) {
-      setImageSize = MAX_SCALE;
-    }
-    currentImageSize = setImageSize;
-    changeImageSize(setImageSize);
-  };
-
-  var changeImageSize = function (imageSize) {
-    imageUploadPreview.classList.remove('transform:scale(0.25)', 'transform:scale(0.5)', 'transform:scale(0.75)', 'transform:scale(1)');
-    imageUploadPreview.classList.add('transform' + ':' + 'scale' + '(' + imageSize / 100 + ')');
-    scaleControlValue.value = imageSize + '%';
-  };
 
   var validateComment = function () {
     if (commentsField.value.length > MAX_COMMENT_LENGTH) {

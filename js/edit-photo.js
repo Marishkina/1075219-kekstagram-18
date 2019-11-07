@@ -3,7 +3,13 @@
 (function () {
 
   // задание 5-3 Максимум подвижности
+  var MIN_SCALE = 25;
+  var MAX_SCALE = 100;
+  var SCALE_STEP = 25;
   var uploadForm = document.querySelector('.img-upload__form');
+  var scaleControlSmaller = uploadForm.querySelector('.scale__control--smaller');
+  var scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');
+  var scaleControlValue = uploadForm.querySelector('.scale__control--value');
   var uploadFile = uploadForm.querySelector('#upload-file');
   var uploadOverlayForm = uploadForm.querySelector('.img-upload__overlay');
   var closeButtonUploadOverlayForm = uploadOverlayForm.querySelector('#upload-cancel');
@@ -29,6 +35,9 @@
       element.addEventListener('change', onEffectRadioButtonsChange);
     });
     photoEffects.addEventListener('change', onPhotoEffectsChange);
+    scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
+    scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
+    scaleControlValue.setAttribute('value', '100%');
   };
 
   var closeUploadOverlayForm = function () {
@@ -37,6 +46,8 @@
       element.removeEventListener('change', onEffectRadioButtonsChange);
     });
     photoEffects.removeEventListener('change', onPhotoEffectsChange);
+    scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
+    scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
   };
 
   var onDocumentKeydown = function (evt) {
@@ -54,6 +65,32 @@
   var onCloseButtonUploadOverlayFormClick = function () {
     setOriginFilter();
     uploadForm.reset();
+  };
+
+  // масштабирование картинки
+  var onScaleControlSmallerClick = function () {
+    var currentImageSize = parseInt(scaleControlValue. value, 10);
+    var setImageSize = currentImageSize - SCALE_STEP;
+    if (setImageSize <= SCALE_STEP) {
+      setImageSize = MIN_SCALE;
+    }
+    currentImageSize = setImageSize;
+    changeImageSize(currentImageSize);
+  };
+
+  var onScaleControlBiggerClick = function () {
+    var currentImageSize = parseInt(scaleControlValue. value, 10);
+    var setImageSize = currentImageSize + SCALE_STEP;
+    if (setImageSize >= MAX_SCALE) {
+      setImageSize = MAX_SCALE;
+    }
+    currentImageSize = setImageSize;
+    changeImageSize(setImageSize);
+  };
+
+  var changeImageSize = function (imageSize) {
+    scaleControlValue.value = imageSize + '%';
+    imageUploadPreview.style.transform = 'scale' + '(' + imageSize / 100 + ')';
   };
 
   // определяем ширину дива для ползунка
@@ -137,16 +174,18 @@
 
   // сброс уровня эффекта до начального состояния (100%)
   var onEffectRadioButtonsChange = function () {
-    effectLevelDepth.style.width = '100%';
-    effectLevelPin.style.left = '100%';
-    effectLevelValue.setAttribute('value', 100);
     setOriginFilter();
   };
 
   var setOriginFilter = function () {
     imageUploadPreview.classList.remove('effects__preview--none', 'effects__preview--chrome', 'effects__preview--sepia', 'effects__preview--marvin', 'effects__preview--phobos', 'effects__preview--heat');
     effectLevel.classList.add('visually-hidden');
+    effectLevelDepth.style.width = '100%';
+    effectLevelPin.style.left = '100%';
+    effectLevelValue.setAttribute('value', 100);
     imageUploadPreview.style.filter = 'none';
+    imageUploadPreview.style.transform = 'scale(1)';
+    scaleControlValue.value = '100%';
   };
 
   var getEffectLevel = function () {
