@@ -42,6 +42,7 @@
   var onDocumentKeydown = function (evt) {
     window.util.isEscEvent(evt, closeUploadOverlayForm);
     setOriginFilter();
+    uploadForm.reset();
   };
 
   var onUploadFileChange = function () {
@@ -52,6 +53,7 @@
 
   var onCloseButtonUploadOverlayFormClick = function () {
     setOriginFilter();
+    uploadForm.reset();
   };
 
   // определяем ширину дива для ползунка
@@ -145,7 +147,6 @@
     imageUploadPreview.classList.remove('effects__preview--none', 'effects__preview--chrome', 'effects__preview--sepia', 'effects__preview--marvin', 'effects__preview--phobos', 'effects__preview--heat');
     effectLevel.classList.add('visually-hidden');
     imageUploadPreview.style.filter = 'none';
-    // не могу добавить желтую рамочку как default
   };
 
   var getEffectLevel = function () {
