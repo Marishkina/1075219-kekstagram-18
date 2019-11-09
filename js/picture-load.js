@@ -2,12 +2,10 @@
 
 (function () {
 
-  var PHOTO_ITEMS_COUNT = 25;
-
   window.picturesList = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
-  // вставка данных маленькой картинки
+  // вставка данных в миниатюру
   var generatePictureElement = function (itemsListPhoto, i) {
     var pictureElement = pictureTemplate.cloneNode(true);
 
@@ -20,15 +18,12 @@
   };
 
   // отрисовка миниатюры
-  var renderPicture = function (generateListItems) {
+  window.renderPicture = function (generateListItems) {
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < PHOTO_ITEMS_COUNT; i++) {
+    for (var i = 0; i < generateListItems.length; i++) {
       fragment.appendChild(generatePictureElement(generateListItems[i], i));
     }
     window.picturesList.appendChild(fragment);
   };
-
-  window.picture = window.generateData(PHOTO_ITEMS_COUNT);
-  renderPicture(window.picture);
 })();

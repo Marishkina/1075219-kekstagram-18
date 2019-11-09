@@ -2,9 +2,15 @@
 
 (function () {
 
-  window.preview = document.querySelector('.big-picture');
-  var socialComments = window.preview.querySelector('.social__comments');
-  var socialComment = socialComments.querySelector('.social__comment');
+  var preview = document.querySelector('.big-picture');
+  var socialComments = preview.querySelector('.social__comments');
+  var socialComment = preview.querySelector('.social__comment');
+  var commentsCount = preview.querySelector('.social__comment-count');
+  var commentsLoader = preview.querySelector('.comments-loader');
+  var closePreviewButton = preview.querySelector('#picture-cancel');
+
+  var uploadForm = document.querySelector('.img-upload__form');
+  var uploadFile = uploadForm.querySelector('#upload-file');
 
   // создание li с комментами для большой картинки
   var generatePreviewComment = function (comment) {
@@ -32,12 +38,71 @@
 
   // отрисовка большой картинки
   window.generatePreview = function (generateListItems) {
-    window.preview.querySelector('.big-picture__img img').src = generateListItems.url;
-    window.preview.querySelector('.likes-count').textContent = generateListItems.likes;
-    window.preview.querySelector('.comments-count').textContent = String(generateListItems.comments.length);
-    window.preview.querySelector('.social__caption').textContent = generateListItems.description;
-    window.preview.querySelector('.social__comments').appendChild(renderListOfComments(generateListItems.comments));
+    preview.querySelector('.big-picture__img img').src = generateListItems.url;
+    preview.querySelector('.likes-count').textContent = generateListItems.likes;
+    preview.querySelector('.comments-count').textContent = String(generateListItems.comments.length);
+    preview.querySelector('.social__caption').textContent = generateListItems.description;
+    preview.querySelector('.social__comments').appendChild(renderListOfComments(generateListItems.comments));
 
-    return window.preview;
+    return preview;
   };
+
+  var getPreviewDetails = function (evt) {
+    if (evt.code === 'Enter') {
+      var m = evt.target.children[0].id.slice(1);
+    } else {
+      m = evt.target.id.slice(1);
+    }
+    var previewDetails = {
+      url: window.pictureItems[m].url,
+      description: window.pictureItems[m].description,
+      likes: window.pictureItems[m].likes,
+      comments: window.pictureItems[m].comments
+    };
+    return previewDetails;
+  };
+
+
+  // открытие большой картинки
+  var openPreview = function () {
+    preview.classList.remove('hidden');
+    commentsCount.classList.add('visually-hidden');
+    commentsLoader.classList.add('visually-hidden');
+    closePreviewButton.addEventListener('click', onClosePrewievButtonClick);
+    document.addEventListener('keydown', onDocumentKeydown);
+  };
+
+  // закрытие большой картинки
+  var closePreview = function () {
+    preview.classList.add('hidden');
+    closePreviewButton.removeEventListener('click', onClosePrewievButtonClick);
+    document.removeEventListener('keydown', onDocumentKeydown);
+  };
+
+  var onClosePrewievButtonClick = function () {
+    closePreview();
+  };
+
+  var onDocumentKeydown = function (evt) {
+    window.util.isEscEvent(evt, closePreview);
+  };
+
+  var onPicturesListMouseup = function (evt) {
+    window.generatePreview(getPreviewDetails(evt));
+    openPreview();
+  };
+
+  var onPicturesListKeydown = function (evt) {
+    if (evt.code === 'Enter') {
+      if (evt.target === uploadFile) {
+        evt.stopPropagation();
+      } else {
+        window.generatePreview(getPreviewDetails(evt));
+        openPreview();
+      }
+    }
+  };
+
+  window.picturesList.addEventListener('mouseup', onPicturesListMouseup);
+  window.picturesList.addEventListener('keydown', onPicturesListKeydown);
 })();
