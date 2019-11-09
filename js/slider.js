@@ -67,6 +67,7 @@
           x: moveEvt.clientX
         };
 
+<<<<<<< HEAD
         if (effectLevelPin.offsetLeft - shift.x < minEffectScale) {
           effectLevelPin.style.left = minEffectScale + 'px';
         } else if (effectLevelPin.offsetLeft - shift.x > maxEffectScale) {
@@ -75,6 +76,13 @@
           effectLevelPin.style.left = (effectLevelPin.offsetLeft - shift.x) + 'px';
         }
       };
+=======
+  var setOriginFilter = function () {
+    imageUploadPreview.classList.remove('effects__preview--none', 'effects__preview--chrome', 'effects__preview--sepia', 'effects__preview--marvin', 'effects__preview--phobos', 'effects__preview--heat');
+    effectLevel.classList.add('visually-hidden');
+    imageUploadPreview.style.filter = 'none';
+  };
+>>>>>>> Задание 6-2: нужно подкачаться, также правит открытие картинок по ентеру
 
       var onEffectLevelPinMouseup = function (upEvt) {
         window.effects.getEffectLevel();
