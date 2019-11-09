@@ -42,6 +42,7 @@
   try {
     load();
   } catch (err) {
+<<<<<<< HEAD
     window.errorMessage.renderErrorMessage();
   }
 
@@ -54,4 +55,8 @@
 
     window.filteredPictures.set(evt.target.id, window.pictureItems);
   });
+=======
+    window.renderErrorMessage();
+  }
+>>>>>>> Задание 6-2: нужно подкачаться, также правит открытие картинок по ентеру
 })();
