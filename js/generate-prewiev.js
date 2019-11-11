@@ -9,8 +9,8 @@
   var commentsLoader = preview.querySelector('.comments-loader');
   var closePreviewButton = preview.querySelector('#picture-cancel');
 
-  var uploadForm = document.querySelector('.img-upload__form');
-  var uploadFile = uploadForm.querySelector('#upload-file');
+  // var uploadForm = document.querySelector('.img-upload__form');
+  // var uploadFile = uploadForm.querySelector('#upload-file');
 
   // создание li с комментами для большой картинки
   var generatePreviewComment = function (comment) {
@@ -87,22 +87,37 @@
     window.util.isEscEvent(evt, closePreview);
   };
 
-  var onPicturesListMouseup = function (evt) {
-    window.generatePreview(getPreviewDetails(evt));
-    openPreview();
-  };
-
-  var onPicturesListKeydown = function (evt) {
-    if (evt.code === 'Enter') {
-      if (evt.target === uploadFile) {
-        evt.stopPropagation();
-      } else {
-        window.generatePreview(getPreviewDetails(evt));
-        openPreview();
-      }
+  var onPicturesListCLick = function (evt) {
+    if (evt.target.className === 'picture__img') {
+      window.generatePreview(getPreviewDetails(evt));
+      openPreview();
     }
   };
 
-  window.picturesList.addEventListener('mouseup', onPicturesListMouseup);
+  // не работает
+  // var onPicturesListCLick = function (evt) {
+  //   console.log(document.activeElement);
+  //   if (document.activeElement === pictureImg) {
+  //     window.generatePreview(getPreviewDetails(evt));
+  //     openPreview();
+  //   }
+  // };
+
+  // var onPicturesListKeydown = function (evt) {
+  //   console.log(evt.target);
+  //   if (evt.code === 'Enter' && document.activeElement === picture) {
+  //     window.generatePreview(getPreviewDetails(evt));
+  //     openPreview();
+  //   }
+  // };
+
+  var onPicturesListKeydown = function (evt) {
+    if (evt.code === 'Enter' && evt.target.className === 'picture') {
+      window.generatePreview(getPreviewDetails(evt));
+      openPreview();
+    }
+  };
+
+  window.picturesList.addEventListener('click', onPicturesListCLick);
   window.picturesList.addEventListener('keydown', onPicturesListKeydown);
 })();

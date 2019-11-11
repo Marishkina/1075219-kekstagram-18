@@ -20,6 +20,9 @@
   var marvinPreview = photoEffects.querySelector('#effect-marvin');
   var phobosPreview = photoEffects.querySelector('#effect-phobos');
   var heatPreview = photoEffects.querySelector('#effect-heat');
+  var scaleControlValue = uploadForm.querySelector('.scale__control--value');
+  var hashtagTextField = uploadForm.querySelector('input[name=hashtags]');
+  var commentsField = uploadForm.querySelector('.text__description');
 
   var openUploadOverlayForm = function () {
     document.addEventListener('keydown', onDocumentKeydown);
@@ -28,7 +31,6 @@
     effectRadioButtons.forEach(function (element) {
       element.addEventListener('change', onEffectRadioButtonsChange);
     });
-    photoEffects.addEventListener('change', onPhotoEffectsChange);
   };
 
   var closeUploadOverlayForm = function () {
@@ -36,12 +38,18 @@
     effectRadioButtons.forEach(function (element) {
       element.removeEventListener('change', onEffectRadioButtonsChange);
     });
-    photoEffects.removeEventListener('change', onPhotoEffectsChange);
   };
 
   var onDocumentKeydown = function (evt) {
-    window.util.isEscEvent(evt, closeUploadOverlayForm);
-    setOriginFilter();
+    if (evt.code === 'Escape') {
+      if (document.activeElement === hashtagTextField || document.activeElement === commentsField) {
+        evt.stopPropagation();
+      } else {
+        uploadForm.reset();
+        window.setOriginFilter();
+        closeUploadOverlayForm();
+      }
+    }
   };
 
   var onUploadFileChange = function () {
@@ -51,7 +59,9 @@
   uploadFile.addEventListener('change', onUploadFileChange);
 
   var onCloseButtonUploadOverlayFormClick = function () {
-    setOriginFilter();
+    uploadForm.reset();
+    window.setOriginFilter();
+    closeUploadOverlayForm();
   };
 
   // определяем ширину дива для ползунка
@@ -134,17 +144,14 @@
   };
 
   // сброс уровня эффекта до начального состояния (100%)
-  var onEffectRadioButtonsChange = function () {
+  window.setOriginFilter = function () {
+    imageUploadPreview.classList.remove('effects__preview--none', 'effects__preview--chrome', 'effects__preview--sepia', 'effects__preview--marvin', 'effects__preview--phobos', 'effects__preview--heat');
+    imageUploadPreview.style.filter = 'none';
+    imageUploadPreview.style.transform = 'scale(1)';
     effectLevelDepth.style.width = '100%';
     effectLevelPin.style.left = '100%';
     effectLevelValue.setAttribute('value', 100);
-    setOriginFilter();
-  };
-
-  var setOriginFilter = function () {
-    imageUploadPreview.classList.remove('effects__preview--none', 'effects__preview--chrome', 'effects__preview--sepia', 'effects__preview--marvin', 'effects__preview--phobos', 'effects__preview--heat');
-    effectLevel.classList.add('visually-hidden');
-    imageUploadPreview.style.filter = 'none';
+    scaleControlValue.value = '100%';
   };
 
   var getEffectLevel = function () {
@@ -181,10 +188,10 @@
     return value;
   };
 
-  var onPhotoEffectsChange = function () {
+  var onEffectRadioButtonsChange = function () {
     var effects = photoEffects.elements;
 
-    onEffectRadioButtonsChange();
+    window.setOriginFilter();
 
     for (var i = 0; i < effects.length; i++) {
 
