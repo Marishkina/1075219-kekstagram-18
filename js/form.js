@@ -30,12 +30,14 @@
     effectLevel.classList.add('visually-hidden');
     document.addEventListener('keydown', onDocumentKeydown);
     closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
+    closeButtonUploadOverlayForm.addEventListener('keydown', onCloseButtonUploadOverlayFormEnterdown);
     hashtagTextField.addEventListener('input', validateHashtag);
-    uploadForm.addEventListener('submit', onUploadFormSubmit);
     effectLevelDepth.style.width = '100%';
     effectLevelPin.style.left = '100%';
     scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
+    scaleControlSmaller.addEventListener('keydown', onScaleControlSmallerEnterDown);
+    scaleControlBigger.addEventListener('keydown', onScaleControlBiggerEnterDown);
     effectLevelValue.setAttribute('value', 100);
     scaleControlValue.setAttribute('value', '100%');
     commentsField.addEventListener('change', validateComment);
@@ -46,17 +48,19 @@
     uploadOverlayForm.classList.add('hidden');
     document.removeEventListener('keydown', onDocumentKeydown);
     closeButtonUploadOverlayForm.removeEventListener('click', onCloseButtonUploadOverlayFormClick);
+    closeButtonUploadOverlayForm.removeEventListener('keydown', onCloseButtonUploadOverlayFormEnterdown);
     hashtagTextField.removeEventListener('input', validateHashtag);
-    uploadForm.removeEventListener('submit', onUploadFormSubmit);
     scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
+    scaleControlSmaller.removeEventListener('keydown', onScaleControlSmallerEnterDown);
+    scaleControlBigger.removeEventListener('keydown', onScaleControlBiggerEnterDown);
     commentsField.removeEventListener('change', validateComment);
   };
 
   var onDocumentKeydown = function (evt) {
-    if (evt.target === hashtagTextField) {
+    if (document.activeElement === hashtagTextField) {
       evt.stopPropagation();
-    } else if (evt.target === commentsField) {
+    } else if (document.activeElement === commentsField) {
       evt.stopPropagation();
     } else {
       window.util.isEscEvent(evt, closeUploadOverlayForm);
@@ -67,14 +71,22 @@
     openUploadOverlayForm();
   };
 
+  uploadFile.addEventListener('change', onUploadFileChange);
+
+  // закрытие формы
   var onCloseButtonUploadOverlayFormClick = function () {
     closeUploadOverlayForm();
   };
 
-  uploadFile.addEventListener('change', onUploadFileChange);
+  var onCloseButtonUploadOverlayFormEnterdown = function (evt) {
+    evt.stopPropagation();
+    if (document.activeElement === closeButtonUploadOverlayForm) {
+      window.util.isEnterEvent(evt, closeUploadOverlayForm);
+    }
+  };
 
   // масштабирование картинки
-  var onScaleControlSmallerClick = function () {
+  var zoomOutPhoto = function () {
     var currentImageSize = parseInt(scaleControlValue. value, 10);
     var setImageSize = currentImageSize - SCALE_STEP;
     if (setImageSize <= SCALE_STEP) {
@@ -84,7 +96,7 @@
     changeImageSize(currentImageSize);
   };
 
-  var onScaleControlBiggerClick = function () {
+  var zoomInPhoto = function () {
     var currentImageSize = parseInt(scaleControlValue. value, 10);
     var setImageSize = currentImageSize + SCALE_STEP;
     if (setImageSize >= MAX_SCALE) {
@@ -95,9 +107,30 @@
   };
 
   var changeImageSize = function (imageSize) {
-    imageUploadPreview.classList.remove('transform:scale(0.25)', 'transform:scale(0.5)', 'transform:scale(0.75)', 'transform:scale(1)');
-    imageUploadPreview.classList.add('transform' + ':' + 'scale' + '(' + imageSize / 100 + ')');
     scaleControlValue.value = imageSize + '%';
+    imageUploadPreview.style.transform = 'scale' + '(' + imageSize / 100 + ')';
+  };
+
+  var onScaleControlSmallerClick = function () {
+    zoomOutPhoto();
+  };
+
+  var onScaleControlSmallerEnterDown = function (evt) {
+    evt.stopPropagation();
+    if (document.activeElement === scaleControlSmaller) {
+      window.util.isEnterEvent(evt, zoomOutPhoto);
+    }
+  };
+
+  var onScaleControlBiggerClick = function () {
+    zoomInPhoto();
+  };
+
+  var onScaleControlBiggerEnterDown = function (evt) {
+    evt.stopPropagation();
+    if (document.activeElement === scaleControlBigger) {
+      window.util.isEnterEvent(evt, zoomInPhoto);
+    }
   };
 
   var validateComment = function () {
@@ -130,11 +163,5 @@
         }
       }
     }
-  };
-
-  var onUploadFormSubmit = function (evt) {
-    evt.preventDefault();
-    validateHashtag();
-    uploadForm.submit();
   };
 })();

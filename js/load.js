@@ -3,11 +3,7 @@
 (function () {
 
   var URL = 'https://js.dump.academy/kekstagram/data';
-<<<<<<< HEAD
   var SUCCESS_CODE = 200;
-=======
-  window.pictureItems = [];
->>>>>>> Задание 6-2: нужно подкачаться, также правит открытие картинок по ентеру
 
   var load = function () {
 
