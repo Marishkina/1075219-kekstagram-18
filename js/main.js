@@ -148,7 +148,7 @@
     commentsCount.classList.add('visually-hidden');
     commentsLoader.classList.add('visually-hidden');
     closeBigPictureButton.addEventListener('click', onCloseBigPictureButtonClick);
-    picturesList.addEventListener('keydown', onDocumentKeydown);
+    document.addEventListener('keydown', onDocumentKeydown);
   };
 
   var closeBigPicture = function () {
@@ -176,19 +176,21 @@
     return bigPictureDetails;
   };
 
-  var onPicturesListMouseup = function (evt) {
-    generateBigPictureElements(getBigPictureDetails(evt));
-    openBigPicture();
-  };
-
-  var onPicturesListKeydown = function (evt) {
-    if (evt.code === 'Enter') {
+  var onPicturesListCLick = function (evt) {
+    if (evt.target.className === 'picture__img') {
       generateBigPictureElements(getBigPictureDetails(evt));
       openBigPicture();
     }
   };
 
-  picturesList.addEventListener('mouseup', onPicturesListMouseup);
+  var onPicturesListKeydown = function (evt) {
+    if (evt.code === 'Enter' && evt.target.className === 'picture') {
+      generateBigPictureElements(getBigPictureDetails(evt));
+      openBigPicture();
+    }
+  };
+
+  picturesList.addEventListener('click', onPicturesListCLick);
   picturesList.addEventListener('keydown', onPicturesListKeydown);
 
   // валидация поля комментария
@@ -227,7 +229,7 @@
     effectLevel.classList.add('visually-hidden');
     document.addEventListener('keydown', onDocumentKeydown);
     closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
-    hashtagTextField.addEventListener('input', validateHashtag);
+    hashtagTextField.addEventListener('input', onHashtagTextFieldInput);
     uploadForm.addEventListener('submit', onUploadFormSubmit);
     effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
     effectRadioButton.addEventListener('change', onEffectRadioButtonsChange);
@@ -245,7 +247,7 @@
     uploadOverlayForm.classList.add('hidden');
     document.removeEventListener('keydown', onDocumentKeydown);
     closeButtonUploadOverlayForm.removeEventListener('click', onCloseButtonUploadOverlayFormClick);
-    hashtagTextField.removeEventListener('input', validateHashtag);
+    hashtagTextField.removeEventListener('input', onHashtagTextFieldInput);
     uploadForm.removeEventListener('submit', onUploadFormSubmit);
     effectLevelPin.removeEventListener('mouseup', onEffectLevelPinMouseup);
     effectRadioButton.removeEventListener('change', onEffectRadioButtonsChange);
@@ -330,31 +332,39 @@
   // валидация хеш-тегов
   var onUploadFormSubmit = function (evt) {
     evt.preventDefault();
-    validateHashtag();
+    // validateHashtag();
     uploadForm.submit();
   };
 
+  var onHashtagTextFieldInput = function () {
+    var hashtagError = validateHashtag(hashtagTextField.value);
+    hashtagTextField.setCustomValidity(hashtagError);
+  };
+
   var validateHashtag = function () {
-    var hashtagTextFieldContent = hashtagTextField.value;
-    var hashtagsList = hashtagTextFieldContent.toLowerCase().split(' ');
+    var hashtagsList = hashtagTextField.value.toLowerCase().split(' ');
 
     if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
-      hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
-    } else {
-      for (var i = 0; i < hashtagsList.length; i++) {
-        if ((hashtagsList[i][0] !== '#' || hashtagsList[0][0] !== '#')) {
-          hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
-        } else if (hashtagsList[i] === '#') {
-          hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
-        } else if (hashtagsList.indexOf(hashtagsList[i]) !== i) {
-          hashtagTextField.setCustomValidity('один и тот же хеш-тег не может быть использован дважды');
-        } else if (hashtagsList[i].length > MAX_HASHTAG_LENGTH) {
-          hashtagTextField.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
-        } else {
-          hashtagTextField.setCustomValidity('');
-        }
-      }
+      return 'максимум 5 хэш-тегов';
     }
+
+    for (var i = 0; i < hashtagsList.length; i++) {
+      if (hashtagsList[i][0] !== '#') {
+        return 'хэш-тег начинается с символа #';
+      }
+
+      if (hashtagsList[i] === '#') {
+        return 'хеш-тег не может состоять только из одной решётки';
+      }
+
+      if (hashtagsList.indexOf(hashtagsList[i]) !== i) {
+        return 'один и тот же хеш-тег не может быть использован дважды';
+      }
+
+      if (hashtagsList[i].length > MAX_HASHTAG_LENGTH) {
+        return 'максимальная длина одного хэш-тега 20 символов, включая решётку';
+      }
+    } return '';
   };
 
   // масштабирование картинки
