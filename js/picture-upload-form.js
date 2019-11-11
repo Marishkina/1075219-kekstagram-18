@@ -210,6 +210,24 @@
         }
       }
     }
+
+    for (var i = 0; i < hashtagsList.length; i++) {
+      if (hashtagsList[i][0] !== '#') {
+        return 'хэш-тег начинается с символа #';
+      }
+
+      if (hashtagsList[i] === '#') {
+        return 'хеш-тег не может состоять только из одной решётки';
+      }
+
+      if (hashtagsList.indexOf(hashtagsList[i]) !== i) {
+        return 'один и тот же хеш-тег не может быть использован дважды';
+      }
+
+      if (hashtagsList[i].length > MAX_HASHTAG_LENGTH) {
+        return 'максимальная длина одного хэш-тега 20 символов, включая решётку';
+      }
+    } return '';
   };
 
   var onUploadFormSubmit = function (evt) {
