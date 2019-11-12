@@ -4,16 +4,12 @@
 
   // задание 5-3 Максимум подвижности
   var uploadForm = document.querySelector('.img-upload__form');
-  var uploadFile = uploadForm.querySelector('#upload-file');
-  var uploadOverlayForm = uploadForm.querySelector('.img-upload__overlay');
-  var closeButtonUploadOverlayForm = uploadOverlayForm.querySelector('#upload-cancel');
   var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
   var imageUploadPreview = uploadForm.querySelector('.img-upload__preview');
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
   var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
   var effectLevelValue = uploadForm.querySelector('.effect-level__value');
   var effectLevelLine = effectLevel.querySelector('.effect-level__line');
-  var effectRadioButtons = uploadForm.querySelectorAll('.effects__radio');
   var photoEffects = uploadForm.querySelector('.img-upload__effects');
   var chromePreview = photoEffects.querySelector('#effect-chrome');
   var sepiaPreview = photoEffects.querySelector('#effect-sepia');
@@ -21,44 +17,6 @@
   var phobosPreview = photoEffects.querySelector('#effect-phobos');
   var heatPreview = photoEffects.querySelector('#effect-heat');
   var scaleControlValue = uploadForm.querySelector('.scale__control--value');
-  var hashtagTextField = uploadForm.querySelector('input[name=hashtags]');
-  var commentsField = uploadForm.querySelector('.text__description');
-
-  var openUploadOverlayForm = function () {
-    document.addEventListener('keydown', onDocumentKeydown);
-    closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
-    effectLevelPin.addEventListener('mousedown', shiftEffectLevelPin);
-    effectRadioButtons.forEach(function (element) {
-      element.addEventListener('change', onEffectRadioButtonsChange);
-    });
-  };
-
-  var closeUploadOverlayForm = function () {
-    effectLevelPin.removeEventListener('mousedown', shiftEffectLevelPin);
-    effectRadioButtons.forEach(function (element) {
-      element.removeEventListener('change', onEffectRadioButtonsChange);
-    });
-  };
-
-  var onDocumentKeydown = function (evt) {
-    if (evt.code === 'Escape') {
-      if (document.activeElement === hashtagTextField || document.activeElement === commentsField) {
-        evt.stopPropagation();
-      } else {
-        closeUploadOverlayForm();
-      }
-    }
-  };
-
-  var onUploadFileChange = function () {
-    openUploadOverlayForm();
-  };
-
-  uploadFile.addEventListener('change', onUploadFileChange);
-
-  var onCloseButtonUploadOverlayFormClick = function () {
-    closeUploadOverlayForm();
-  };
 
   // определяем ширину дива для ползунка
   var getWidthOfEffectLevelLine = function () {
@@ -72,7 +30,7 @@
     getEffectLevelValue();
   };
 
-  var shiftEffectLevelPin = function (evt) {
+  window.shiftEffectLevelPin = function (evt) {
     var maxEffectScale = getWidthOfEffectLevelLine();
     var minEffectScale = 0;
 
@@ -184,7 +142,7 @@
     return value;
   };
 
-  var onEffectRadioButtonsChange = function () {
+  window.onEffectRadioButtonsChange = function () {
     var effects = photoEffects.elements;
 
     window.setOriginFilter();

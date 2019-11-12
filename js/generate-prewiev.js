@@ -9,9 +9,6 @@
   var commentsLoader = preview.querySelector('.comments-loader');
   var closePreviewButton = preview.querySelector('#picture-cancel');
 
-  // var uploadForm = document.querySelector('.img-upload__form');
-  // var uploadFile = uploadForm.querySelector('#upload-file');
-
   // создание li с комментами для большой картинки
   var generatePreviewComment = function (comment) {
     var socialCommentElement = socialComment.cloneNode(true);
@@ -93,23 +90,6 @@
       openPreview();
     }
   };
-
-  // не работает
-  // var onPicturesListCLick = function (evt) {
-  //   console.log(document.activeElement);
-  //   if (document.activeElement === pictureImg) {
-  //     window.generatePreview(getPreviewDetails(evt));
-  //     openPreview();
-  //   }
-  // };
-
-  // var onPicturesListKeydown = function (evt) {
-  //   console.log(evt.target);
-  //   if (evt.code === 'Enter' && document.activeElement === picture) {
-  //     window.generatePreview(getPreviewDetails(evt));
-  //     openPreview();
-  //   }
-  // };
 
   var onPicturesListKeydown = function (evt) {
     if (evt.code === 'Enter' && evt.target.className === 'picture') {
