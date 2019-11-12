@@ -45,8 +45,6 @@
       if (document.activeElement === hashtagTextField || document.activeElement === commentsField) {
         evt.stopPropagation();
       } else {
-        uploadForm.reset();
-        window.setOriginFilter();
         closeUploadOverlayForm();
       }
     }
@@ -59,8 +57,6 @@
   uploadFile.addEventListener('change', onUploadFileChange);
 
   var onCloseButtonUploadOverlayFormClick = function () {
-    uploadForm.reset();
-    window.setOriginFilter();
     closeUploadOverlayForm();
   };
 

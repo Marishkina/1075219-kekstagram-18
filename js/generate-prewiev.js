@@ -49,15 +49,15 @@
 
   var getPreviewDetails = function (evt) {
     if (evt.code === 'Enter') {
-      var m = evt.target.children[0].id.slice(1);
+      var templateImgId = evt.target.children[0].id.slice(13);
     } else {
-      m = evt.target.id.slice(1);
+      templateImgId = evt.target.id.slice(13);
     }
     var previewDetails = {
-      url: window.pictureItems[m].url,
-      description: window.pictureItems[m].description,
-      likes: window.pictureItems[m].likes,
-      comments: window.pictureItems[m].comments
+      url: window.pictureItems[templateImgId].url,
+      description: window.pictureItems[templateImgId].description,
+      likes: window.pictureItems[templateImgId].likes,
+      comments: window.pictureItems[templateImgId].comments
     };
     return previewDetails;
   };
