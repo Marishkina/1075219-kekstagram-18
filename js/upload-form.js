@@ -10,14 +10,11 @@
   var successButton = successTemplate.querySelector('.success__button');
   var submitButton = uploadForm.querySelector('.img-upload__submit');
 
-  var effectRadioButtons = uploadForm.querySelectorAll('.effects__radio');
-
   var upload = function (data, onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      console.log(xhr.response);
       if (xhr.status === 200) {
         onSuccess();
       } else {
@@ -34,15 +31,14 @@
     evt.preventDefault();
   };
 
-  // var onSubmitButtonKeydown = function (evt) {
-  //   if (evt.code === 'Enter' && evt.target === submitButton) {
-  //     onUploadFormSubmit();
-  //   }
-  // };
+  var onSubmitButtonMouseup = function (evt) {
+    if (evt.code === 'Enter' && evt.target === submitButton) {
+      onUploadFormSubmit();
+    }
+  };
 
   uploadForm.addEventListener('submit', onUploadFormSubmit);
-
-  // submitButton.addEventListener('keydown', onSubmitButtonKeydown);
+  submitButton.addEventListener('mouseup', onSubmitButtonMouseup);
 
   // действия на отправку формы
   var onSuccessResponse = function () {
