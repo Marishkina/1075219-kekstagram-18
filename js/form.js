@@ -24,6 +24,7 @@
   var scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');
   var scaleControlValue = uploadForm.querySelector('.scale__control--value');
   var commentsField = uploadForm.querySelector('.text__description');
+  var effectRadioButtons = uploadForm.querySelectorAll('.effects__radio');
 
   var openUploadOverlayForm = function () {
     uploadOverlayForm.classList.remove('hidden');
@@ -40,7 +41,16 @@
     scaleControlBigger.addEventListener('keydown', onScaleControlBiggerEnterDown);
     effectLevelValue.setAttribute('value', 100);
     scaleControlValue.setAttribute('value', '100%');
+<<<<<<< HEAD
     commentsField.addEventListener('change', validateComment);
+=======
+    commentsField.addEventListener('change', onCommentsFieldChange);
+    closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
+    effectLevelPin.addEventListener('mousedown', window.shiftEffectLevelPin);
+    effectRadioButtons.forEach(function (element) {
+      element.addEventListener('change', window.onEffectRadioButtonsChange);
+    });
+>>>>>>> Убирает повторяющиеся функции, правит функцию валидации хеш-тегов
   };
 
   var closeUploadOverlayForm = function () {
@@ -54,8 +64,26 @@
     scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
     scaleControlSmaller.removeEventListener('keydown', onScaleControlSmallerEnterDown);
     scaleControlBigger.removeEventListener('keydown', onScaleControlBiggerEnterDown);
+<<<<<<< HEAD
     commentsField.removeEventListener('change', validateComment);
+=======
+    commentsField.removeEventListener('change', onCommentsFieldChange);
+    effectLevelPin.removeEventListener('mousedown', window.shiftEffectLevelPin);
+    effectRadioButtons.forEach(function (element) {
+      element.removeEventListener('change', window.onEffectRadioButtonsChange);
+    });
+    window.setOriginFilter();
+    uploadForm.reset();
+    hashtagTextField.setCustomValidity('');
+    commentsField.setCustomValidity('');
+>>>>>>> Убирает повторяющиеся функции, правит функцию валидации хеш-тегов
   };
+
+  var onUploadFileChange = function () {
+    openUploadOverlayForm();
+  };
+
+  uploadFile.addEventListener('change', onUploadFileChange);
 
   var onDocumentKeydown = function (evt) {
     if (document.activeElement === hashtagTextField) {
@@ -66,12 +94,6 @@
       window.util.isEscEvent(evt, closeUploadOverlayForm);
     }
   };
-
-  var onUploadFileChange = function () {
-    openUploadOverlayForm();
-  };
-
-  uploadFile.addEventListener('change', onUploadFileChange);
 
   // закрытие формы
   var onCloseButtonUploadOverlayFormClick = function () {
@@ -119,6 +141,11 @@
     evt.stopPropagation();
     if (document.activeElement === scaleControlSmaller) {
       window.util.isEnterEvent(evt, zoomOutPhoto);
+<<<<<<< HEAD
+=======
+    } else {
+      window.util.isEscEvent(evt, closeUploadOverlayForm);
+>>>>>>> Убирает повторяющиеся функции, правит функцию валидации хеш-тегов
     }
   };
 
@@ -130,6 +157,11 @@
     evt.stopPropagation();
     if (document.activeElement === scaleControlBigger) {
       window.util.isEnterEvent(evt, zoomInPhoto);
+<<<<<<< HEAD
+=======
+    } else {
+      window.util.isEscEvent(evt, closeUploadOverlayForm);
+>>>>>>> Убирает повторяющиеся функции, правит функцию валидации хеш-тегов
     }
   };
 
@@ -150,7 +182,7 @@
       hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
     } else {
       for (var i = 0; i < hashtagsList.length; i++) {
-        if ((hashtagsList[i][0] !== '#' || hashtagsList[0][0] !== '#')) {
+        if (hashtagsList[i][0] !== '#') {
           hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
         } else if (hashtagsList[i] === '#') {
           hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
