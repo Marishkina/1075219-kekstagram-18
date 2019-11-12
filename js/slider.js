@@ -63,7 +63,6 @@
           x: startCoords.x - moveEvt.clientX
         };
 
-<<<<<<< HEAD
         startCoords = {
           x: moveEvt.clientX
         };
@@ -76,18 +75,6 @@
           effectLevelPin.style.left = (effectLevelPin.offsetLeft - shift.x) + 'px';
         }
       };
-=======
-  // сброс уровня эффекта до начального состояния (100%)
-  window.setOriginFilter = function () {
-    imageUploadPreview.classList.remove('effects__preview--none', 'effects__preview--chrome', 'effects__preview--sepia', 'effects__preview--marvin', 'effects__preview--phobos', 'effects__preview--heat');
-    imageUploadPreview.style.filter = 'none';
-    imageUploadPreview.style.transform = 'scale(1)';
-    effectLevelDepth.style.width = '100%';
-    effectLevelPin.style.left = '100%';
-    effectLevelValue.setAttribute('value', 100);
-    scaleControlValue.value = '100%';
-  };
->>>>>>> Задание 6-3: без хэштега
 
       var onEffectLevelPinMouseup = function (upEvt) {
         window.effects.getEffectLevel();
@@ -99,49 +86,8 @@
         effectLevelPin.removeEventListener('mouseup', onEffectLevelPinMouseup);
       };
 
-<<<<<<< HEAD
       effectLevelPin.addEventListener('mousemove', onEffectLevelPinMousemove);
       effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
     },
-=======
-  var onEffectRadioButtonsChange = function () {
-    var effects = photoEffects.elements;
-
-    window.setOriginFilter();
-
-    for (var i = 0; i < effects.length; i++) {
-
-      if (effects[i].checked) {
-        switch (effects[i].value) {
-
-          case ('chrome'):
-            imageUploadPreview.classList.add('effects__preview--chrome');
-            effectLevel.classList.remove('visually-hidden');
-            imageUploadPreview.style.filter = 'grayscale' + '(' + getEffectLevelValue() / 100 + ')';
-            break;
-          case ('sepia'):
-            imageUploadPreview.classList.add('effects__preview--sepia');
-            effectLevel.classList.remove('visually-hidden');
-            imageUploadPreview.style.filter = 'sepia' + '(' + getEffectLevelValue() / 100 + ')';
-            break;
-          case ('marvin'):
-            imageUploadPreview.classList.add('effects__preview--marvin');
-            effectLevel.classList.remove('visually-hidden');
-            imageUploadPreview.style.filter = 'invert' + '(' + getEffectLevelValue() + '%' + ')';
-            break;
-          case ('phobos'):
-            imageUploadPreview.classList.add('effects__preview--phobos');
-            effectLevel.classList.remove('visually-hidden');
-            imageUploadPreview.style.filter = 'blur' + '(' + Math.round(getEffectLevelValue() / 3 / 10) + 'px' + ')';
-            break;
-          case ('heat'):
-            imageUploadPreview.classList.add('effects__preview--heat');
-            effectLevel.classList.remove('visually-hidden');
-            imageUploadPreview.style.filter = 'brightness' + '(' + Math.round(getEffectLevelValue() / 3 / 10) + ')';
-            break;
-        }
-      }
-    }
->>>>>>> Задание 6-3: без хэштега
   };
 })();
