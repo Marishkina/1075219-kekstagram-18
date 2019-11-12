@@ -13,7 +13,7 @@
     'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
   ];
   var MIN_COMMENTS = 1;
-  var MAX_COMMENTS = 120;
+  var MAX_COMMENTS = 12;
   var MIN_LIKES = 15;
   var MAX_LIKES = 200;
   var NAMES = ['Артем', 'Вася', 'Матрена', 'Катюша', 'Слава', 'Поля'];
@@ -149,21 +149,32 @@
     commentsLoader.classList.add('visually-hidden');
     closeBigPictureButton.addEventListener('click', onCloseBigPictureButtonClick);
     document.addEventListener('keydown', onDocumentKeydown);
+    document.querySelector('body').classList.add('modal-open');
+    bigPicture.focus();
   };
 
   var closeBigPicture = function () {
     bigPicture.classList.add('hidden');
     closeBigPictureButton.removeEventListener('click', onCloseBigPictureButtonClick);
     document.removeEventListener('keydown', onDocumentKeydown);
+    document.querySelector('body').classList.remove('modal-open');
   };
 
   var onCloseBigPictureButtonClick = function () {
     closeBigPicture();
   };
 
+  var onDocumentKeydown = function (evt) {
+    if (evt.code === 'Escape') {
+      closeBigPicture();
+    }
+  };
+
   var getBigPictureDetails = function (evt) {
+    var templateImgId;
     if (evt.code === 'Enter') {
-      var templateImgId = evt.target.children[0].id.slice(13);
+      templateImgId = evt.target.children[0].id.slice(13);
+      // slice(13) - отрезаем первые 13 символов в названии переменной, так как переменную используем как индекс для поиска в массиве, а индекс м.б. только цифра
     } else {
       templateImgId = evt.target.id.slice(13);
     }
