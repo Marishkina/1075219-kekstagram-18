@@ -31,16 +31,17 @@
     document.addEventListener('keydown', onDocumentKeydown);
     closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
     closeButtonUploadOverlayForm.addEventListener('keydown', onCloseButtonUploadOverlayFormEnterdown);
+    // hashtagTextField.addEventListener('input', onHashtagTextFieldInput);
     hashtagTextField.addEventListener('input', validateHashtag);
     effectLevelDepth.style.width = '100%';
     effectLevelPin.style.left = '100%';
-    scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
-    scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
+    scaleControlSmaller.addEventListener('mouseup', onScaleControlSmallerMouseup);
+    scaleControlBigger.addEventListener('mouseup', onScaleControlBiggerMouseup);
     scaleControlSmaller.addEventListener('keydown', onScaleControlSmallerEnterDown);
     scaleControlBigger.addEventListener('keydown', onScaleControlBiggerEnterDown);
     effectLevelValue.setAttribute('value', 100);
     scaleControlValue.setAttribute('value', '100%');
-    commentsField.addEventListener('change', validateComment);
+    commentsField.addEventListener('change', onCommentsFieldChange);
   };
 
   var closeUploadOverlayForm = function () {
@@ -49,21 +50,26 @@
     document.removeEventListener('keydown', onDocumentKeydown);
     closeButtonUploadOverlayForm.removeEventListener('click', onCloseButtonUploadOverlayFormClick);
     closeButtonUploadOverlayForm.removeEventListener('keydown', onCloseButtonUploadOverlayFormEnterdown);
+    // hashtagTextField.removeEventListener('input', onHashtagTextFieldInput);
     hashtagTextField.removeEventListener('input', validateHashtag);
-    scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
-    scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
+    scaleControlSmaller.removeEventListener('mouseup', onScaleControlSmallerMouseup);
+    scaleControlBigger.removeEventListener('mouseup', onScaleControlBiggerMouseup);
     scaleControlSmaller.removeEventListener('keydown', onScaleControlSmallerEnterDown);
     scaleControlBigger.removeEventListener('keydown', onScaleControlBiggerEnterDown);
-    commentsField.removeEventListener('change', validateComment);
+    commentsField.removeEventListener('change', onCommentsFieldChange);
+    window.setOriginFilter();
+    uploadForm.reset();
+    hashtagTextField.setCustomValidity('');
+    commentsField.setCustomValidity('');
   };
 
   var onDocumentKeydown = function (evt) {
-    if (document.activeElement === hashtagTextField) {
-      evt.stopPropagation();
-    } else if (document.activeElement === commentsField) {
-      evt.stopPropagation();
-    } else {
-      window.util.isEscEvent(evt, closeUploadOverlayForm);
+    if (evt.code === 'Escape') {
+      if (document.activeElement === hashtagTextField || document.activeElement === commentsField) {
+        evt.stopPropagation();
+      } else {
+        closeUploadOverlayForm();
+      }
     }
   };
 
@@ -79,9 +85,10 @@
   };
 
   var onCloseButtonUploadOverlayFormEnterdown = function (evt) {
-    evt.stopPropagation();
-    if (document.activeElement === closeButtonUploadOverlayForm) {
-      window.util.isEnterEvent(evt, closeUploadOverlayForm);
+    if (evt.code === 'Enter' && document.activeElement === closeButtonUploadOverlayForm) {
+      evt.stopPropagation();
+    } else {
+      closeUploadOverlayForm();
     }
   };
 
@@ -111,29 +118,33 @@
     imageUploadPreview.style.transform = 'scale' + '(' + imageSize / 100 + ')';
   };
 
-  var onScaleControlSmallerClick = function () {
+  var onScaleControlSmallerMouseup = function () {
     zoomOutPhoto();
   };
 
   var onScaleControlSmallerEnterDown = function (evt) {
     evt.stopPropagation();
-    if (document.activeElement === scaleControlSmaller) {
+    if (evt.code === 'Enter' && document.activeElement === scaleControlSmaller) {
       window.util.isEnterEvent(evt, zoomOutPhoto);
+    } else if (evt.code === 'Escape') {
+      window.util.isEscEvent(evt, closeUploadOverlayForm);
     }
   };
 
-  var onScaleControlBiggerClick = function () {
+  var onScaleControlBiggerMouseup = function () {
     zoomInPhoto();
   };
 
   var onScaleControlBiggerEnterDown = function (evt) {
     evt.stopPropagation();
-    if (document.activeElement === scaleControlBigger) {
+    if (evt.code === 'Enter' && document.activeElement === scaleControlBigger) {
       window.util.isEnterEvent(evt, zoomInPhoto);
+    } else if (evt.code === 'Escape') {
+      window.util.isEscEvent(evt, closeUploadOverlayForm);
     }
   };
 
-  var validateComment = function () {
+  var onCommentsFieldChange = function () {
     if (commentsField.value.length > MAX_COMMENT_LENGTH) {
       commentsField.setCustomValidity('максимальная длина комментария 140 символов');
     } else {
@@ -141,10 +152,11 @@
     }
   };
 
-  // валидация хеш-тегов
   var validateHashtag = function () {
     var hashtagTextFieldContent = hashtagTextField.value;
     var hashtagsList = hashtagTextFieldContent.toLowerCase().split(' ');
+
+    hashtagTextField.setCustomValidity('');
 
     if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
       hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
@@ -158,10 +170,41 @@
           hashtagTextField.setCustomValidity('один и тот же хеш-тег не может быть использован дважды');
         } else if (hashtagsList[i].length > MAX_HASHTAG_LENGTH) {
           hashtagTextField.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
-        } else {
-          hashtagTextField.setCustomValidity('');
         }
       }
     }
   };
+
+  // валидация хеш-тегов
+  // var onHashtagTextFieldInput = function () {
+  //   var hashtagError = validateHashtag(hashtagTextField.value);
+  //   hashtagTextField.setCustomValidity(hashtagError);
+  // };
+
+  // var validateHashtag = function () {
+  //   var hashtagsList = hashtagTextField.value.toLowerCase().split(' ');
+
+  //   if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
+  //     return 'максимум 5 хэш-тегов';
+  //   }
+
+  //   for (var i = 0; i < hashtagsList.length; i++) {
+  //     if (hashtagsList[i][0] !== '#') {
+  //       return 'хэш-тег начинается с символа #';
+  //     }
+
+  //     if (hashtagsList[i] === '#') {
+  //       return 'хеш-тег не может состоять только из одной решётки';
+  //     }
+
+  //     if (hashtagsList.indexOf(hashtagsList[i]) !== i) {
+  //       return 'один и тот же хеш-тег не может быть использован дважды';
+  //     }
+
+  //     if (hashtagsList[i].length > MAX_HASHTAG_LENGTH) {
+  //       return 'максимальная длина одного хэш-тега 20 символов, включая решётку';
+  //     }
+  //   }
+  //   return '';
+  // };
 })();
