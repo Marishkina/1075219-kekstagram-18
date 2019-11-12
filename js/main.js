@@ -174,6 +174,12 @@
     closeBigPicture();
   };
 
+  var onDocumentKeydown = function (evt) {
+    if (evt.code === 'Escape') {
+      closeBigPicture();
+    }
+  };
+
   var getBigPictureDetails = function (evt) {
     var templateImgId;
 
