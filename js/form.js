@@ -24,6 +24,7 @@
   var scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');
   var scaleControlValue = uploadForm.querySelector('.scale__control--value');
   var commentsField = uploadForm.querySelector('.text__description');
+  var effectRadioButtons = uploadForm.querySelectorAll('.effects__radio');
 
   var openUploadOverlayForm = function () {
     uploadOverlayForm.classList.remove('hidden');
@@ -31,7 +32,6 @@
     document.addEventListener('keydown', onDocumentKeydown);
     closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
     closeButtonUploadOverlayForm.addEventListener('keydown', onCloseButtonUploadOverlayFormEnterdown);
-    // hashtagTextField.addEventListener('input', onHashtagTextFieldInput);
     hashtagTextField.addEventListener('input', validateHashtag);
     effectLevelDepth.style.width = '100%';
     effectLevelPin.style.left = '100%';
@@ -42,6 +42,11 @@
     effectLevelValue.setAttribute('value', 100);
     scaleControlValue.setAttribute('value', '100%');
     commentsField.addEventListener('change', onCommentsFieldChange);
+    closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
+    effectLevelPin.addEventListener('mousedown', window.shiftEffectLevelPin);
+    effectRadioButtons.forEach(function (element) {
+      element.addEventListener('change', window.onEffectRadioButtonsChange);
+    });
   };
 
   var closeUploadOverlayForm = function () {
@@ -50,18 +55,27 @@
     document.removeEventListener('keydown', onDocumentKeydown);
     closeButtonUploadOverlayForm.removeEventListener('click', onCloseButtonUploadOverlayFormClick);
     closeButtonUploadOverlayForm.removeEventListener('keydown', onCloseButtonUploadOverlayFormEnterdown);
-    // hashtagTextField.removeEventListener('input', onHashtagTextFieldInput);
     hashtagTextField.removeEventListener('input', validateHashtag);
     scaleControlSmaller.removeEventListener('mouseup', onScaleControlSmallerMouseup);
     scaleControlBigger.removeEventListener('mouseup', onScaleControlBiggerMouseup);
     scaleControlSmaller.removeEventListener('keydown', onScaleControlSmallerEnterDown);
     scaleControlBigger.removeEventListener('keydown', onScaleControlBiggerEnterDown);
     commentsField.removeEventListener('change', onCommentsFieldChange);
+    effectLevelPin.removeEventListener('mousedown', window.shiftEffectLevelPin);
+    effectRadioButtons.forEach(function (element) {
+      element.removeEventListener('change', window.onEffectRadioButtonsChange);
+    });
     window.setOriginFilter();
     uploadForm.reset();
     hashtagTextField.setCustomValidity('');
     commentsField.setCustomValidity('');
   };
+
+  var onUploadFileChange = function () {
+    openUploadOverlayForm();
+  };
+
+  uploadFile.addEventListener('change', onUploadFileChange);
 
   var onDocumentKeydown = function (evt) {
     if (evt.code === 'Escape') {
@@ -72,12 +86,6 @@
       }
     }
   };
-
-  var onUploadFileChange = function () {
-    openUploadOverlayForm();
-  };
-
-  uploadFile.addEventListener('change', onUploadFileChange);
 
   // закрытие формы
   var onCloseButtonUploadOverlayFormClick = function () {
@@ -126,7 +134,7 @@
     evt.stopPropagation();
     if (evt.code === 'Enter' && document.activeElement === scaleControlSmaller) {
       window.util.isEnterEvent(evt, zoomOutPhoto);
-    } else if (evt.code === 'Escape') {
+    } else {
       window.util.isEscEvent(evt, closeUploadOverlayForm);
     }
   };
@@ -139,7 +147,7 @@
     evt.stopPropagation();
     if (evt.code === 'Enter' && document.activeElement === scaleControlBigger) {
       window.util.isEnterEvent(evt, zoomInPhoto);
-    } else if (evt.code === 'Escape') {
+    } else {
       window.util.isEscEvent(evt, closeUploadOverlayForm);
     }
   };
@@ -162,7 +170,7 @@
       hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
     } else {
       for (var i = 0; i < hashtagsList.length; i++) {
-        if ((hashtagsList[i][0] !== '#' || hashtagsList[0][0] !== '#')) {
+        if (hashtagsList[i][0] !== '#') {
           hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
         } else if (hashtagsList[i] === '#') {
           hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
@@ -174,37 +182,4 @@
       }
     }
   };
-
-  // валидация хеш-тегов
-  // var onHashtagTextFieldInput = function () {
-  //   var hashtagError = validateHashtag(hashtagTextField.value);
-  //   hashtagTextField.setCustomValidity(hashtagError);
-  // };
-
-  // var validateHashtag = function () {
-  //   var hashtagsList = hashtagTextField.value.toLowerCase().split(' ');
-
-  //   if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
-  //     return 'максимум 5 хэш-тегов';
-  //   }
-
-  //   for (var i = 0; i < hashtagsList.length; i++) {
-  //     if (hashtagsList[i][0] !== '#') {
-  //       return 'хэш-тег начинается с символа #';
-  //     }
-
-  //     if (hashtagsList[i] === '#') {
-  //       return 'хеш-тег не может состоять только из одной решётки';
-  //     }
-
-  //     if (hashtagsList.indexOf(hashtagsList[i]) !== i) {
-  //       return 'один и тот же хеш-тег не может быть использован дважды';
-  //     }
-
-  //     if (hashtagsList[i].length > MAX_HASHTAG_LENGTH) {
-  //       return 'максимальная длина одного хэш-тега 20 символов, включая решётку';
-  //     }
-  //   }
-  //   return '';
-  // };
 })();
