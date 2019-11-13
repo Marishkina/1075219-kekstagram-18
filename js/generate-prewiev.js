@@ -40,28 +40,80 @@
   };
 
   var loadComments = function (listOfComments) {
-    var copyListOfComments = listOfComments.slice();
-    var listOfCommentsForRender = [];
+    var commentsForRender = [];
 
     if (listOfComments.length <= MAX_COMMENTS) {
-      listOfCommentsForRender = renderListOfComments(listOfComments);
+      commentsForRender = renderListOfComments(listOfComments);
 
       commentsLoader.classList.add('visually-hidden');
       socialCommentsCount.textContent = listOfComments.length + ' из ' + listOfComments.length + ' комментариев';
     } else {
-      for (var i = 0; i < listOfComments.length; i++) {
-        console.
-        var slicedListOfComments = copyListOfComments.slice(5);
-        listOfCommentsForRender = renderListOfComments(slicedListOfComments);
-      }
-      commentsLoader.classList.remove('visually-hidden');
-      socialCommentsCount.textContent = listOfComments.length + ' из ' + listOfComments.length + ' комментариев';
+
+      var copyListOfComments = listOfComments.slice();
+
+      commentsForRender = renderListOfComments(loadMoreComments(copyListOfComments));
     }
-    return listOfCommentsForRender;
+
+    return commentsForRender;
   };
 
-  // var loadMoreComments = function () {
+  var loadMoreComments = function (listOfComments) {
+    var commentsForRender = [];
 
+    var slicedListOfComments = listOfComments.slice(0, 5);
+
+    for (var i = 0; i < slicedListOfComments.length; i++) {
+
+      commentsForRender = slicedListOfComments;
+
+      commentsLoader.classList.remove('visually-hidden');
+      socialCommentsCount.textContent = commentsForRender.length + ' из ' + listOfComments.length + ' комментариев';
+    }
+
+    return commentsForRender;
+  };
+
+  commentsLoader.addEventListener('click', loadMoreComments);
+
+  // var loadComments = function (listOfComments) {
+  //   var commentsForRender = [];
+
+  //   if (listOfComments.length <= MAX_COMMENTS) {
+  //     commentsForRender = renderListOfComments(listOfComments);
+
+  //     commentsLoader.classList.add('visually-hidden');
+  //     socialCommentsCount.textContent = listOfComments.length + ' из ' + listOfComments.length + ' комментариев';
+  //   } else {
+
+  //     var copyListOfComments = listOfComments.slice();
+  //     var slicedListOfComments = copyListOfComments.slice(0, 5);
+  //     console.log(slicedListOfComments);
+
+  //     // for (var i = 0; i < slicedListOfComments; i++) {
+
+  //       commentsForRender = renderListOfComments(slicedListOfComments);
+  //     // }
+  //   }
+  //   console.log(commentsForRender);
+  //   return commentsForRender;
+  // };
+
+  // var loadMoreComments = function (listOfComments) {
+  //   var commentsForRender = [];
+
+  //   var v = listOfComments.slice();
+  //   var slicedListOfComments = v.slice(0, 5);
+
+  //   for (var i = 0; i < slicedListOfComments.length; i++) {
+  //     commentsForRender = renderListOfComments(slicedListOfComments);
+
+  //     commentsForRender = slicedListOfComments;
+
+  //     commentsLoader.classList.remove('visually-hidden');
+  //     socialCommentsCount.textContent = commentsForRender.length + ' из ' + listOfComments.length + ' комментариев';
+  //   }
+
+  //   return commentsForRender;
   // };
 
   // отрисовка большой картинки
