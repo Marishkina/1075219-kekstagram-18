@@ -288,7 +288,6 @@
 
   var onUploadFormSubmit = function (evt) {
     evt.preventDefault();
-    validateHashtag();
     uploadForm.submit();
   };
 >>>>>>> Задание 5-2: модуляция:js/form.js
