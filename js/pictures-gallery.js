@@ -4,23 +4,23 @@
 
   var commentsCount = window.preview.querySelector('.social__comment-count');
   var commentsLoader = window.preview.querySelector('.comments-loader');
-  var closePrewievButton = window.preview.querySelector('#picture-cancel');
+  var closePreviewButton = window.preview.querySelector('#picture-cancel');
 
   var openPreview = function () {
     window.preview.classList.remove('hidden');
     commentsCount.classList.add('visually-hidden');
     commentsLoader.classList.add('visually-hidden');
-    closePrewievButton.addEventListener('click', onClosePrewievButtonClick);
+    closePreviewButton.addEventListener('click', onClosePreviewButtonClick);
     document.addEventListener('keydown', onDocumentKeydown);
   };
 
   var closePreview = function () {
     window.preview.classList.add('hidden');
-    closePrewievButton.removeEventListener('click', onClosePrewievButtonClick);
+    closePreviewButton.removeEventListener('click', onClosePreviewButtonClick);
     document.removeEventListener('keydown', onDocumentKeydown);
   };
 
-  var onClosePrewievButtonClick = function () {
+  var onClosePreviewButtonClick = function () {
     closePreview();
   };
 
@@ -30,32 +30,38 @@
 
   // функция сбора в объект данных большой картинки
   var getPreviewDetails = function (evt) {
+    var templateImgId;
+
     if (evt.code === 'Enter') {
-      var m = evt.target.children[0].id.slice(1);
+      templateImgId = evt.target.children[0].id.slice(13);
     } else {
-      m = evt.target.id.slice(1);
+      templateImgId = evt.target.id.slice(13);
     }
-    var previewDetails = {
-      url: window.picture[m].url,
-      description: window.picture[m].description,
-      likes: window.picture[m].likes,
-      comments: window.picture[m].comments
+
+    var bigPictureDetails = {
+      url: window.picture[templateImgId].url,
+      description: window.picture[templateImgId].description,
+      likes: window.picture[templateImgId].likes,
+      comments: window.picture[templateImgId].comments
     };
-    return previewDetails;
+
+    return bigPictureDetails;
   };
 
-  var onPicturesListMouseup = function (evt) {
-    window.generatePreview(getPreviewDetails(evt));
-    openPreview();
-  };
-
-  var onPicturesListKeydown = function (evt) {
-    if (evt.code === 'Enter') {
+  var onPicturesListCLick = function (evt) {
+    if (evt.target.className === 'picture__img') {
       window.generatePreview(getPreviewDetails(evt));
       openPreview();
     }
   };
 
-  window.picturesList.addEventListener('mouseup', onPicturesListMouseup);
+  var onPicturesListKeydown = function (evt) {
+    if (evt.code === 'Enter' && evt.target.className === 'picture') {
+      window.generatePreview(getPreviewDetails(evt));
+      openPreview();
+    }
+  };
+
+  window.picturesList.addEventListener('click', onPicturesListCLick);
   window.picturesList.addEventListener('keydown', onPicturesListKeydown);
 })();

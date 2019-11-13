@@ -11,7 +11,7 @@
   var generatePictureElement = function (itemsListPhoto, i) {
     var pictureElement = pictureTemplate.cloneNode(true);
 
-    pictureElement.querySelector('.picture__img').id = 'm' + i;
+    pictureElement.querySelector('.picture__img').id = 'templateImgId' + i;
     pictureElement.querySelector('.picture__img').src = itemsListPhoto.url;
     pictureElement.querySelector('.picture__likes').textContent = itemsListPhoto.likes;
     pictureElement.querySelector('.picture__comments').textContent = String(itemsListPhoto.comments.length);
