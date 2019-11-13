@@ -195,7 +195,6 @@
 
   var onUploadFormSubmit = function (evt) {
     evt.preventDefault();
-    validateHashtag();
     uploadForm.submit();
   };
 })();
