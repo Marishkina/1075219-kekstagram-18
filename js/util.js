@@ -3,6 +3,7 @@
 (function () {
   var ESC_CODE = 'Escape';
   var ENTER_CODE = 'Enter';
+  window.SUCCESS_CODE = 200;
 
   window.util = {
     isEscEvent: function (evt, action) {

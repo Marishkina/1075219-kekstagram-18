@@ -5,6 +5,10 @@
   var URL = 'https://js.dump.academy/kekstagram/data';
   window.pictureItems = [];
 
+  var filters = document.querySelector('.img-filters');
+  var filterButtonsAll = filters.querySelectorAll('.img-filters__button');
+  filters.classList.remove('img-filters--inactive');
+
   var load = function () {
 
     var xhr = new XMLHttpRequest();
@@ -12,7 +16,7 @@
 
     xhr.addEventListener('load', function () {
 
-      if (xhr.status === 200) {
+      if (xhr.status === window.SUCCESS_CODE) {
         window.pictureItems = xhr.response;
         window.renderPicture(window.pictureItems);
       } else {
@@ -35,4 +39,14 @@
   } catch (err) {
     window.renderErrorMessage();
   }
+
+  filters.addEventListener('click', function (evt) {
+
+    filterButtonsAll.forEach(function (button) {
+      button.classList.remove('img-filters__button--active');
+    });
+    evt.target.classList.toggle('img-filters__button--active');
+
+    window.filteredPictures.set(evt.target.id, window.pictureItems);
+  });
 })();
