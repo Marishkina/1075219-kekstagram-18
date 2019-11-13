@@ -2,22 +2,22 @@
 
 (function () {
 
-  var commentsCount = window.preview.querySelector('.social__comment-count');
-  var commentsLoader = window.preview.querySelector('.comments-loader');
-  var closePreviewButton = window.preview.querySelector('#picture-cancel');
+  var commentsCount = window.util.preview.querySelector('.social__comment-count');
+  var commentsLoader = window.util.preview.querySelector('.comments-loader');
+  var closePreviewButton = window.util.preview.querySelector('#picture-cancel');
 
   var openPreview = function () {
-    window.preview.classList.remove('hidden');
+    window.util.preview.classList.remove('hidden');
     commentsCount.classList.add('visually-hidden');
     commentsLoader.classList.add('visually-hidden');
     closePreviewButton.addEventListener('click', onClosePreviewButtonClick);
     document.addEventListener('keydown', onDocumentKeydown);
     document.querySelector('body').classList.add('modal-open');
-    window.preview.focus();
+    window.util.preview.focus();
   };
 
   var closePreview = function () {
-    window.preview.classList.add('hidden');
+    window.util.preview.classList.add('hidden');
     closePreviewButton.removeEventListener('click', onClosePreviewButtonClick);
     document.removeEventListener('keydown', onDocumentKeydown);
   };
@@ -52,18 +52,18 @@
 
   var onPicturesListCLick = function (evt) {
     if (evt.target.className === 'picture__img') {
-      window.generatePreview(getPreviewDetails(evt));
+      window.renderPreview(getPreviewDetails(evt));
       openPreview();
     }
   };
 
   var onPicturesListKeydown = function (evt) {
     if (evt.code === 'Enter' && evt.target.className === 'picture') {
-      window.generatePreview(getPreviewDetails(evt));
+      window.renderPreview(getPreviewDetails(evt));
       openPreview();
     }
   };
 
-  window.picturesList.addEventListener('click', onPicturesListCLick);
-  window.picturesList.addEventListener('keydown', onPicturesListKeydown);
+  window.util.picturesList.addEventListener('click', onPicturesListCLick);
+  window.util.picturesList.addEventListener('keydown', onPicturesListKeydown);
 })();

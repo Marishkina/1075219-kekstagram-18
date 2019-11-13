@@ -4,7 +4,6 @@
 
   var PHOTO_ITEMS_COUNT = 25;
 
-  window.picturesList = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
   // вставка данных маленькой картинки

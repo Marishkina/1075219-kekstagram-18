@@ -19,33 +19,15 @@
   var NAMES = ['Артем', 'Вася', 'Матрена', 'Катюша', 'Слава', 'Поля'];
   var AVATARS = ['1', '2', '3', '4', '5', '6'];
 
-  var getRandomItem = function (array) {
-    return array[Math.floor(Math.random() * array.length)];
-  };
-
-  var getRandomNumber = function (min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
-  var shuffleList = function (a) {
-    for (var i = a.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var x = a[i];
-      a[i] = a[j];
-      a[j] = x;
-    }
-    return a;
-  };
-
   var getComments = function (count) {
-    var shuffledListComments = shuffleList(COMMENTS);
+    var shuffledListComments = window.util.shuffleList(COMMENTS);
     var listOfComments = [];
     for (var i = 0; i < count; i++) {
 
       var comment = {
-        avatar: 'img/avatar-' + getRandomItem(AVATARS) + '.svg',
-        message: getRandomItem(shuffledListComments),
-        name: getRandomItem(NAMES)
+        avatar: 'img/avatar-' + window.util.getRandomItem(AVATARS) + '.svg',
+        message: window.util.getRandomItem(shuffledListComments),
+        name: window.util.getRandomItem(NAMES)
       };
       listOfComments.push(comment);
     }
@@ -54,15 +36,15 @@
 
   // генерация массива объектов для миниатюры
   window.generateData = function (count) {
-    var shuffledListPhotos = shuffleList(PHOTOS);
+    var shuffledListPhotos = window.util.shuffleList(PHOTOS);
     var itemsOfListOfPhotos = [];
 
     for (var i = 0; i < count; i++) {
       itemsOfListOfPhotos[i] = {
         url: 'photos/' + shuffledListPhotos[i] + '.jpg',
-        description: getRandomItem(DESCRIPTIONS),
-        likes: getRandomNumber(MIN_LIKES, MAX_LIKES),
-        comments: getComments(getRandomNumber(MIN_COMMENTS, MAX_COMMENTS))
+        description: window.util.getRandomItem(DESCRIPTIONS),
+        likes: window.util.getRandomNumber(MIN_LIKES, MAX_LIKES),
+        comments: getComments(window.util.getRandomNumber(MIN_COMMENTS, MAX_COMMENTS))
       };
     }
     return itemsOfListOfPhotos;
