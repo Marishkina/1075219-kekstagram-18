@@ -15,6 +15,7 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
+      console.log(xhr.response);
 
       if (xhr.status === window.SUCCESS_CODE) {
         window.pictureItems = xhr.response;
