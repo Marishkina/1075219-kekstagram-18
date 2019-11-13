@@ -13,7 +13,7 @@
     'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
   ];
   var MIN_COMMENTS = 1;
-  var MAX_COMMENTS = 120;
+  var MAX_COMMENTS = 12;
   var MIN_LIKES = 15;
   var MAX_LIKES = 200;
   var NAMES = ['Артем', 'Вася', 'Матрена', 'Катюша', 'Слава', 'Поля'];
@@ -24,9 +24,17 @@
   var MIN_SCALE = 25;
   var MAX_SCALE = 100;
   var SCALE_STEP = 25;
+  var MAX_COMMENT_LENGTH = 140;
 
   var picturesList = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+
+  var bigPicture = document.querySelector('.big-picture');
+  var socialComments = bigPicture.querySelector('.social__comments');
+  var socialComment = socialComments.querySelector('.social__comment');
+  var commentsCount = bigPicture.querySelector('.social__comment-count');
+  var commentsLoader = bigPicture.querySelector('.comments-loader');
+  var closeBigPictureButton = bigPicture.querySelector('#picture-cancel');
 
   var getRandomItem = function (array) {
     return array[Math.floor(Math.random() * array.length)];
@@ -76,26 +84,16 @@
     return itemsOfListOfPhotos;
   };
 
-  var generatePhoto = function (itemsListPhoto) {
+  var generatePhoto = function (itemsListPhoto, i) {
     var pictureElement = pictureTemplate.cloneNode(true);
 
+    pictureElement.querySelector('.picture__img').id = 'templateImgId' + i;
     pictureElement.querySelector('.picture__img').src = itemsListPhoto.url;
     pictureElement.querySelector('.picture__likes').textContent = itemsListPhoto.likes;
     pictureElement.querySelector('.picture__comments').textContent = String(itemsListPhoto.comments.length);
 
     return pictureElement;
   };
-
-  var bigPicture = document.querySelector('.big-picture');
-  var socialComments = bigPicture.querySelector('.social__comments');
-  var socialComment = socialComments.querySelector('.social__comment');
-  var commentsCount = bigPicture.querySelector('.social__comment-count');
-  var commentsLoader = bigPicture.querySelector('.comments-loader');
-
-  // bigPicture.classList.remove('hidden');
-
-  commentsCount.classList.add('visually-hidden');
-  commentsLoader.classList.add('visually-hidden');
 
   // функция собирает li
   var renderBigPictureComment = function (comment) {
@@ -122,11 +120,11 @@
   };
 
   var generateBigPictureElements = function (generateListItems) {
-    bigPicture.querySelector('.big-picture__img').src = generateListItems[0].url;
-    bigPicture.querySelector('.likes-count').textContent = generateListItems[0].likes;
-    bigPicture.querySelector('.comments-count').textContent = String(generateListItems[0].comments.length);
-    bigPicture.querySelector('.social__caption').textContent = generateListItems[0].description;
-    bigPicture.querySelector('.social__comments').appendChild(renderListOfComments(generateListItems[0].comments));
+    bigPicture.querySelector('.big-picture__img img').src = generateListItems.url;
+    bigPicture.querySelector('.likes-count').textContent = generateListItems.likes;
+    bigPicture.querySelector('.comments-count').textContent = String(generateListItems.comments.length);
+    bigPicture.querySelector('.social__caption').textContent = generateListItems.description;
+    bigPicture.querySelector('.social__comments').appendChild(renderListOfComments(generateListItems.comments));
 
     return bigPicture;
   };
@@ -135,15 +133,81 @@
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < PHOTO_ITEMS_COUNT; i++) {
-      fragment.appendChild(generatePhoto(generateListItems[i]));
+      fragment.appendChild(generatePhoto(generateListItems[i], i));
     }
-
     picturesList.appendChild(fragment);
-
-    generateBigPictureElements(generateListItems);
   };
 
-  generatePhotoPage(generateListOfPhotos(PHOTO_ITEMS_COUNT));
+  var photosList = generateListOfPhotos(PHOTO_ITEMS_COUNT);
+  generatePhotoPage(photosList);
+
+  // задание 4-3: Доверяй, но проверяй
+
+  var openBigPicture = function () {
+    bigPicture.classList.remove('hidden');
+    commentsCount.classList.add('visually-hidden');
+    commentsLoader.classList.add('visually-hidden');
+    closeBigPictureButton.addEventListener('click', onCloseBigPictureButtonClick);
+    document.addEventListener('keydown', onDocumentKeydown);
+    document.querySelector('body').classList.add('modal-open');
+    bigPicture.focus();
+  };
+
+  var closeBigPicture = function () {
+    bigPicture.classList.add('hidden');
+    closeBigPictureButton.removeEventListener('click', onCloseBigPictureButtonClick);
+    document.removeEventListener('keydown', onDocumentKeydown);
+    document.querySelector('body').classList.remove('modal-open');
+  };
+
+  var onCloseBigPictureButtonClick = function () {
+    closeBigPicture();
+  };
+
+  var getBigPictureDetails = function (evt) {
+    var templateImgId;
+
+    if (evt.code === 'Enter') {
+      templateImgId = evt.target.children[0].id.slice(13);
+    } else {
+      templateImgId = evt.target.id.slice(13);
+    }
+
+    var bigPictureDetails = {
+      url: photosList[templateImgId].url,
+      description: photosList[templateImgId].description,
+      likes: photosList[templateImgId].likes,
+      comments: photosList[templateImgId].comments
+    };
+
+    return bigPictureDetails;
+  };
+
+  var onPicturesListCLick = function (evt) {
+    if (evt.target.className === 'picture__img') {
+      generateBigPictureElements(getBigPictureDetails(evt));
+      openBigPicture();
+    }
+  };
+
+  var onPicturesListKeydown = function (evt) {
+    if (evt.code === 'Enter' && evt.target.className === 'picture') {
+      generateBigPictureElements(getBigPictureDetails(evt));
+      openBigPicture();
+    }
+  };
+
+  picturesList.addEventListener('click', onPicturesListCLick);
+  picturesList.addEventListener('keydown', onPicturesListKeydown);
+
+  // валидация поля комментария
+  var onCommentsFieldChange = function () {
+    if (commentsField.value.length > MAX_COMMENT_LENGTH) {
+      commentsField.setCustomValidity('максимальная длина комментария 140 символов');
+    } else {
+      commentsField.setCustomValidity('');
+    }
+  };
 
   // задание 4-2
 
@@ -165,13 +229,14 @@
   var scaleControlSmaller = uploadForm.querySelector('.scale__control--smaller');
   var scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');
   var scaleControlValue = uploadForm.querySelector('.scale__control--value');
+  var commentsField = uploadForm.querySelector('.text__description');
 
   var openUploadOverlayForm = function () {
     uploadOverlayForm.classList.remove('hidden');
     effectLevel.classList.add('visually-hidden');
     document.addEventListener('keydown', onDocumentKeydown);
     closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
-    hashtagTextField.addEventListener('input', validateHashtag);
+    hashtagTextField.addEventListener('input', onHashtagTextFieldInput);
     uploadForm.addEventListener('submit', onUploadFormSubmit);
     effectLevelPin.addEventListener('mouseup', onEffectLevelPinMouseup);
     effectRadioButton.addEventListener('change', onEffectRadioButtonsChange);
@@ -181,6 +246,7 @@
     scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
     scaleControlValue.setAttribute('value', '100%');
+    commentsField.addEventListener('change', onCommentsFieldChange);
   };
 
   var closeUploadOverlayForm = function () {
@@ -188,21 +254,26 @@
     uploadOverlayForm.classList.add('hidden');
     document.removeEventListener('keydown', onDocumentKeydown);
     closeButtonUploadOverlayForm.removeEventListener('click', onCloseButtonUploadOverlayFormClick);
-    hashtagTextField.removeEventListener('input', validateHashtag);
+    hashtagTextField.removeEventListener('input', onHashtagTextFieldInput);
     uploadForm.removeEventListener('submit', onUploadFormSubmit);
     effectLevelPin.removeEventListener('mouseup', onEffectLevelPinMouseup);
     effectRadioButton.removeEventListener('change', onEffectRadioButtonsChange);
     photoEffects.removeEventListener('change', onPhotoEffectsChange);
     scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
     scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
+    commentsField.removeEventListener('change', onCommentsFieldChange);
+    uploadForm.reset();
+    hashtagTextField.setCustomValidity('');
+    commentsField.setCustomValidity('');
   };
 
   var onDocumentKeydown = function (evt) {
     if (evt.code === 'Escape') {
-      if (evt.target === hashtagTextField) {
+      if (evt.target === hashtagTextField || evt.target === commentsField) {
         evt.stopPropagation();
       } else {
         closeUploadOverlayForm();
+        closeBigPicture();
       }
     }
   };
@@ -271,20 +342,20 @@
   // валидация хеш-тегов
   var onUploadFormSubmit = function (evt) {
     evt.preventDefault();
-    validateHashtag();
     uploadForm.submit();
   };
 
-  var validateHashtag = function () {
+  var onHashtagTextFieldInput = function () {
     var hashtagTextFieldContent = hashtagTextField.value;
-    var lowerCaseHashtagsList = hashtagTextFieldContent.toLowerCase();
-    var hashtagsList = lowerCaseHashtagsList.split(' ');
+    var hashtagsList = hashtagTextFieldContent.toLowerCase().split(' ');
+
+    hashtagTextField.setCustomValidity('');
 
     if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
       hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
     } else {
       for (var i = 0; i < hashtagsList.length; i++) {
-        if (hashtagsList[i][0] !== '#' || hashtagsList[0][0] !== '#') {
+        if (hashtagsList[i][0] !== '#') {
           hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
         } else if (hashtagsList[i] === '#') {
           hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
@@ -292,8 +363,6 @@
           hashtagTextField.setCustomValidity('один и тот же хеш-тег не может быть использован дважды');
         } else if (hashtagsList[i].length > MAX_HASHTAG_LENGTH) {
           hashtagTextField.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
-        } else {
-          hashtagTextField.setCustomValidity('');
         }
       }
     }
