@@ -166,17 +166,20 @@
 
   var getBigPictureDetails = function (evt) {
     var templateImgId;
+
     if (evt.code === 'Enter') {
       templateImgId = evt.target.children[0].id.slice(13);
     } else {
       templateImgId = evt.target.id.slice(13);
     }
+
     var bigPictureDetails = {
       url: photosList[templateImgId].url,
       description: photosList[templateImgId].description,
       likes: photosList[templateImgId].likes,
       comments: photosList[templateImgId].comments
     };
+
     return bigPictureDetails;
   };
 
