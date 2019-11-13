@@ -12,6 +12,8 @@
     commentsLoader.classList.add('visually-hidden');
     closePreviewButton.addEventListener('click', onClosePreviewButtonClick);
     document.addEventListener('keydown', onDocumentKeydown);
+    document.querySelector('body').classList.add('modal-open');
+    window.preview.focus();
   };
 
   var closePreview = function () {
