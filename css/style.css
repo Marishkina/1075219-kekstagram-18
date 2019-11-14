@@ -72,6 +72,10 @@ main {
   overflow: hidden;
 }
 
+.error-field {
+  border: solid 5px red;
+}
+
 .container {
   width: 1360px;
   margin: 0 auto;

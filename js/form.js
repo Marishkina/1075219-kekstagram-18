@@ -69,6 +69,7 @@
     uploadForm.reset();
     hashtagTextField.setCustomValidity('');
     commentsField.setCustomValidity('');
+    hashtagTextField.classList.remove('error-field');
   };
 
   var onUploadFileChange = function () {
@@ -154,23 +155,28 @@
 
   var onCommentsFieldChange = function () {
     if (commentsField.value.length > MAX_COMMENT_LENGTH) {
+      commentsField.classList.add('error-field');
       commentsField.setCustomValidity('максимальная длина комментария 140 символов');
     } else {
+      commentsField.classList.remove('error-field');
       commentsField.setCustomValidity('');
     }
   };
 
   var validateHashtag = function () {
+    hashtagTextField.classList.remove('error-field');
     var hashtagTextFieldContent = hashtagTextField.value;
     var hashtagsList = hashtagTextFieldContent.toLowerCase().split(' ');
 
     hashtagTextField.setCustomValidity('');
 
     if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
+      hashtagTextField.classList.add('error-field');
       hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
     } else {
       for (var i = 0; i < hashtagsList.length; i++) {
         if (hashtagsList[i][0] !== '#') {
+          hashtagTextField.classList.add('error-field');
           hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
         } else if (hashtagsList[i] === '#') {
           hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
@@ -178,6 +184,9 @@
           hashtagTextField.setCustomValidity('один и тот же хеш-тег не может быть использован дважды');
         } else if (hashtagsList[i].length > MAX_HASHTAG_LENGTH) {
           hashtagTextField.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
+        } else {
+          hashtagTextField.classList.remove('error-field');
+          hashtagTextField.setCustomValidity('');
         }
       }
     }
