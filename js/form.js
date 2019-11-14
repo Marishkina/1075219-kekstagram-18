@@ -55,23 +55,7 @@
     scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
     scaleControlSmaller.removeEventListener('keydown', onScaleControlSmallerEnterDown);
     scaleControlBigger.removeEventListener('keydown', onScaleControlBiggerEnterDown);
-<<<<<<< HEAD
     commentsField.removeEventListener('change', validateComment);
-=======
-    commentsField.removeEventListener('change', onCommentsFieldChange);
-    effectLevelPin.removeEventListener('mousedown', window.shiftEffectLevelPin);
-    effectRadioButtons.forEach(function (element) {
-      element.removeEventListener('change', window.onEffectRadioButtonsChange);
-    });
-    window.setOriginFilter();
-    uploadForm.reset();
-    hashtagTextField.setCustomValidity('');
-    commentsField.setCustomValidity('');
-<<<<<<< HEAD
->>>>>>> Убирает повторяющиеся функции, правит функцию валидации хеш-тегов
-=======
-    hashtagTextField.classList.remove('error-field');
->>>>>>> Задание 7-3: v1.0
   };
 
   var onUploadFileChange = function () {
@@ -172,23 +156,32 @@
 
   // валидация хеш-тегов
   var validateHashtag = function () {
-    hashtagTextField.classList.remove('error-field');
     var hashtagTextFieldContent = hashtagTextField.value;
     var hashtagsList = hashtagTextFieldContent.toLowerCase().split(' ');
 
+<<<<<<< HEAD
     if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
+=======
+    if (hashtagTextField.value.length === 0) {
+      hashtagTextField.classList.remove('error-field');
+      hashtagTextField.setCustomValidity('');
+    } else if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
+>>>>>>> 7.3 1.01
       hashtagTextField.classList.add('error-field');
       hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
     } else {
       for (var i = 0; i < hashtagsList.length; i++) {
-        if (hashtagsList[i][0] !== '#') {
+        if (hashtagsList[i].indexOf(0) !== '#') {
           hashtagTextField.classList.add('error-field');
           hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
         } else if (hashtagsList[i] === '#') {
+          hashtagTextField.classList.add('error-field');
           hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
         } else if (hashtagsList.indexOf(hashtagsList[i]) !== i) {
+          hashtagTextField.classList.add('error-field');
           hashtagTextField.setCustomValidity('один и тот же хеш-тег не может быть использован дважды');
         } else if (hashtagsList[i].length > MAX_HASHTAG_LENGTH) {
+          hashtagTextField.classList.add('error-field');
           hashtagTextField.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
         } else {
 <<<<<<< HEAD
