@@ -41,16 +41,7 @@
     scaleControlBigger.addEventListener('keydown', onScaleControlBiggerEnterDown);
     effectLevelValue.setAttribute('value', 100);
     scaleControlValue.setAttribute('value', '100%');
-<<<<<<< HEAD
     commentsField.addEventListener('change', validateComment);
-=======
-    commentsField.addEventListener('change', onCommentsFieldChange);
-    closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
-    effectLevelPin.addEventListener('mousedown', window.shiftEffectLevelPin);
-    effectRadioButtons.forEach(function (element) {
-      element.addEventListener('change', window.onEffectRadioButtonsChange);
-    });
->>>>>>> Убирает повторяющиеся функции, правит функцию валидации хеш-тегов
   };
 
   var closeUploadOverlayForm = function () {
@@ -76,7 +67,11 @@
     uploadForm.reset();
     hashtagTextField.setCustomValidity('');
     commentsField.setCustomValidity('');
+<<<<<<< HEAD
 >>>>>>> Убирает повторяющиеся функции, правит функцию валидации хеш-тегов
+=======
+    hashtagTextField.classList.remove('error-field');
+>>>>>>> Задание 7-3: v1.0
   };
 
   var onUploadFileChange = function () {
@@ -167,22 +162,27 @@
 
   var validateComment = function () {
     if (commentsField.value.length > MAX_COMMENT_LENGTH) {
+      commentsField.classList.add('error-field');
       commentsField.setCustomValidity('максимальная длина комментария 140 символов');
     } else {
+      commentsField.classList.remove('error-field');
       commentsField.setCustomValidity('');
     }
   };
 
   // валидация хеш-тегов
   var validateHashtag = function () {
+    hashtagTextField.classList.remove('error-field');
     var hashtagTextFieldContent = hashtagTextField.value;
     var hashtagsList = hashtagTextFieldContent.toLowerCase().split(' ');
 
     if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
+      hashtagTextField.classList.add('error-field');
       hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
     } else {
       for (var i = 0; i < hashtagsList.length; i++) {
         if (hashtagsList[i][0] !== '#') {
+          hashtagTextField.classList.add('error-field');
           hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
         } else if (hashtagsList[i] === '#') {
           hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
@@ -191,6 +191,10 @@
         } else if (hashtagsList[i].length > MAX_HASHTAG_LENGTH) {
           hashtagTextField.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
         } else {
+<<<<<<< HEAD
+=======
+          hashtagTextField.classList.remove('error-field');
+>>>>>>> Задание 7-3: v1.0
           hashtagTextField.setCustomValidity('');
         }
       }
