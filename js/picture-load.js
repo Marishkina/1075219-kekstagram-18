@@ -9,6 +9,7 @@
   var generatePictureElement = function (itemsListPhoto, i) {
     var pictureElement = pictureTemplate.cloneNode(true);
 
+    // pictureElement.href = itemsListPhoto.url;
     pictureElement.querySelector('.picture__img').id = 'templateImgId' + i;
     pictureElement.querySelector('.picture__img').src = itemsListPhoto.url;
     pictureElement.querySelector('.picture__likes').textContent = itemsListPhoto.likes;

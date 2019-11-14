@@ -97,7 +97,7 @@
     } else {
       templateImgId = evt.target.id.slice(13);
     }
-
+    // TODO
     var previewDetails = {
       url: window.pictureItems[templateImgId].url,
       description: window.pictureItems[templateImgId].description,
