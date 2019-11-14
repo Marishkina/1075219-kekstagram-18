@@ -2,22 +2,22 @@
 
 (function () {
 
-  var commentsCount = window.util.preview.querySelector('.social__comment-count');
-  var commentsLoader = window.util.preview.querySelector('.comments-loader');
-  var closePreviewButton = window.util.preview.querySelector('#picture-cancel');
+  var commentsCount = window.utils.preview.querySelector('.social__comment-count');
+  var commentsLoader = window.utils.preview.querySelector('.comments-loader');
+  var closePreviewButton = window.utils.preview.querySelector('#picture-cancel');
 
   var openPreview = function () {
-    window.util.preview.classList.remove('hidden');
+    window.utils.preview.classList.remove('hidden');
     commentsCount.classList.add('visually-hidden');
     commentsLoader.classList.add('visually-hidden');
     closePreviewButton.addEventListener('click', onClosePreviewButtonClick);
     document.addEventListener('keydown', onDocumentKeydown);
     document.querySelector('body').classList.add('modal-open');
-    window.util.preview.focus();
+    window.utils.preview.focus();
   };
 
   var closePreview = function () {
-    window.util.preview.classList.add('hidden');
+    window.utils.preview.classList.add('hidden');
     closePreviewButton.removeEventListener('click', onClosePreviewButtonClick);
     document.removeEventListener('keydown', onDocumentKeydown);
   };
@@ -27,7 +27,7 @@
   };
 
   var onDocumentKeydown = function (evt) {
-    window.util.isEscEvent(evt, closePreview);
+    window.utils.isEscEvent(evt, closePreview);
   };
 
   // функция сбора в объект данных большой картинки
@@ -41,10 +41,10 @@
     }
 
     var bigPictureDetails = {
-      url: window.picture[templateImgId].url,
-      description: window.picture[templateImgId].description,
-      likes: window.picture[templateImgId].likes,
-      comments: window.picture[templateImgId].comments
+      url: window.generatedData[templateImgId].url,
+      description: window.generatedData[templateImgId].description,
+      likes: window.generatedData[templateImgId].likes,
+      comments: window.generatedData[templateImgId].comments
     };
 
     return bigPictureDetails;
@@ -64,6 +64,6 @@
     }
   };
 
-  window.util.picturesList.addEventListener('click', onPicturesListCLick);
-  window.util.picturesList.addEventListener('keydown', onPicturesListKeydown);
+  window.utils.picturesList.addEventListener('click', onPicturesListCLick);
+  window.utils.picturesList.addEventListener('keydown', onPicturesListKeydown);
 })();

@@ -3,7 +3,11 @@
 (function () {
   var ESC_CODE = 'Escape';
 
-  window.util = {
+  window.utils = {
+
+    preview: document.querySelector('.big-picture'),
+    picturesList: document.querySelector('.pictures'),
+
     isEscEvent: function (evt, action) {
       if (evt.code === ESC_CODE) {
         action();
@@ -26,11 +30,6 @@
         a[j] = x;
       }
       return a;
-    },
-
-    preview: document.querySelector('.big-picture'),
-
-    picturesList: document.querySelector('.pictures')
+    }
   };
-
 })();

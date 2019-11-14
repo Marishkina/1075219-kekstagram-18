@@ -25,9 +25,9 @@
     for (var i = 0; i < PHOTO_ITEMS_COUNT; i++) {
       fragment.appendChild(generatePictureElement(generateListItems[i], i));
     }
-    window.picturesList.appendChild(fragment);
+    window.utils.picturesList.appendChild(fragment);
   };
 
-  window.picture = window.generateData(PHOTO_ITEMS_COUNT);
-  renderPicture(window.picture);
+  window.generatedData = window.generateData(PHOTO_ITEMS_COUNT);
+  renderPicture(window.generatedData);
 })();

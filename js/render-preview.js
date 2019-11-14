@@ -2,7 +2,7 @@
 
 (function () {
 
-  var socialComments = window.util.preview.querySelector('.social__comments');
+  var socialComments = window.utils.preview.querySelector('.social__comments');
   var socialComment = socialComments.querySelector('.social__comment');
 
   // создание li с комментами для большой картинки
@@ -31,12 +31,12 @@
 
   // отрисовка большой картинки
   window.renderPreview = function (generateListItems) {
-    window.util.preview.querySelector('.big-picture__img img').src = generateListItems.url;
-    window.util.preview.querySelector('.likes-count').textContent = generateListItems.likes;
-    window.util.preview.querySelector('.comments-count').textContent = String(generateListItems.comments.length);
-    window.util.preview.querySelector('.social__caption').textContent = generateListItems.description;
-    window.util.preview.querySelector('.social__comments').appendChild(renderListOfComments(generateListItems.comments));
+    window.utils.preview.querySelector('.big-picture__img img').src = generateListItems.url;
+    window.utils.preview.querySelector('.likes-count').textContent = generateListItems.likes;
+    window.utils.preview.querySelector('.comments-count').textContent = String(generateListItems.comments.length);
+    window.utils.preview.querySelector('.social__caption').textContent = generateListItems.description;
+    window.utils.preview.querySelector('.social__comments').appendChild(renderListOfComments(generateListItems.comments));
 
-    return window.util.preview;
+    return window.utils.preview;
   };
 })();
