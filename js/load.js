@@ -9,10 +9,6 @@
   var filterButtonsAll = filters.querySelectorAll('.img-filters__button');
   filters.classList.remove('img-filters--inactive');
 
-  var filters = document.querySelector('.img-filters');
-  var filterButtonsAll = filters.querySelectorAll('.img-filters__button');
-  filters.classList.remove('img-filters--inactive');
-
   var load = function () {
 
     var xhr = new XMLHttpRequest();
