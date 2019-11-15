@@ -18,8 +18,14 @@
       console.log(xhr.response);
 
       if (xhr.status === window.SUCCESS_CODE) {
-        window.pictureItems = xhr.response;
-        window.renderPicture(window.pictureItems);
+        var pictureItems = xhr.response;
+        // window.renderPicture(window.pictureItems);
+        window.photo = pictureItems.map(function (photo, id) {
+          photo.id = id;
+          return photo;
+        });
+        console.log(window.photo);
+        window.renderPicture(window.photo);
       } else {
         window.renderErrorMessage();
       }
@@ -48,6 +54,8 @@
     });
     evt.target.classList.toggle('img-filters__button--active');
 
-    window.filteredPictures.set(evt.target.id, window.pictureItems);
+    console.log('evt.target.id=', evt.target.id);
+    console.log('window.photo=', window.photo);
+    window.filteredPictures.set(evt.target.id, window.photo);
   });
 })();

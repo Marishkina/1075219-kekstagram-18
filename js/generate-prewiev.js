@@ -90,20 +90,60 @@
   };
 
   var getPreviewDetails = function (evt) {
+    console.log(evt.target);
+    // console.log(evt.target.indexOf(window.photo));
+    // var target = evt.target.indexOf(evt.target);
+
+    // arr.some(callback(element[, index[, array]])[, thisArg])
+
+    //   var isEven = function isEven(currentElement, index, array) {
+    //     if(currentElement % 2 === 0) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
+
     var templateImgId;
 
     if (evt.code === 'Enter') {
-      templateImgId = evt.target.children[0].id.slice(13);
+      templateImgId = Number(evt.target.children[0].id.slice(13));
     } else {
-      templateImgId = evt.target.id.slice(13);
+      templateImgId = Number(evt.target.id.slice(13));
     }
-    // TODO
-    var previewDetails = {
-      url: window.pictureItems[templateImgId].url,
-      description: window.pictureItems[templateImgId].description,
-      likes: window.pictureItems[templateImgId].likes,
-      comments: window.pictureItems[templateImgId].comments
-    };
+
+    // Получили данные с сервера и записали их в переменную data
+    // var previewM = window.photo.filter(function (el) {
+
+    //   return window.photo.some(function (element, index) {
+
+    //     return element.id === templateImgId;
+    //   });
+    // });
+
+    // var previewM = window.photo.some(function (element, index) {
+    //   console.log('index', index);
+    //   var Marina = index;
+    //   // console.log('element.id', element.id, '****', typeof element.id);
+    //   // console.log('templateImgId', templateImgId, '****', typeof templateImgId);
+    //   return element.id === templateImgId;
+    // });
+
+    var previewDetails = window.photo.find(function (element) {
+      return element.id === templateImgId;
+    });
+
+    // console.log('Marina', Marina);
+    console.log('previewDetails', previewDetails);
+
+    // // TODO
+    // var previewDetails = {
+    //   url: window.photo[templateImgId].url,
+    //   description: window.photo[templateImgId].description,
+    //   likes: window.photo[templateImgId].likes,
+    //   comments: window.photo[templateImgId].comments
+    // };
+
 
     return previewDetails;
   };
@@ -138,6 +178,7 @@
 
   var onPicturesListCLick = function (evt) {
     if (evt.target.className === 'picture__img') {
+      console.log('getPreviewDetails=', getPreviewDetails(evt));
       window.generatePreview(getPreviewDetails(evt));
       openPreview();
     }
