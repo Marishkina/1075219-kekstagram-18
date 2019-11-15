@@ -17,12 +17,7 @@
   };
 
   // функция собирает li с комментами в ul большой картинки
-<<<<<<< HEAD:js/comments-list.js
   window.commentsList = {
-=======
-  window.renderListOfComments = function (listOfComments) {
-    socialComments.innerHTML = '';
->>>>>>> Правки в render-preview:js/render-comment.js
 
     render: function (listOfComments) {
       socialComments.innerHTML = '';
