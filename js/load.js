@@ -52,6 +52,8 @@
     });
     evt.target.classList.toggle('img-filters__button--active');
 
-    window.filteredPictures.set(evt.target.id, window.pictureItems);
+    console.log('evt.target.id=', evt.target.id);
+    console.log('window.photo=', window.photo);
+    window.filteredPictures.set(evt.target.id, window.photo);
   });
 })();
