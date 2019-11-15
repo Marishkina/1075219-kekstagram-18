@@ -120,11 +120,6 @@
     evt.stopPropagation();
     if (document.activeElement === scaleControlSmaller) {
       window.util.isEnterEvent(evt, zoomOutPhoto);
-<<<<<<< HEAD
-=======
-    } else {
-      window.util.isEscEvent(evt, closeUploadOverlayForm);
->>>>>>> Убирает повторяющиеся функции, правит функцию валидации хеш-тегов
     }
   };
 
@@ -136,11 +131,6 @@
     evt.stopPropagation();
     if (document.activeElement === scaleControlBigger) {
       window.util.isEnterEvent(evt, zoomInPhoto);
-<<<<<<< HEAD
-=======
-    } else {
-      window.util.isEscEvent(evt, closeUploadOverlayForm);
->>>>>>> Убирает повторяющиеся функции, правит функцию валидации хеш-тегов
     }
   };
 
@@ -159,14 +149,7 @@
     var hashtagTextFieldContent = hashtagTextField.value;
     var hashtagsList = hashtagTextFieldContent.toLowerCase().split(' ');
 
-<<<<<<< HEAD
     if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
-=======
-    if (hashtagTextField.value.length === 0) {
-      hashtagTextField.classList.remove('error-field');
-      hashtagTextField.setCustomValidity('');
-    } else if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
->>>>>>> 7.3 1.01
       hashtagTextField.classList.add('error-field');
       hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
     } else {
@@ -184,10 +167,6 @@
           hashtagTextField.classList.add('error-field');
           hashtagTextField.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
         } else {
-<<<<<<< HEAD
-=======
-          hashtagTextField.classList.remove('error-field');
->>>>>>> Задание 7-3: v1.0
           hashtagTextField.setCustomValidity('');
         }
       }

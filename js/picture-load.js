@@ -6,7 +6,9 @@
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
   // вставка данных в миниатюру
-  var generatePictureElement = function (itemsListPhoto, i) {
+  var generatePictureElement = function (itemsListPhoto) {
+    console.log('itemsListPhoto=', itemsListPhoto);
+
     var pictureElement = pictureTemplate.cloneNode(true);
 
     pictureElement.querySelector('.picture__img').id = 'm' + i;
@@ -22,7 +24,7 @@
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < generateListItems.length; i++) {
-      fragment.appendChild(generatePictureElement(generateListItems[i], i));
+      fragment.appendChild(generatePictureElement(generateListItems[i]));
     }
     window.picturesList.appendChild(fragment);
   };
