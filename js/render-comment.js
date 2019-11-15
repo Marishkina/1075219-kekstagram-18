@@ -16,7 +16,7 @@
     return socialCommentElement;
   };
 
-  // функция собирает li в ul больщой картинки
+  // функция собирает li с комментами в ul большой картинки
   window.renderListOfComments = function (listOfComments) {
     socialComments.innerHTML = '';
 

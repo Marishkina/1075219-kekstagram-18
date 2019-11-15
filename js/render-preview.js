@@ -27,7 +27,7 @@
   };
 
   // отрисовка большой картинки
-  window.renderPreview = function (generateListItems) {
+  var renderPreview = function (generateListItems) {
     window.utils.preview.querySelector('.big-picture__img img').src = generateListItems.url;
     window.utils.preview.querySelector('.likes-count').textContent = generateListItems.likes;
     window.utils.preview.querySelector('.comments-count').textContent = String(generateListItems.comments.length);
@@ -63,14 +63,14 @@
 
   var onPicturesListCLick = function (evt) {
     if (evt.target.className === 'picture__img') {
-      window.renderPreview(getPreviewDetails(evt));
+      renderPreview(getPreviewDetails(evt));
       openPreview();
     }
   };
 
   var onPicturesListKeydown = function (evt) {
     if (evt.code === 'Enter' && evt.target.className === 'picture') {
-      window.renderPreview(getPreviewDetails(evt));
+      renderPreview(getPreviewDetails(evt));
       openPreview();
     }
   };
