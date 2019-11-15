@@ -28,6 +28,11 @@
     window.utils.picturesList.appendChild(fragment);
   };
 
-  window.generatedPictures = window.generations.pictures(PHOTO_ITEMS_COUNT);
-  renderPicture(window.generatedPictures);
+  var miniatures = window.generate.pictures(PHOTO_ITEMS_COUNT);
+
+  renderPicture(miniatures);
+
+  window.miniatures = {
+    pictures: miniatures
+  };
 })();

@@ -17,10 +17,10 @@
     }
 
     var bigPictureDetails = {
-      url: window.generatedPictures[templateImgId].url,
-      description: window.generatedPictures[templateImgId].description,
-      likes: window.generatedPictures[templateImgId].likes,
-      comments: window.generatedPictures[templateImgId].comments
+      url: window.miniatures.pictures[templateImgId].url,
+      description: window.miniatures.pictures[templateImgId].description,
+      likes: window.miniatures.pictures[templateImgId].likes,
+      comments: window.miniatures.pictures[templateImgId].comments
     };
 
     return bigPictureDetails;
@@ -32,7 +32,7 @@
     window.utils.preview.querySelector('.likes-count').textContent = generateListItems.likes;
     window.utils.preview.querySelector('.comments-count').textContent = String(generateListItems.comments.length);
     window.utils.preview.querySelector('.social__caption').textContent = generateListItems.description;
-    window.utils.preview.querySelector('.social__comments').appendChild(window.renderListOfComments(generateListItems.comments));
+    window.utils.preview.querySelector('.social__comments').appendChild(window.commentsList.render(generateListItems.comments));
 
     return window.utils.preview;
   };

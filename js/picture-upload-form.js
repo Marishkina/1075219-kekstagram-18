@@ -82,8 +82,6 @@
     closeUploadOverlayForm();
   };
 
-  uploadFile.addEventListener('change', onUploadFileChange);
-
   // пропорция для определения уровня эффекта
   var onEffectLevelPinMouseup = function () {
     var widthOfEffectLevelLine = effectLevelLine.getBoundingClientRect().width;
@@ -197,4 +195,6 @@
     evt.preventDefault();
     uploadForm.submit();
   };
+
+  uploadFile.addEventListener('change', onUploadFileChange);
 })();

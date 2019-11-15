@@ -17,15 +17,18 @@
   };
 
   // функция собирает li с комментами в ul большой картинки
-  window.renderListOfComments = function (listOfComments) {
-    socialComments.innerHTML = '';
+  window.commentsList = {
 
-    var commentsFragment = document.createDocumentFragment();
+    render: function (listOfComments) {
+      socialComments.innerHTML = '';
 
-    for (var i = 0; i < listOfComments.length; i++) {
-      commentsFragment.appendChild(generatePreviewComment(listOfComments[i]));
+      var commentsFragment = document.createDocumentFragment();
+
+      for (var i = 0; i < listOfComments.length; i++) {
+        commentsFragment.appendChild(generatePreviewComment(listOfComments[i]));
+      }
+
+      return commentsFragment;
     }
-
-    return commentsFragment;
   };
 })();

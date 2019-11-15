@@ -19,7 +19,7 @@
   var MIN_LIKES = 15;
   var MAX_LIKES = 200;
 
-  window.generations = {
+  window.generate = {
 
     comments: function (count) {
       var shuffledListComments = window.utils.shuffleList(COMMENTS);
@@ -47,7 +47,7 @@
           url: 'photos/' + shuffledListPhotos[i] + '.jpg',
           description: window.utils.getRandomItem(DESCRIPTIONS),
           likes: window.utils.getRandomNumber(MIN_LIKES, MAX_LIKES),
-          comments: window.generations.comments(window.utils.getRandomNumber(MIN_COMMENTS, MAX_COMMENTS))
+          comments: window.generate.comments(window.utils.getRandomNumber(MIN_COMMENTS, MAX_COMMENTS))
         };
       }
 
