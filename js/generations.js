@@ -21,7 +21,7 @@
 
   window.generations = {
 
-    getComment: function (count) {
+    comments: function (count) {
       var shuffledListComments = window.utils.shuffleList(COMMENTS);
       var listOfComments = [];
       for (var i = 0; i < count; i++) {
@@ -38,7 +38,7 @@
     },
 
     // генерация массива объектов для миниатюры
-    generateData: function (count) {
+    pictures: function (count) {
       var shuffledListPhotos = window.utils.shuffleList(PHOTOS);
       var itemsOfListOfPhotos = [];
 
@@ -47,7 +47,7 @@
           url: 'photos/' + shuffledListPhotos[i] + '.jpg',
           description: window.utils.getRandomItem(DESCRIPTIONS),
           likes: window.utils.getRandomNumber(MIN_LIKES, MAX_LIKES),
-          comments: window.generations.getComment(window.utils.getRandomNumber(MIN_COMMENTS, MAX_COMMENTS))
+          comments: window.generations.comments(window.utils.getRandomNumber(MIN_COMMENTS, MAX_COMMENTS))
         };
       }
 

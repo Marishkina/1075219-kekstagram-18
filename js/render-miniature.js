@@ -28,6 +28,6 @@
     window.utils.picturesList.appendChild(fragment);
   };
 
-  window.generatedData = window.generations.generateData(PHOTO_ITEMS_COUNT);
-  renderPicture(window.generatedData);
+  window.generatedPictures = window.generations.pictures(PHOTO_ITEMS_COUNT);
+  renderPicture(window.generatedPictures);
 })();

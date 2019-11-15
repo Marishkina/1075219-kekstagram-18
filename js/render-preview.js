@@ -2,31 +2,28 @@
 
 (function () {
 
-  var socialComments = window.utils.preview.querySelector('.social__comments');
-  var socialComment = socialComments.querySelector('.social__comment');
+  var commentsCount = window.utils.preview.querySelector('.social__comment-count');
+  var commentsLoader = window.utils.preview.querySelector('.comments-loader');
+  var closePreviewButton = window.utils.preview.querySelector('#picture-cancel');
 
-  // создание li с комментами для большой картинки
-  var generatePreviewComment = function (comment) {
-    var socialCommentElement = socialComment.cloneNode(true);
+  // функция сбора в объект данных большой картинки
+  var getPreviewDetails = function (evt) {
+    var templateImgId;
 
-    socialCommentElement.querySelector('.social__picture').src = comment.avatar;
-    socialCommentElement.querySelector('.social__picture').alt = comment.name;
-    socialCommentElement.querySelector('.social__text').textContent = comment.message;
-
-    return socialCommentElement;
-  };
-
-  // функция собирает li в ul больщой картинки
-  var renderListOfComments = function (listOfComments) {
-    socialComments.innerHTML = '';
-
-    var commentsFragment = document.createDocumentFragment();
-
-    for (var i = 0; i < listOfComments.length; i++) {
-      commentsFragment.appendChild(generatePreviewComment(listOfComments[i]));
+    if (evt.code === 'Enter') {
+      templateImgId = evt.target.children[0].id.slice(13);
+    } else {
+      templateImgId = evt.target.id.slice(13);
     }
 
-    return commentsFragment;
+    var bigPictureDetails = {
+      url: window.generatedPictures[templateImgId].url,
+      description: window.generatedPictures[templateImgId].description,
+      likes: window.generatedPictures[templateImgId].likes,
+      comments: window.generatedPictures[templateImgId].comments
+    };
+
+    return bigPictureDetails;
   };
 
   // отрисовка большой картинки
@@ -35,8 +32,49 @@
     window.utils.preview.querySelector('.likes-count').textContent = generateListItems.likes;
     window.utils.preview.querySelector('.comments-count').textContent = String(generateListItems.comments.length);
     window.utils.preview.querySelector('.social__caption').textContent = generateListItems.description;
-    window.utils.preview.querySelector('.social__comments').appendChild(renderListOfComments(generateListItems.comments));
+    window.utils.preview.querySelector('.social__comments').appendChild(window.renderListOfComments(generateListItems.comments));
 
     return window.utils.preview;
   };
+
+  var openPreview = function () {
+    window.utils.preview.classList.remove('hidden');
+    commentsCount.classList.add('visually-hidden');
+    commentsLoader.classList.add('visually-hidden');
+    closePreviewButton.addEventListener('click', onClosePreviewButtonClick);
+    document.addEventListener('keydown', onDocumentKeydown);
+    document.querySelector('body').classList.add('modal-open');
+    window.utils.preview.focus();
+  };
+
+  var closePreview = function () {
+    window.utils.preview.classList.add('hidden');
+    closePreviewButton.removeEventListener('click', onClosePreviewButtonClick);
+    document.removeEventListener('keydown', onDocumentKeydown);
+  };
+
+  var onClosePreviewButtonClick = function () {
+    closePreview();
+  };
+
+  var onDocumentKeydown = function (evt) {
+    window.utils.isEscEvent(evt, closePreview);
+  };
+
+  var onPicturesListCLick = function (evt) {
+    if (evt.target.className === 'picture__img') {
+      window.renderPreview(getPreviewDetails(evt));
+      openPreview();
+    }
+  };
+
+  var onPicturesListKeydown = function (evt) {
+    if (evt.code === 'Enter' && evt.target.className === 'picture') {
+      window.renderPreview(getPreviewDetails(evt));
+      openPreview();
+    }
+  };
+
+  window.utils.picturesList.addEventListener('click', onPicturesListCLick);
+  window.utils.picturesList.addEventListener('keydown', onPicturesListKeydown);
 })();
