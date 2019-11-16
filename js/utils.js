@@ -3,6 +3,7 @@
 (function () {
   var ESC_CODE = 'Escape';
   var ENTER_CODE = 'Enter';
+  var DEBOUNCE_TIME = 500;
 
   window.utils = {
 
@@ -22,14 +23,27 @@
       }
     },
 
-    shuffleList: function (a) {
-      for (var i = a.length - 1; i > 0; i--) {
+    shuffleList: function (arr) {
+      for (var i = arr.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
-        var x = a[i];
-        a[i] = a[j];
-        a[j] = x;
+        var x = arr[i];
+        arr[i] = arr[j];
+        arr[j] = x;
       }
-      return a;
+      return arr;
+    },
+
+    debounce: function (f) {
+      var lastTimeout = null;
+      return function () {
+        var parameters = arguments;
+        if (lastTimeout) {
+          window.clearTimeout(lastTimeout);
+        }
+        lastTimeout = window.setTimeout(function () {
+          f.apply(null, parameters);
+        }, DEBOUNCE_TIME);
+      };
     }
   };
 })();
