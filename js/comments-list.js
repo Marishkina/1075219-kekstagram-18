@@ -61,7 +61,7 @@
     },
 
     // TODO переделать, удалить слушатель и название
-      // onCommentsLoaderClick
+    // onCommentsLoaderClick
     // onCommentsLoaderClick:
 
     //   commentsLoader.addEventListener('click', function () {
