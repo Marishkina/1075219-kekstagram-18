@@ -9,7 +9,6 @@
   var effectLevelValue = uploadForm.querySelector('.effect-level__value');
   var effectLevelLine = effectLevel.querySelector('.effect-level__line');
 
-
   // определяем ширину дива для ползунка
   var getWidthOfEffectLevelLine = function () {
     var widthOfEffectLevelLine = effectLevelLine.getBoundingClientRect().width;
