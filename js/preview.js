@@ -2,58 +2,55 @@
 
 (function () {
 
-  var commentsCount = window.utils.preview.querySelector('.social__comment-count');
-  var commentsLoader = window.utils.preview.querySelector('.comments-loader');
   var closePreviewButton = window.utils.preview.querySelector('#picture-cancel');
 
-  // функция сбора в объект данных большой картинки
-  var getPreviewDetails = function (evt) {
-    var templateImgId;
-
-    if (evt.code === 'Enter') {
-      templateImgId = evt.target.children[0].id.slice(13);
-    } else {
-      templateImgId = evt.target.id.slice(13);
-    }
-
-    var bigPictureDetails = {
-      url: window.miniatures.pictures[templateImgId].url,
-      description: window.miniatures.pictures[templateImgId].description,
-      likes: window.miniatures.pictures[templateImgId].likes,
-      comments: window.miniatures.pictures[templateImgId].comments
-    };
-
-    return bigPictureDetails;
-  };
 
   // отрисовка большой картинки
-  var renderPreview = function (generateListItems) {
+  window.generatePreview = function (generateListItems) {
+
     window.utils.preview.querySelector('.big-picture__img img').src = generateListItems.url;
     window.utils.preview.querySelector('.likes-count').textContent = generateListItems.likes;
-    window.utils.preview.querySelector('.comments-count').textContent = String(generateListItems.comments.length);
     window.utils.preview.querySelector('.social__caption').textContent = generateListItems.description;
-    window.utils.preview.querySelector('.social__comments').appendChild(window.commentsList.render(generateListItems.comments));
+    window.utils.preview.querySelector('.social__comments').appendChild(window.loadMoreComments(generateListItems.comments));
 
     return window.utils.preview;
   };
 
+  // получаем id активной миниатюры, сравниваем с id элемента массива с сервера, получаем данные
+  var getPreviewDetails = function (evt) {
+    var templateImgId;
+
+    if (evt.code === 'Enter') {
+      templateImgId = Number(evt.target.children[0].id.slice(13));
+    } else {
+      templateImgId = Number(evt.target.id.slice(13));
+    }
+
+    var previewDetails = window.photo.find(function (element) {
+      return element.id === templateImgId;
+    });
+
+    return previewDetails;
+  };
+
+  // открытие большой картинки
   var openPreview = function () {
     window.utils.preview.classList.remove('hidden');
-    commentsCount.classList.add('visually-hidden');
-    commentsLoader.classList.add('visually-hidden');
-    closePreviewButton.addEventListener('click', onClosePreviewButtonClick);
+    closePreviewButton.addEventListener('click', onClosePrewievButtonClick);
     document.addEventListener('keydown', onDocumentKeydown);
     document.querySelector('body').classList.add('modal-open');
     window.utils.preview.focus();
   };
 
+  // закрытие большой картинки
   var closePreview = function () {
     window.utils.preview.classList.add('hidden');
-    closePreviewButton.removeEventListener('click', onClosePreviewButtonClick);
+    closePreviewButton.removeEventListener('click', onClosePrewievButtonClick);
     document.removeEventListener('keydown', onDocumentKeydown);
+    document.querySelector('body').classList.remove('modal-open');
   };
 
-  var onClosePreviewButtonClick = function () {
+  var onClosePrewievButtonClick = function () {
     closePreview();
   };
 
@@ -63,14 +60,14 @@
 
   var onPicturesListCLick = function (evt) {
     if (evt.target.className === 'picture__img') {
-      renderPreview(getPreviewDetails(evt));
+      window.generatePreview(getPreviewDetails(evt));
       openPreview();
     }
   };
 
   var onPicturesListKeydown = function (evt) {
     if (evt.code === 'Enter' && evt.target.className === 'picture') {
-      renderPreview(getPreviewDetails(evt));
+      window.generatePreview(getPreviewDetails(evt));
       openPreview();
     }
   };

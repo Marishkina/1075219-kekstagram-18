@@ -3,7 +3,7 @@
 (function () {
 
   var URL = 'https://js.dump.academy/kekstagram/data';
-  window.pictureItems = [];
+  var SUCCESS_CODE = 200;
 
   var load = function () {
 
@@ -11,17 +11,22 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
+      // console.log(xhr.response);
 
-      if (xhr.status === 200) {
-        window.pictureItems = xhr.response;
-        window.miniatures.renderPicture(window.pictureItems);
+      if (xhr.status === SUCCESS_CODE) {
+        var pictureItems = xhr.response;
+        window.photo = pictureItems.map(function (photo, id) {
+          photo.id = id;
+          return photo;
+        });
+        window.miniatures.renderPicture(window.photo);
       } else {
-        window.renderErrorMessage();
+        window.errorMessage.renderErrorMessage();
       }
     });
 
     xhr.addEventListener('timeout', function () {
-      window.renderErrorMessage();
+      window.errorMessage.renderErrorMessage();
     });
 
     xhr.timeout = 10000;
@@ -33,6 +38,6 @@
   try {
     load();
   } catch (err) {
-    window.renderErrorMessage();
+    window.errorMessage.renderErrorMessage();
   }
 })();
