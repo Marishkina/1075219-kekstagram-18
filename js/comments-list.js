@@ -2,8 +2,13 @@
 
 (function () {
 
+  var MAX_COMMENTS_TO_SHOW = 5;
+
   var socialComments = window.utils.preview.querySelector('.social__comments');
   var socialComment = socialComments.querySelector('.social__comment');
+  var socialCommentsCount = window.utils.preview.querySelector('.social__comment-count');
+  var commentsLoader = window.utils.preview.querySelector('.comments-loader');
+
 
   // создание li с комментами для большой картинки
   var generatePreviewComment = function (comment) {
@@ -16,19 +21,61 @@
     return socialCommentElement;
   };
 
-  // функция собирает li с комментами в ul большой картинки
-  window.commentsList = {
+  // функция собирает li в ul большой картинки
+  var renderListOfComments = function (listOfComments) {
 
-    render: function (listOfComments) {
-      socialComments.innerHTML = '';
+    socialComments.innerHTML = '';
 
-      var commentsFragment = document.createDocumentFragment();
+    var commentsFragment = document.createDocumentFragment();
 
-      for (var i = 0; i < listOfComments.length; i++) {
-        commentsFragment.appendChild(generatePreviewComment(listOfComments[i]));
+    for (var i = 0; i < listOfComments.length; i++) {
+
+      commentsFragment.appendChild(generatePreviewComment(listOfComments[i]));
+
+    }
+
+    return commentsFragment;
+  };
+
+  window.loadMoreComments = function (arr) {
+    var commentsForRender = [];
+
+    if (arr.length <= MAX_COMMENTS_TO_SHOW) {
+      commentsForRender = renderListOfComments(arr);
+
+      commentsLoader.classList.add('visually-hidden');
+      socialCommentsCount.textContent = arr.length + ' из ' + arr.length + ' комментариев';
+
+    } else {
+      var arrCopy = arr.slice();
+      var slicedArr = arrCopy.slice(0, MAX_COMMENTS_TO_SHOW);
+
+      commentsForRender = renderListOfComments(slicedArr);
+
+      commentsLoader.classList.remove('visually-hidden');
+      socialCommentsCount.textContent = slicedArr.length + ' из ' + arr.length + ' комментариев';
+    }
+
+    commentsLoader.addEventListener('click', function () {
+      var totalCommentsCount = arr.length;
+      var countOfShowedComments = socialComments.querySelectorAll('.social__comment').length;
+
+      var needToLoadCommentsCount = totalCommentsCount - countOfShowedComments;
+
+      if (needToLoadCommentsCount > MAX_COMMENTS_TO_SHOW) {
+        commentsForRender = arrCopy.slice(0, countOfShowedComments + MAX_COMMENTS_TO_SHOW);
+
+      } else if (needToLoadCommentsCount < MAX_COMMENTS_TO_SHOW) {
+        needToLoadCommentsCount = MAX_COMMENTS_TO_SHOW;
+        commentsForRender = arrCopy;
+
+        commentsLoader.classList.add('visually-hidden');
       }
 
-      return commentsFragment;
-    }
+      socialCommentsCount.textContent = commentsForRender.length + ' из ' + arr.length + ' комментариев';
+      window.utils.preview.querySelector('.social__comments').appendChild(renderListOfComments(commentsForRender));
+    });
+
+    return commentsForRender;
   };
 })();
