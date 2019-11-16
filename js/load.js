@@ -14,7 +14,7 @@
       console.log(xhr.response);
       if (xhr.status === 200) {
         window.pictureItems = xhr.response;
-        window.renderPicture(window.pictureItems);
+        window.miniatures.renderPicture(window.pictureItems);
       } else {
         window.renderErrorMessage();
       }
