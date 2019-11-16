@@ -4,7 +4,6 @@
 
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
-
   // вставка данных в миниатюру
   var generatePictureElement = function (itemsListPhoto) {
 
@@ -21,7 +20,7 @@
   // отрисовка миниатюры
   window.miniatures = {
 
-    renderPicture: function (generateListItems) {
+    render: function (generateListItems) {
       var fragment = document.createDocumentFragment();
 
       for (var i = 0; i < generateListItems.length; i++) {

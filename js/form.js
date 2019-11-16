@@ -6,159 +6,145 @@
   var uploadFile = uploadForm.querySelector('#upload-file');
   var uploadOverlayForm = uploadForm.querySelector('.img-upload__overlay');
   var closeButtonUploadOverlayForm = uploadOverlayForm.querySelector('#upload-cancel');
+  var hashtagTextField = document.querySelector('input[name=hashtags]');
+  var commentField = uploadForm.querySelector('.text__description');
   var scaleControlSmaller = uploadForm.querySelector('.scale__control--smaller');
   var scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');
   var scaleControlValue = uploadForm.querySelector('.scale__control--value');
-  var hashtagTextField = document.querySelector('input[name=hashtags]');
   var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
   var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
   var effectLevelValue = uploadForm.querySelector('.effect-level__value');
-  var commentsField = uploadForm.querySelector('.text__description');
   var effectRadioButtons = uploadForm.querySelectorAll('.effects__radio');
 
-  var openUploadOverlayForm = function () {
+  var openForm = function () {
     uploadOverlayForm.classList.remove('hidden');
+
+    scaleControlValue.setAttribute('value', '100%');
+
     effectLevel.classList.add('visually-hidden');
-    document.addEventListener('keydown', onDocumentKeydown);
-    closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
-    closeButtonUploadOverlayForm.addEventListener('keydown', onCloseButtonUploadOverlayFormEnterdown);
-    hashtagTextField.addEventListener('input', validateHashtag);
+    effectLevelValue.setAttribute('value', 100);
     effectLevelDepth.style.width = '100%';
     effectLevelPin.style.left = '100%';
+
+    document.addEventListener('keydown', onDocumentKeydown);
+
+    closeButtonUploadOverlayForm.addEventListener('click', onCloseButtonUploadOverlayFormClick);
+    closeButtonUploadOverlayForm.addEventListener('keydown', onCloseButtonUploadOverlayFormKeydown);
+
+    hashtagTextField.addEventListener('input', onHashtagTextFieldInput);
+    commentField.addEventListener('change', onCommentFieldChange);
+
     scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
+    scaleControlSmaller.addEventListener('keydown', onScaleControlSmallerKeydown);
     scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
-    scaleControlSmaller.addEventListener('keydown', onScaleControlSmallerEnterDown);
-    scaleControlBigger.addEventListener('keydown', onScaleControlBiggerEnterDown);
-    effectLevelValue.setAttribute('value', 100);
-    scaleControlValue.setAttribute('value', '100%');
-    commentsField.addEventListener('change', validateComment);
+    scaleControlBigger.addEventListener('keydown', onScaleControlBiggerKeydown);
+
+    effectLevelPin.addEventListener('mousedown', onEffectLevelPinMousedown);
+    effectRadioButtons.forEach(function (element) {
+      element.addEventListener('change', onEffectRadioButtonsChange);
+    });
   };
 
-  var closeUploadOverlayForm = function () {
-    uploadFile.value = '';
+  var closeForm = function () {
     uploadOverlayForm.classList.add('hidden');
+
+    uploadFile.value = '';
+
+    window.effects.setOriginFilter();
+    hashtagTextField.setCustomValidity('');
+    commentField.setCustomValidity('');
+    hashtagTextField.classList.remove('error-field');
+    uploadForm.reset();
+
     document.removeEventListener('keydown', onDocumentKeydown);
+
     closeButtonUploadOverlayForm.removeEventListener('click', onCloseButtonUploadOverlayFormClick);
-    closeButtonUploadOverlayForm.removeEventListener('keydown', onCloseButtonUploadOverlayFormEnterdown);
-    hashtagTextField.removeEventListener('input', validateHashtag);
+    closeButtonUploadOverlayForm.removeEventListener('keydown', onCloseButtonUploadOverlayFormKeydown);
+
+    hashtagTextField.removeEventListener('input', onHashtagTextFieldInput);
+    commentField.removeEventListener('change', onCommentFieldChange);
+
     scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
+    scaleControlSmaller.removeEventListener('keydown', onScaleControlSmallerKeydown);
     scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
-    scaleControlSmaller.removeEventListener('keydown', onScaleControlSmallerEnterDown);
-    scaleControlBigger.removeEventListener('keydown', onScaleControlBiggerEnterDown);
-    commentsField.removeEventListener('change', validateComment);
-  };
+    scaleControlBigger.removeEventListener('keydown', onScaleControlBiggerKeydown);
 
-  var onUploadFileChange = function () {
-    window.uploadOverlayForm.openForm();
-  };
-
-  var onDocumentKeydown = function (evt) {
-    if (document.activeElement === hashtagTextField) {
-      evt.stopPropagation();
-    } else if (document.activeElement === commentsField) {
-      evt.stopPropagation();
-    } else {
-      window.util.isEscEvent(evt, closeUploadOverlayForm);
-    }
+    effectLevelPin.removeEventListener('mousedown', onEffectLevelPinMousedown);
+    effectRadioButtons.forEach(function (element) {
+      element.removeEventListener('change', onEffectRadioButtonsChange);
+    });
   };
 
   // закрытие формы
+
+  var onDocumentKeydown = function (evt) {
+    if (evt.code === 'Escape') {
+      if (document.activeElement === hashtagTextField || document.activeElement === commentField) {
+        evt.stopPropagation();
+      } else {
+        closeForm();
+      }
+    }
+  };
+
   var onCloseButtonUploadOverlayFormClick = function () {
-    window.uploadOverlayForm.closeForm();
+    closeForm();
   };
 
-  var onCloseButtonUploadOverlayFormEnterdown = function (evt) {
-    evt.stopPropagation();
-    if (document.activeElement === closeButtonUploadOverlayForm) {
-      window.util.isEnterEvent(evt, closeUploadOverlayForm);
+  var onCloseButtonUploadOverlayFormKeydown = function (evt) {
+    if (evt.code === 'Enter' && document.activeElement === closeButtonUploadOverlayForm) {
+      evt.stopPropagation();
+    } else {
+      closeForm();
     }
   };
 
-  // масштабирование картинки
-  var zoomOutPhoto = function () {
-    var currentImageSize = parseInt(scaleControlValue. value, 10);
-    var setImageSize = currentImageSize - SCALE_STEP;
-    if (setImageSize <= SCALE_STEP) {
-      setImageSize = MIN_SCALE;
-    }
-    currentImageSize = setImageSize;
-    changeImageSize(currentImageSize);
+  var onHashtagTextFieldInput = function () {
+    window.validation.hashtag();
   };
 
-  var zoomInPhoto = function () {
-    var currentImageSize = parseInt(scaleControlValue. value, 10);
-    var setImageSize = currentImageSize + SCALE_STEP;
-    if (setImageSize >= MAX_SCALE) {
-      setImageSize = MAX_SCALE;
-    }
-    currentImageSize = setImageSize;
-    changeImageSize(setImageSize);
-  };
-
-  var changeImageSize = function (imageSize) {
-    scaleControlValue.value = imageSize + '%';
-    imageUploadPreview.style.transform = 'scale' + '(' + imageSize / 100 + ')';
+  var onCommentFieldChange = function () {
+    window.validation.commentField();
   };
 
   var onScaleControlSmallerClick = function () {
-    zoomOutPhoto();
+    window.zoom.out();
   };
 
-  var onScaleControlSmallerEnterDown = function (evt) {
+  var onScaleControlSmallerKeydown = function (evt) {
     evt.stopPropagation();
-    if (document.activeElement === scaleControlSmaller) {
-      window.util.isEnterEvent(evt, zoomOutPhoto);
+    if (evt.code === 'Enter' && document.activeElement === scaleControlSmaller) {
+      window.utils.isEnterEvent(evt, window.zoom.out);
+    } else {
+      window.utils.isEscEvent(evt, closeForm);
     }
   };
 
   var onScaleControlBiggerClick = function () {
-    zoomInPhoto();
+    window.zoom.in();
   };
 
-  var onScaleControlBiggerEnterDown = function (evt) {
+  var onScaleControlBiggerKeydown = function (evt) {
     evt.stopPropagation();
-    if (document.activeElement === scaleControlBigger) {
-      window.util.isEnterEvent(evt, zoomInPhoto);
-    }
-  };
-
-  var validateComment = function () {
-    if (commentsField.value.length > MAX_COMMENT_LENGTH) {
-      commentsField.classList.add('error-field');
-      commentsField.setCustomValidity('максимальная длина комментария 140 символов');
+    if (evt.code === 'Enter' && document.activeElement === scaleControlBigger) {
+      window.utils.isEnterEvent(evt, window.zoom.in);
     } else {
-      commentsField.classList.remove('error-field');
-      commentsField.setCustomValidity('');
+      window.utils.isEscEvent(evt, closeForm);
     }
   };
 
-  // валидация хеш-тегов
-  var validateHashtag = function () {
-    var hashtagTextFieldContent = hashtagTextField.value;
-    var hashtagsList = hashtagTextFieldContent.toLowerCase().split(' ');
-
-    if (hashtagsList.length > MAX_HASHTAGS_COUNT) {
-      hashtagTextField.classList.add('error-field');
-      hashtagTextField.setCustomValidity('максимум 5 хэш-тегов');
-    } else {
-      for (var i = 0; i < hashtagsList.length; i++) {
-        if (hashtagsList[i].indexOf(0) !== '#') {
-          hashtagTextField.classList.add('error-field');
-          hashtagTextField.setCustomValidity('хэш-тег начинается с символа #');
-        } else if (hashtagsList[i] === '#') {
-          hashtagTextField.classList.add('error-field');
-          hashtagTextField.setCustomValidity('хеш-тег не может состоять только из одной решётки');
-        } else if (hashtagsList.indexOf(hashtagsList[i]) !== i) {
-          hashtagTextField.classList.add('error-field');
-          hashtagTextField.setCustomValidity('один и тот же хеш-тег не может быть использован дважды');
-        } else if (hashtagsList[i].length > MAX_HASHTAG_LENGTH) {
-          hashtagTextField.classList.add('error-field');
-          hashtagTextField.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
-        } else {
-          hashtagTextField.setCustomValidity('');
-        }
-      }
-    }
+  var onEffectLevelPinMousedown = function (evt) {
+    window.slider.coordinate(evt);
   };
+
+  var onEffectRadioButtonsChange = function () {
+    window.effects.change();
+  };
+
+  var onUploadFileChange = function () {
+    openForm();
+  };
+
+  uploadFile.addEventListener('change', onUploadFileChange);
 })();
