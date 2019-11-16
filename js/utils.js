@@ -2,11 +2,13 @@
 
 (function () {
   var ESC_CODE = 'Escape';
+  var ENTER_CODE = 'Enter';
 
   window.utils = {
 
     preview: document.querySelector('.big-picture'),
     picturesList: document.querySelector('.pictures'),
+
 
     isEscEvent: function (evt, action) {
       if (evt.code === ESC_CODE) {
@@ -14,12 +16,10 @@
       }
     },
 
-    getRandomItem: function (array) {
-      return array[Math.floor(Math.random() * array.length)];
-    },
-
-    getRandomNumber: function (min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
+    isEnterEvent: function (evt, action) {
+      if (evt.code === ENTER_CODE) {
+        action();
+      }
     },
 
     shuffleList: function (a) {

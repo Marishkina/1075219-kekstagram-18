@@ -26,7 +26,6 @@
     },
 
     onHashtagTextFieldInput: function () {
-      hashtagTextField.setCustomValidity('');
       var hashtagTextFieldContent = hashtagTextField.value;
       var hashtagsList = hashtagTextFieldContent.toLowerCase().split(' ');
 

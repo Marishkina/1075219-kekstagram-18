@@ -50,8 +50,8 @@
     filterButtonsAll.forEach(function (button) {
       button.classList.remove('img-filters__button--active');
     });
-    evt.target.classList.toggle('img-filters__button--active');
 
-    window.filteredPictures.set(evt.target.id, window.pictureItems);
+    evt.target.classList.toggle('img-filters__button--active');
+    window.filteredPictures.set(evt.target.id, window.photo);
   });
 })();
