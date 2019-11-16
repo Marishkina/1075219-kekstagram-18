@@ -6,6 +6,7 @@
   var MIN_SCALE = 25;
   var MAX_SCALE = 100;
   var SCALE_STEP = 25;
+
   var uploadForm = document.querySelector('.img-upload__form');
   var scaleControlSmaller = uploadForm.querySelector('.scale__control--smaller');
   var scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');

@@ -17,6 +17,7 @@
   var hashtagTextField = hashtagFieldset.querySelector('input[name=hashtags]');
   var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
+  var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
   var effectLevelLine = effectLevel.querySelector('.effect-level__line');
   var effectRadioButtons = uploadForm.querySelector('input[name=effect]');
   var effectLevelValue = uploadForm.querySelector('.effect-level__value');
@@ -79,16 +80,6 @@
 
   var onCloseButtonUploadOverlayFormClick = function () {
     closeUploadOverlayForm();
-  };
-
-  //  определение ширины линии (родителя пина)
-  var getWidthOfEffectLevelLine = function () {
-    return effectLevelLine.getBoundingClientRect().width;
-  };
-
-  // определение позиции пина относительно левого края родителя
-  var getEffectLevelPinPosition = function () {
-    return effectLevelPin.offsetLeft;
   };
 
   // пропорция для определения уровня эффекта
