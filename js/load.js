@@ -3,7 +3,7 @@
 (function () {
 
   var URL = 'https://js.dump.academy/kekstagram/data';
-  window.pictureItems = [];
+  var SUCCESS_CODE = 200;
 
   var filters = document.querySelector('.img-filters');
   var filterButtonsAll = filters.querySelectorAll('.img-filters__button');
@@ -15,24 +15,22 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      console.log(xhr.response);
+      // console.log(xhr.response);
 
-      if (xhr.status === window.SUCCESS_CODE) {
+      if (xhr.status === SUCCESS_CODE) {
         var pictureItems = xhr.response;
-        // window.renderPicture(window.pictureItems);
         window.photo = pictureItems.map(function (photo, id) {
           photo.id = id;
           return photo;
         });
-        console.log(window.photo);
-        window.renderPicture(window.photo);
+        window.miniatures.renderPicture(window.photo);
       } else {
-        window.renderErrorMessage();
+        window.errorMessage.renderErrorMessage();
       }
     });
 
     xhr.addEventListener('timeout', function () {
-      window.renderErrorMessage();
+      window.errorMessage.renderErrorMessage();
     });
 
     xhr.timeout = 10000;
@@ -44,7 +42,7 @@
   try {
     load();
   } catch (err) {
-    window.renderErrorMessage();
+    window.errorMessage.renderErrorMessage();
   }
 
   filters.addEventListener('click', function (evt) {
@@ -52,10 +50,8 @@
     filterButtonsAll.forEach(function (button) {
       button.classList.remove('img-filters__button--active');
     });
-    evt.target.classList.toggle('img-filters__button--active');
 
-    console.log('evt.target.id=', evt.target.id);
-    console.log('window.photo=', window.photo);
+    evt.target.classList.toggle('img-filters__button--active');
     window.filteredPictures.set(evt.target.id, window.photo);
   });
 })();

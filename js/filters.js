@@ -5,6 +5,7 @@
   var RANDOM_PHOTO_NUMBER = 10;
   var DEBOUNCE_TIME = 500;
 
+
   var debounce = function (f) {
     var lastTimeout = null;
     return function () {
@@ -19,33 +20,29 @@
   };
 
   var deletePictures = function () {
-    [].forEach.call(window.picturesList.querySelectorAll('.picture'), function (picture) {
+    [].forEach.call(window.utils.picturesList.querySelectorAll('.picture'), function (picture) {
       picture.parentNode.removeChild(picture);
     });
   };
 
   var filterPopular = function (arr) {
-    debounce(window.renderPicture(arr));
+    debounce(window.miniatures.renderPicture(arr));
   };
 
   var filterRandom = function (arr) {
     deletePictures();
-    debounce(window.renderPicture(getRandomPictures(arr)));
+    debounce(window.miniatures.renderPicture(getRandomPictures(arr)));
   };
 
   var filterDiscussed = function (arr) {
     deletePictures();
-    debounce(window.renderPicture(getDiscussedPictures(arr)));
+    debounce(window.miniatures.renderPicture(getDiscussedPictures(arr)));
   };
 
   var getRandomPictures = function (a) {
     var aCopy = a.slice();
-    for (var i = aCopy.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var x = aCopy[i];
-      aCopy[i] = aCopy[j];
-      aCopy[j] = x;
-    }
+    window.utils.shuffleList(aCopy);
+
     var RandomPictures = aCopy.slice(0, RANDOM_PHOTO_NUMBER);
 
     return RandomPictures;

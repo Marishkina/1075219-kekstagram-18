@@ -2,16 +2,14 @@
 
 (function () {
 
-  window.picturesList = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
+
 
   // вставка данных в миниатюру
   var generatePictureElement = function (itemsListPhoto) {
-    console.log('itemsListPhoto=', itemsListPhoto);
 
     var pictureElement = pictureTemplate.cloneNode(true);
 
-    // pictureElement.href = itemsListPhoto.url;
     pictureElement.querySelector('.picture__img').id = 'templateImgId' + itemsListPhoto.id;
     pictureElement.querySelector('.picture__img').src = itemsListPhoto.url;
     pictureElement.querySelector('.picture__likes').textContent = itemsListPhoto.likes;
@@ -21,12 +19,15 @@
   };
 
   // отрисовка миниатюры
-  window.renderPicture = function (generateListItems) {
-    var fragment = document.createDocumentFragment();
+  window.miniatures = {
 
-    for (var i = 0; i < generateListItems.length; i++) {
-      fragment.appendChild(generatePictureElement(generateListItems[i]));
+    renderPicture: function (generateListItems) {
+      var fragment = document.createDocumentFragment();
+
+      for (var i = 0; i < generateListItems.length; i++) {
+        fragment.appendChild(generatePictureElement(generateListItems[i]));
+      }
+      window.utils.picturesList.appendChild(fragment);
     }
-    window.picturesList.appendChild(fragment);
   };
 })();
