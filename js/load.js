@@ -50,10 +50,8 @@
     filterButtonsAll.forEach(function (button) {
       button.classList.remove('img-filters__button--active');
     });
-    evt.target.classList.toggle('img-filters__button--active');
 
-    console.log('evt.target.id=', evt.target.id);
-    console.log('window.photo=', window.photo);
+    evt.target.classList.toggle('img-filters__button--active');
     window.filteredPictures.set(evt.target.id, window.photo);
   });
 })();
