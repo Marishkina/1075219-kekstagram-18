@@ -11,7 +11,7 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      console.log(xhr.response);
+
       if (xhr.status === 200) {
         window.pictureItems = xhr.response;
         window.miniatures.renderPicture(window.pictureItems);
