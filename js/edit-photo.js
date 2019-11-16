@@ -61,8 +61,6 @@
     openUploadOverlayForm();
   };
 
-  uploadFile.addEventListener('change', onUploadFileChange);
-
   var onCloseButtonUploadOverlayFormClick = function () {
     setOriginFilter();
     uploadForm.reset();
@@ -262,4 +260,6 @@
       }
     }
   };
+
+  uploadFile.addEventListener('change', onUploadFileChange);
 })();
