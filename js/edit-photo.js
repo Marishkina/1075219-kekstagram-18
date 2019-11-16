@@ -261,5 +261,5 @@
     }
   };
 
-  uploadFile.addEventListener('change', onUploadFileChange);
+  uploadFile.addEventListener('change', onUploadFileChange)
 })();

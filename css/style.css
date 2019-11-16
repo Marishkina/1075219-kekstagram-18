@@ -50,6 +50,10 @@ main {
   display: none;
 }
 
+.error-field {
+  border: solid 4px red;
+}
+
 .visually-hidden {
   position: absolute;
 
