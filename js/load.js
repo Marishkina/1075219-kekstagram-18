@@ -4,10 +4,13 @@
 
   var URL = 'https://js.dump.academy/kekstagram/data';
   var SUCCESS_CODE = 200;
+<<<<<<< HEAD
 
   var filters = document.querySelector('.img-filters');
   var filterButtonsAll = filters.querySelectorAll('.img-filters__button');
   filters.classList.remove('img-filters--inactive');
+=======
+>>>>>>> Задание 7-3: добавляет модуляцию
 
   var filters = document.querySelector('.img-filters');
   var filterButtonsAll = filters.querySelectorAll('.img-filters__button');

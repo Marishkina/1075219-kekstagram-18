@@ -2,27 +2,18 @@
 
 (function () {
 
-  var MAX_HASHTAGS_COUNT = 5;
-  var MAX_HASHTAG_LENGTH = 20;
-  var MIN_SCALE = 25;
-  var MAX_SCALE = 100;
-  var SCALE_STEP = 25;
-  var MAX_COMMENT_LENGTH = 140;
-
   var uploadForm = document.querySelector('.img-upload__form');
   var uploadFile = uploadForm.querySelector('#upload-file');
   var uploadOverlayForm = uploadForm.querySelector('.img-upload__overlay');
   var closeButtonUploadOverlayForm = uploadOverlayForm.querySelector('#upload-cancel');
-  var hashtagFieldset = uploadForm.querySelector('.img-upload__text');
-  var hashtagTextField = hashtagFieldset.querySelector('input[name=hashtags]');
+  var scaleControlSmaller = uploadForm.querySelector('.scale__control--smaller');
+  var scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');
+  var scaleControlValue = uploadForm.querySelector('.scale__control--value');
+  var hashtagTextField = document.querySelector('input[name=hashtags]');
   var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
   var effectLevelPin = effectLevel.querySelector('.effect-level__pin');
   var effectLevelDepth = effectLevel.querySelector('.effect-level__depth');
   var effectLevelValue = uploadForm.querySelector('.effect-level__value');
-  var imageUploadPreview = uploadForm.querySelector('.img-upload__preview');
-  var scaleControlSmaller = uploadForm.querySelector('.scale__control--smaller');
-  var scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');
-  var scaleControlValue = uploadForm.querySelector('.scale__control--value');
   var commentsField = uploadForm.querySelector('.text__description');
   var effectRadioButtons = uploadForm.querySelectorAll('.effects__radio');
 
@@ -59,10 +50,8 @@
   };
 
   var onUploadFileChange = function () {
-    openUploadOverlayForm();
+    window.uploadOverlayForm.openForm();
   };
-
-  uploadFile.addEventListener('change', onUploadFileChange);
 
   var onDocumentKeydown = function (evt) {
     if (document.activeElement === hashtagTextField) {
@@ -76,7 +65,7 @@
 
   // закрытие формы
   var onCloseButtonUploadOverlayFormClick = function () {
-    closeUploadOverlayForm();
+    window.uploadOverlayForm.closeForm();
   };
 
   var onCloseButtonUploadOverlayFormEnterdown = function (evt) {

@@ -5,6 +5,7 @@
   var RANDOM_PHOTO_NUMBER = 10;
   var DEBOUNCE_TIME = 500;
 
+
   var debounce = function (f) {
     var lastTimeout = null;
     return function () {

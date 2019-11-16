@@ -9,6 +9,7 @@
   var uploadOverlayForm = uploadForm.querySelector('.img-upload__overlay');
   var submitButton = uploadForm.querySelector('.img-upload__submit');
 
+
   var upload = function (data, onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
