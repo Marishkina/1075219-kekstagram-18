@@ -33,17 +33,17 @@
   };
 
   var filterPopular = function (arr) {
-    window.miniatures.renderPicture(arr);
+    window.miniatures.render(arr);
   };
 
   var filterRandom = function (arr) {
     deletePictures();
-    window.miniatures.renderPicture(getRandomPictures(arr));
+    window.miniatures.render(getRandomPictures(arr));
   };
 
   var filterDiscussed = function (arr) {
     deletePictures();
-    window.miniatures.renderPicture(getDiscussedPictures(arr));
+    window.miniatures.render(getDiscussedPictures(arr));
   };
 
   var Filter = {
@@ -63,6 +63,6 @@
     });
 
     evt.target.classList.toggle('img-filters__button--active');
-    getFilter(evt.target.id, window.backend.picture);
+    getFilter(evt.target.id, window.pictures);
   });
 })();

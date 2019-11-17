@@ -14,7 +14,7 @@
       templateImgId = Number(evt.target.id.slice(13));
     }
 
-    var previewDetails = window.backend.picture.find(function (element) {
+    var previewDetails = window.pictures.find(function (element) {
       return element.id === templateImgId;
     });
 

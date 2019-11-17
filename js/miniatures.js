@@ -18,15 +18,32 @@
   };
 
   // отрисовка миниатюры
-  window.miniatures = {
+  var renderMiniatures = function (generateListItems) {
+    var fragment = document.createDocumentFragment();
 
-    render: function (generateListItems) {
-      var fragment = document.createDocumentFragment();
-
-      for (var i = 0; i < generateListItems.length; i++) {
-        fragment.appendChild(generatePictureElement(generateListItems[i]));
-      }
-      window.utils.picturesList.appendChild(fragment);
+    for (var i = 0; i < generateListItems.length; i++) {
+      fragment.appendChild(generatePictureElement(generateListItems[i]));
     }
+
+    window.utils.picturesList.appendChild(fragment);
   };
+
+  var onSuccess = function (pictureItems) {
+    window.pictures = pictureItems.map(function (el, id) {
+      el.id = id;
+      return el;
+    });
+
+    renderMiniatures(window.pictures);
+  };
+
+  var onError = function () {
+    window.errorMessage.render();
+  };
+
+  window.miniatures = {
+    render: renderMiniatures
+  };
+
+  window.backend.load(onSuccess, onError);
 })();

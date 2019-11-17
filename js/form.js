@@ -19,6 +19,7 @@
 
   var openForm = function () {
     uploadOverlayForm.classList.remove('hidden');
+    uploadOverlayForm.focus();
 
     scaleControlValue.setAttribute('value', '100%');
 
@@ -35,9 +36,9 @@
     hashtagTextField.addEventListener('input', onHashtagTextFieldInput);
     commentField.addEventListener('change', onCommentFieldChange);
 
-    scaleControlSmaller.addEventListener('click', onScaleControlSmallerClick);
+    scaleControlSmaller.addEventListener('mouseup', onScaleControlSmallerMouseup);
     scaleControlSmaller.addEventListener('keydown', onScaleControlSmallerKeydown);
-    scaleControlBigger.addEventListener('click', onScaleControlBiggerClick);
+    scaleControlBigger.addEventListener('mouseup', onScaleControlBiggerMouseup);
     scaleControlBigger.addEventListener('keydown', onScaleControlBiggerKeydown);
 
     effectLevelPin.addEventListener('mousedown', onEffectLevelPinMousedown);
@@ -65,9 +66,9 @@
     hashtagTextField.removeEventListener('input', onHashtagTextFieldInput);
     commentField.removeEventListener('change', onCommentFieldChange);
 
-    scaleControlSmaller.removeEventListener('click', onScaleControlSmallerClick);
+    scaleControlSmaller.removeEventListener('mouseup', onScaleControlSmallerMouseup);
     scaleControlSmaller.removeEventListener('keydown', onScaleControlSmallerKeydown);
-    scaleControlBigger.removeEventListener('click', onScaleControlBiggerClick);
+    scaleControlBigger.removeEventListener('mouseup', onScaleControlBiggerMouseup);
     scaleControlBigger.removeEventListener('keydown', onScaleControlBiggerKeydown);
 
     effectLevelPin.removeEventListener('mousedown', onEffectLevelPinMousedown);
@@ -108,7 +109,7 @@
     window.validation.commentField();
   };
 
-  var onScaleControlSmallerClick = function () {
+  var onScaleControlSmallerMouseup = function () {
     window.zoom.out();
   };
 
@@ -121,7 +122,7 @@
     }
   };
 
-  var onScaleControlBiggerClick = function () {
+  var onScaleControlBiggerMouseup = function () {
     window.zoom.in();
   };
 
