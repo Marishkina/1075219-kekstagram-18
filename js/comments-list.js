@@ -57,35 +57,28 @@
         commentsLoader.classList.remove('visually-hidden');
         socialCommentsCount.textContent = slicedArr.length + ' из ' + arr.length + ' комментариев';
       }
+
+      commentsLoader.addEventListener('click', function () {
+        var totalCommentsCount = arr.length;
+        var countOfShowedComments = socialComments.querySelectorAll('.social__comment').length;
+
+        var needToLoadCommentsCount = totalCommentsCount - countOfShowedComments;
+
+        if (needToLoadCommentsCount > MAX_COMMENTS_TO_SHOW) {
+          commentsForRender = arrCopy.slice(0, countOfShowedComments + MAX_COMMENTS_TO_SHOW);
+
+        } else if (needToLoadCommentsCount < MAX_COMMENTS_TO_SHOW) {
+          needToLoadCommentsCount = MAX_COMMENTS_TO_SHOW;
+          commentsForRender = arrCopy;
+
+          commentsLoader.classList.add('visually-hidden');
+        }
+
+        socialCommentsCount.textContent = commentsForRender.length + ' из ' + arr.length + ' комментариев';
+        window.utils.preview.querySelector('.social__comments').appendChild(renderListOfComments(commentsForRender));
+      });
+
       return commentsForRender;
-    },
-
-    // TODO переделать, удалить слушатель и название
-    // onCommentsLoaderClick
-    // onCommentsLoaderClick:
-
-    //   commentsLoader.addEventListener('click', function () {
-    //     // renderCommentsOnClick
-    //     var totalCommentsCount = arr.length;
-    //     var countOfShowedComments = socialComments.querySelectorAll('.social__comment').length;
-
-    //     var needToLoadCommentsCount = totalCommentsCount - countOfShowedComments;
-
-    //     if (needToLoadCommentsCount > MAX_COMMENTS_TO_SHOW) {
-    //       commentsForRender = arrCopy.slice(0, countOfShowedComments + MAX_COMMENTS_TO_SHOW);
-
-    //     } else if (needToLoadCommentsCount < MAX_COMMENTS_TO_SHOW) {
-    //       needToLoadCommentsCount = MAX_COMMENTS_TO_SHOW;
-    //       commentsForRender = arrCopy;
-
-    //       commentsLoader.classList.add('visually-hidden');
-    //     }
-
-    //     socialCommentsCount.textContent = commentsForRender.length + ' из ' + arr.length + ' комментариев';
-    //     window.utils.preview.querySelector('.social__comments').appendChild(renderListOfComments(commentsForRender));
-    //   });
-
-    //   return commentsForRender;
-    // }
+    }
   };
 })();
