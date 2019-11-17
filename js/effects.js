@@ -48,6 +48,20 @@
     scaleControlValue.value = '100%';
   };
 
+  var getEffectLevel = function () {
+    if (chromePreview.checked) {
+      imageUploadPreview.style.filter = 'grayscale' + '(' + window.slider.getEffectLevelValue() / 100 + ')';
+    } else if (sepiaPreview.checked) {
+      imageUploadPreview.style.filter = 'sepia' + '(' + window.slider.getEffectLevelValue() / 100 + ')';
+    } else if (marvinPreview.checked) {
+      imageUploadPreview.style.filter = 'invert' + '(' + window.slider.getEffectLevelValue() + '%' + ')';
+    } else if (phobosPreview.checked) {
+      imageUploadPreview.style.filter = 'blur' + '(' + blurScale() + 'px' + ')';
+    } else if (heatPreview.checked) {
+      imageUploadPreview.style.filter = 'brightness' + '(' + brightnessScale() + ')';
+    }
+  };
+
   var changeEffects = function () {
     var effects = photoEffects.elements;
 
@@ -91,19 +105,6 @@
   window.effects = {
     change: changeEffects,
     setOriginFilter: setOriginFilter,
-
-    getEffectLevel: function () {
-      if (chromePreview.checked) {
-        imageUploadPreview.style.filter = 'grayscale' + '(' + window.slider.getEffectLevelValue() / 100 + ')';
-      } else if (sepiaPreview.checked) {
-        imageUploadPreview.style.filter = 'sepia' + '(' + window.slider.getEffectLevelValue() / 100 + ')';
-      } else if (marvinPreview.checked) {
-        imageUploadPreview.style.filter = 'invert' + '(' + window.slider.getEffectLevelValue() + '%' + ')';
-      } else if (phobosPreview.checked) {
-        imageUploadPreview.style.filter = 'blur' + '(' + blurScale() + 'px' + ')';
-      } else if (heatPreview.checked) {
-        imageUploadPreview.style.filter = 'brightness' + '(' + brightnessScale() + ')';
-      }
-    }
+    getEffectLevel: getEffectLevel
   };
 })();
