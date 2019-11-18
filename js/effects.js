@@ -17,34 +17,6 @@
   var effectLevelValue = uploadForm.querySelector('.effect-level__value');
 
 
-  window.effects = {
-
-    getEffectLevel: function () {
-      if (chromePreview.checked) {
-        imageUploadPreview.style.filter = 'grayscale' + '(' + window.slider.getEffectLevelValue() / 100 + ')';
-      } else if (sepiaPreview.checked) {
-        imageUploadPreview.style.filter = 'sepia' + '(' + window.slider.getEffectLevelValue() / 100 + ')';
-      } else if (marvinPreview.checked) {
-        imageUploadPreview.style.filter = 'invert' + '(' + window.slider.getEffectLevelValue() + '%' + ')';
-      } else if (phobosPreview.checked) {
-        imageUploadPreview.style.filter = 'blur' + '(' + blurScale() + 'px' + ')';
-      } else if (heatPreview.checked) {
-        imageUploadPreview.style.filter = 'brightness' + '(' + brightnessScale() + ')';
-      }
-    },
-
-    // сброс уровня эффекта до начального состояния (100%)
-    setOriginFilter: function () {
-      imageUploadPreview.classList.remove('effects__preview--none', 'effects__preview--chrome', 'effects__preview--sepia', 'effects__preview--marvin', 'effects__preview--phobos', 'effects__preview--heat');
-      imageUploadPreview.style.filter = 'none';
-      imageUploadPreview.style.transform = 'scale(1)';
-      effectLevelDepth.style.width = '100%';
-      effectLevelPin.style.left = '100%';
-      effectLevelValue.setAttribute('value', 100);
-      scaleControlValue.value = '100%';
-    }
-  };
-
   // установка мах значения для phobos эффекта
   var blurScale = function () {
     var value = window.slider.getEffectLevelValue() / 30;
@@ -65,10 +37,35 @@
     return value;
   };
 
-  window.onEffectRadioButtonsChange = function () {
+  // сброс уровня эффекта до начального состояния (100%)
+  var setOriginFilter = function () {
+    imageUploadPreview.classList.remove('effects__preview--none', 'effects__preview--chrome', 'effects__preview--sepia', 'effects__preview--marvin', 'effects__preview--phobos', 'effects__preview--heat');
+    imageUploadPreview.style.filter = 'none';
+    imageUploadPreview.style.transform = 'scale(1)';
+    effectLevelDepth.style.width = '100%';
+    effectLevelPin.style.left = '100%';
+    effectLevelValue.setAttribute('value', 100);
+    scaleControlValue.value = '100%';
+  };
+
+  var getEffectLevel = function () {
+    if (chromePreview.checked) {
+      imageUploadPreview.style.filter = 'grayscale' + '(' + window.slider.getEffectLevelValue() / 100 + ')';
+    } else if (sepiaPreview.checked) {
+      imageUploadPreview.style.filter = 'sepia' + '(' + window.slider.getEffectLevelValue() / 100 + ')';
+    } else if (marvinPreview.checked) {
+      imageUploadPreview.style.filter = 'invert' + '(' + window.slider.getEffectLevelValue() + '%' + ')';
+    } else if (phobosPreview.checked) {
+      imageUploadPreview.style.filter = 'blur' + '(' + blurScale() + 'px' + ')';
+    } else if (heatPreview.checked) {
+      imageUploadPreview.style.filter = 'brightness' + '(' + brightnessScale() + ')';
+    }
+  };
+
+  var changeEffects = function () {
     var effects = photoEffects.elements;
 
-    window.effects.setOriginFilter();
+    setOriginFilter();
 
     for (var i = 0; i < effects.length; i++) {
 
@@ -103,5 +100,11 @@
         }
       }
     }
+  };
+
+  window.effects = {
+    change: changeEffects,
+    setOriginFilter: setOriginFilter,
+    getEffectLevel: getEffectLevel
   };
 })();
