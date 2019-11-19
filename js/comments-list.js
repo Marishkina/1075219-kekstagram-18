@@ -9,7 +9,6 @@
   var socialCommentsCount = window.utils.preview.querySelector('.social__comment-count');
   var commentsLoader = window.utils.preview.querySelector('.comments-loader');
 
-
   // создание li с комментами для большой картинки
   var generatePreviewComment = function (comment) {
     var socialCommentElement = socialComment.cloneNode(true);
@@ -39,7 +38,7 @@
 
   window.commentsList = {
 
-    loadMore: function (arr) {
+    render: function (arr) {
       var commentsForRender = [];
 
       if (arr.length <= MAX_COMMENTS_TO_SHOW) {
@@ -58,7 +57,7 @@
         socialCommentsCount.textContent = slicedArr.length + ' из ' + arr.length + ' комментариев';
       }
 
-      commentsLoader.addEventListener('click', function () {
+      window.onCommentsLoaderClick = function () {
         var totalCommentsCount = arr.length;
         var countOfShowedComments = socialComments.querySelectorAll('.social__comment').length;
 
@@ -76,7 +75,7 @@
 
         socialCommentsCount.textContent = commentsForRender.length + ' из ' + arr.length + ' комментариев';
         window.utils.preview.querySelector('.social__comments').appendChild(renderListOfComments(commentsForRender));
-      });
+      };
 
       return commentsForRender;
     }

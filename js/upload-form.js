@@ -12,7 +12,7 @@
   };
 
   var onSubmitButtonClick = function (evt) {
-    if (evt.code === 'Enter' && evt.target === submitButton) {
+    if (evt.code === window.utils.keyCode.ENTER_CODE && evt.target === submitButton) {
       onUploadFormSubmit();
     }
   };

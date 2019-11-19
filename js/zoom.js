@@ -13,13 +13,13 @@
   var scaleControlValue = uploadForm.querySelector('.scale__control--value');
 
   var changeImageSize = function (imageSize) {
-    scaleControlValue.value = imageSize + '%';
+    scaleControlValue.setAttribute('value', imageSize + '%');
     imageUploadPreview.style.transform = 'scale' + '(' + imageSize / 100 + ')';
   };
 
   // масштабирование картинки
   var zoomOutPhoto = function () {
-    var currentImageSize = parseInt(scaleControlValue. value, 10);
+    var currentImageSize = parseInt(scaleControlValue.value, 10);
     var setImageSize = currentImageSize - Scale.STEP;
     if (setImageSize <= Scale.STEP) {
       setImageSize = Scale.MIN;
@@ -29,7 +29,7 @@
   };
 
   var zoomInPhoto = function () {
-    var currentImageSize = parseInt(scaleControlValue. value, 10);
+    var currentImageSize = parseInt(scaleControlValue.value, 10);
     var setImageSize = currentImageSize + Scale.STEP;
     if (setImageSize >= Scale.MAX) {
       setImageSize = Scale.MAX;
