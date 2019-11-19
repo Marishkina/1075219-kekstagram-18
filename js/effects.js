@@ -2,6 +2,22 @@
 
 (function () {
 
+  var scaleValue = {
+
+    BLUR_SCALE_VALUE: {
+      MAX_VALUE: 3,
+      DIVIDER: 30
+    },
+
+    BRIGHTNESS_SCALE_VALUE: {
+      MIN_VALUE: 1,
+      MAX_VALUE: 3,
+      DIVIDER: 30
+    }
+
+
+  };
+
   var uploadForm = document.querySelector('.img-upload__form');
   var effectLevel = uploadForm.querySelector('.img-upload__effect-level');
   var imageUploadPreview = uploadForm.querySelector('.img-upload__preview');
@@ -19,20 +35,20 @@
 
   // установка мах значения для phobos эффекта
   var blurScale = function () {
-    var value = window.slider.getEffectLevelValue() / 30;
-    if (value > 3) {
-      value = 3;
+    var value = window.slider.getEffectLevelValue() / scaleValue.BLUR_SCALE_VALUE.DIVIDER;
+    if (value > scaleValue.BLUR_SCALE_VALUE.MAX_VALUE) {
+      value = scaleValue.BLUR_SCALE_VALUE.MAX_VALUE;
     }
     return value;
   };
 
   // установка мин и мах значений для heat эффекта
   var brightnessScale = function () {
-    var value = window.slider.getEffectLevelValue() / 30;
-    if (value > 3) {
-      value = 3;
-    } else if (value < 1) {
-      value = 1;
+    var value = window.slider.getEffectLevelValue() / scaleValue.BRIGHTNESS_SCALE_VALUE.DIVIDER;
+    if (value > scaleValue.BRIGHTNESS_SCALE_VALUE.MAX_VALUE) {
+      value = scaleValue.BRIGHTNESS_SCALE_VALUE.MAX_VALUE;
+    } else if (value < scaleValue.BRIGHTNESS_SCALE_VALUE.MIN_VALUE) {
+      value = scaleValue.BRIGHTNESS_SCALE_VALUE.MIN_VALUE;
     }
     return value;
   };
@@ -45,7 +61,7 @@
     effectLevelDepth.style.width = '100%';
     effectLevelPin.style.left = '100%';
     effectLevelValue.setAttribute('value', 100);
-    scaleControlValue.value = '100%';
+    scaleControlValue.setAttribute('value', 100 + '%');
   };
 
   var getEffectLevel = function () {

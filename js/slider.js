@@ -89,7 +89,7 @@
       var pinPosition = getPinPosition();
       var value;
 
-      if (pinPosition === 100) {
+      if (pinPosition === Slider.MAX_VALUE) {
         value = Slider.MAX_VALUE;
       } else {
         value = Math.round(pinPosition * 100 / getWidthOfEffectLevelLine());

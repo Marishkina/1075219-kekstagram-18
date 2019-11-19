@@ -78,13 +78,12 @@
   };
 
   // закрытие формы
-
   var onDocumentKeydown = function (evt) {
-    if (evt.code === 'Escape') {
+    if (evt.code === window.utils.keyCode.ESC_CODE) {
       if (document.activeElement === hashtagTextField || document.activeElement === commentField) {
         evt.stopPropagation();
       } else {
-        closeForm();
+        window.utils.isEscEvent(evt, closeForm);
       }
     }
   };
@@ -94,10 +93,10 @@
   };
 
   var onCloseButtonUploadOverlayFormKeydown = function (evt) {
-    if (evt.code === 'Enter' && document.activeElement === closeButtonUploadOverlayForm) {
+    if (evt.code === window.utils.keyCode.ENTER_CODE && document.activeElement === closeButtonUploadOverlayForm) {
       evt.stopPropagation();
     } else {
-      closeForm();
+      window.utils.isEscEvent(evt, closeForm);
     }
   };
 
@@ -115,7 +114,7 @@
 
   var onScaleControlSmallerKeydown = function (evt) {
     evt.stopPropagation();
-    if (evt.code === 'Enter' && document.activeElement === scaleControlSmaller) {
+    if (evt.code === window.utils.keyCode.ENTER_CODE && document.activeElement === scaleControlSmaller) {
       window.utils.isEnterEvent(evt, window.zoom.out);
     } else {
       window.utils.isEscEvent(evt, closeForm);
@@ -128,7 +127,7 @@
 
   var onScaleControlBiggerKeydown = function (evt) {
     evt.stopPropagation();
-    if (evt.code === 'Enter' && document.activeElement === scaleControlBigger) {
+    if (evt.code === window.utils.keyCode.ENTER_CODE && document.activeElement === scaleControlBigger) {
       window.utils.isEnterEvent(evt, window.zoom.in);
     } else {
       window.utils.isEscEvent(evt, closeForm);

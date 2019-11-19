@@ -3,6 +3,8 @@
 (function () {
 
   var closePreviewButton = window.utils.preview.querySelector('#picture-cancel');
+  var body = document.querySelector('body');
+  var commentsLoader = window.utils.preview.querySelector('.comments-loader');
 
   // получаем id активной миниатюры, сравниваем с id элемента массива с сервера, получаем данные
   var getPreviewDetails = function (evt) {
@@ -26,8 +28,9 @@
     window.utils.preview.classList.remove('hidden');
     closePreviewButton.addEventListener('click', onClosePreviewButtonClick);
     document.addEventListener('keydown', onDocumentKeydown);
-    document.querySelector('body').classList.add('modal-open');
+    body.classList.add('modal-open');
     window.utils.preview.focus();
+    commentsLoader.addEventListener('click', window.onCommentsLoaderClick);
   };
 
   // закрытие большой картинки
@@ -35,7 +38,9 @@
     window.utils.preview.classList.add('hidden');
     closePreviewButton.removeEventListener('click', onClosePreviewButtonClick);
     document.removeEventListener('keydown', onDocumentKeydown);
-    document.querySelector('body').classList.remove('modal-open');
+    body.classList.remove('modal-open');
+    commentsLoader.removeEventListener('click', window.onCommentsLoaderClick);
+
   };
 
   var onClosePreviewButtonClick = function () {
@@ -54,7 +59,7 @@
   };
 
   var onPicturesListKeydown = function (evt) {
-    if (evt.code === 'Enter' && evt.target.className === 'picture') {
+    if (evt.code === window.utils.keyCode.ENTER_CODE && evt.target.className === 'picture') {
       generatePreview(getPreviewDetails(evt));
       openPreview();
     }
@@ -68,7 +73,7 @@
     window.utils.preview.querySelector('.social__caption').textContent = generateListItems.description;
 
     window.utils.preview.querySelector('.social__comments')
-      .appendChild(window.commentsList.loadMore(generateListItems.comments));
+      .appendChild(window.commentsList.render(generateListItems.comments));
 
     return window.utils.preview;
   };
