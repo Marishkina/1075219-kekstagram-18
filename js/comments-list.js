@@ -44,7 +44,7 @@
       if (arr.length <= MAX_COMMENTS_TO_SHOW) {
         commentsForRender = renderListOfComments(arr);
 
-        commentsLoader.classList.add('visually-hidden');
+        commentsLoader.classList.add('hidden');
         socialCommentsCount.textContent = arr.length + ' из ' + arr.length + ' комментариев';
 
       } else {
@@ -53,7 +53,7 @@
 
         commentsForRender = renderListOfComments(slicedArr);
 
-        commentsLoader.classList.remove('visually-hidden');
+        commentsLoader.classList.remove('hidden');
         socialCommentsCount.textContent = slicedArr.length + ' из ' + arr.length + ' комментариев';
       }
 
@@ -66,11 +66,11 @@
         if (needToLoadCommentsCount > MAX_COMMENTS_TO_SHOW) {
           commentsForRender = arrCopy.slice(0, countOfShowedComments + MAX_COMMENTS_TO_SHOW);
 
-        } else if (needToLoadCommentsCount < MAX_COMMENTS_TO_SHOW) {
+        } else if (needToLoadCommentsCount <= MAX_COMMENTS_TO_SHOW) {
           needToLoadCommentsCount = MAX_COMMENTS_TO_SHOW;
           commentsForRender = arrCopy;
 
-          commentsLoader.classList.add('visually-hidden');
+          commentsLoader.classList.add('hidden');
         }
 
         socialCommentsCount.textContent = commentsForRender.length + ' из ' + arr.length + ' комментариев';
