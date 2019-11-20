@@ -5,7 +5,7 @@
   var RANDOM_PHOTO_NUMBER = 10;
 
   var filters = document.querySelector('.img-filters');
-  var filterButtonsAll = filters.querySelectorAll('.img-filters__button');
+  var filterButtons = filters.querySelectorAll('.img-filters__button');
 
   filters.classList.remove('img-filters--inactive');
 
@@ -58,7 +58,7 @@
 
   filters.addEventListener('click', function (evt) {
 
-    filterButtonsAll.forEach(function (button) {
+    filterButtons.forEach(function (button) {
       button.classList.remove('img-filters__button--active');
     });
 
